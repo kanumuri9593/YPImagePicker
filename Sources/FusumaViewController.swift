@@ -100,8 +100,9 @@ public final class FusumaViewController: UIViewController {
     @IBOutlet var cameraFirstConstraints: [NSLayoutConstraint]!
     
     lazy var albumView  = FSAlbumView.instance()
-    lazy var cameraView = FSCameraView.instance()
+    public lazy var cameraView = FSCameraView.instance()
     lazy var videoView = FSVideoCameraView.instance()
+    
 
     fileprivate var hasGalleryPermission: Bool {
         return PHPhotoLibrary.authorizationStatus() == .authorized

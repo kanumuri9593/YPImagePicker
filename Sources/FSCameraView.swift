@@ -13,7 +13,7 @@ import AVFoundation
     func cameraShotFinished(_ image: UIImage)
 }
 
-final class FSCameraView: UIView, UIGestureRecognizerDelegate {
+final public class FSCameraView: UIView, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var previewViewContainer: UIView!
     @IBOutlet weak var shotButton: UIButton!
@@ -21,6 +21,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
     @IBOutlet weak var flipButton: UIButton!
     @IBOutlet weak var croppedAspectRatioConstraint: NSLayoutConstraint!
     @IBOutlet weak var fullAspectRatioConstraint: NSLayoutConstraint!
+    public var useFrontCamera = false
     
     weak var delegate: FSCameraViewDelegate? = nil
     
@@ -76,7 +77,12 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
         
         for device in AVCaptureDevice.devices() {
             
-            if let device = device as? AVCaptureDevice , device.position == AVCaptureDevicePosition.back {
+            let cameraPosition: AVCaptureDevicePosition = useFrontCamera
+                ? .front
+                : .back
+            
+            
+            if let device = device as? AVCaptureDevice , device.position == cameraPosition {
                 
                 self.device = device
                 
