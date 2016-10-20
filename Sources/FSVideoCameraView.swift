@@ -118,13 +118,13 @@ final class FSVideoCameraView: UIView {
             flipButton.tintColor  = fusumaBaseTintColor
             shotButton.tintColor  = fusumaBaseTintColor
             
-            flashButton.setImage(flashOffImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
-            flipButton.setImage(flipImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
-            shotButton.setImage(videoStartImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
+            flashButton.setImage(flashOffImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            flipButton.setImage(flipImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            shotButton.setImage(videoStartImage?.withRenderingMode(.alwaysTemplate), for: .normal)
         } else {
-            flashButton.setImage(flashOffImage, for: UIControlState())
-            flipButton.setImage(flipImage, for: UIControlState())
-            shotButton.setImage(videoStartImage, for: UIControlState())
+            flashButton.setImage(flashOffImage, for: .normal)
+            flipButton.setImage(flipImage, for: .normal)
+            shotButton.setImage(videoStartImage, for: .normal)
         }
         
         flashConfiguration()
@@ -176,7 +176,7 @@ final class FSVideoCameraView: UIView {
         } else {
             shotImage = videoStartImage
         }
-        self.shotButton.setImage(shotImage, for: UIControlState())
+        self.shotButton.setImage(shotImage, for: .normal)
         
         if self.isRecording {
             let outputPath = "\(NSTemporaryDirectory())output.mov"
@@ -255,12 +255,12 @@ final class FSVideoCameraView: UIView {
                 if mode == AVCaptureFlashMode.off {
                     
                     device.flashMode = AVCaptureFlashMode.on
-                    flashButton.setImage(flashOnImage, for: UIControlState())
+                    flashButton.setImage(flashOnImage, for: .normal)
                     
                 } else if mode == AVCaptureFlashMode.on {
                     
                     device.flashMode = AVCaptureFlashMode.off
-                    flashButton.setImage(flashOffImage, for: UIControlState())
+                    flashButton.setImage(flashOffImage, for: .normal)
                 }
                 
                 device.unlockForConfiguration()
@@ -269,7 +269,7 @@ final class FSVideoCameraView: UIView {
             
         } catch _ {
             
-            flashButton.setImage(flashOffImage, for: UIControlState())
+            flashButton.setImage(flashOffImage, for: .normal)
             return
         }
         
@@ -351,7 +351,7 @@ extension FSVideoCameraView {
                 try device.lockForConfiguration()
                 
                 device.flashMode = AVCaptureFlashMode.off
-                flashButton.setImage(flashOffImage, for: UIControlState())
+                flashButton.setImage(flashOffImage, for: .normal)
                 
                 device.unlockForConfiguration()
                 

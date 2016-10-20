@@ -59,13 +59,13 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
             flipButton.tintColor  = fusumaBaseTintColor
             shotButton.tintColor  = fusumaBaseTintColor
             
-            flashButton.setImage(flashOffImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
-            flipButton.setImage(flipImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
-            shotButton.setImage(shotImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
+            flashButton.setImage(flashOffImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            flipButton.setImage(flipImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            shotButton.setImage(shotImage?.withRenderingMode(.alwaysTemplate), for: .normal)
         } else {
-            flashButton.setImage(flashOffImage, for: UIControlState())
-            flipButton.setImage(flipImage, for: UIControlState())
-            shotButton.setImage(shotImage, for: UIControlState())
+            flashButton.setImage(flashOffImage, for: .normal)
+            flipButton.setImage(flipImage, for: .normal)
+            shotButton.setImage(shotImage, for: .normal)
         }
 
         
@@ -305,12 +305,12 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
                 if mode == AVCaptureFlashMode.off {
                     
                     device.flashMode = AVCaptureFlashMode.on
-                    flashButton.setImage(flashOnImage, for: UIControlState())
+                    flashButton.setImage(flashOnImage, for: .normal)
                     
                 } else if mode == AVCaptureFlashMode.on {
                     
                     device.flashMode = AVCaptureFlashMode.off
-                    flashButton.setImage(flashOffImage, for: UIControlState())
+                    flashButton.setImage(flashOffImage, for: .normal)
                 }
                 
                 device.unlockForConfiguration()
@@ -319,7 +319,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
 
         } catch _ {
 
-            flashButton.setImage(flashOffImage, for: UIControlState())
+            flashButton.setImage(flashOffImage, for: .normal)
             return
         }
  
@@ -389,7 +389,7 @@ extension FSCameraView {
                 try device.lockForConfiguration()
                 
                 device.flashMode = AVCaptureFlashMode.off
-                flashButton.setImage(flashOffImage, for: UIControlState())
+                flashButton.setImage(flashOffImage, for: .normal)
                 
                 device.unlockForConfiguration()
                 

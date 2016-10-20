@@ -143,51 +143,51 @@ public final class FusumaViewController: UIViewController {
         
         if fusumaTintIcons {
             
-            libraryButton.setImage(albumImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
+            libraryButton.setImage(albumImage?.withRenderingMode(.alwaysTemplate), for: .normal)
             libraryButton.setImage(albumImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
             libraryButton.setImage(albumImage?.withRenderingMode(.alwaysTemplate), for: .selected)
             libraryButton.tintColor = fusumaTintColor
             libraryButton.adjustsImageWhenHighlighted = false
 
-            cameraButton.setImage(cameraImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
+            cameraButton.setImage(cameraImage?.withRenderingMode(.alwaysTemplate), for: .normal)
             cameraButton.setImage(cameraImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
             cameraButton.setImage(cameraImage?.withRenderingMode(.alwaysTemplate), for: .selected)
             cameraButton.tintColor  = fusumaTintColor
             cameraButton.adjustsImageWhenHighlighted  = false
             
-            closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
+            closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .normal)
             closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
             closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .selected)
             closeButton.tintColor = fusumaBaseTintColor
             
-            videoButton.setImage(videoImage, for: UIControlState())
+            videoButton.setImage(videoImage, for: .normal)
             videoButton.setImage(videoImage, for: .highlighted)
             videoButton.setImage(videoImage, for: .selected)
             videoButton.tintColor  = fusumaTintColor
             videoButton.adjustsImageWhenHighlighted = false
             
-            doneButton.setImage(checkImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
+            doneButton.setImage(checkImage?.withRenderingMode(.alwaysTemplate), for: .normal)
             doneButton.tintColor = fusumaBaseTintColor
             
         } else {
             
-            libraryButton.setImage(albumImage, for: UIControlState())
+            libraryButton.setImage(albumImage, for: .normal)
             libraryButton.setImage(albumImage, for: .highlighted)
             libraryButton.setImage(albumImage, for: .selected)
             libraryButton.tintColor = nil
             
-            cameraButton.setImage(cameraImage, for: UIControlState())
+            cameraButton.setImage(cameraImage, for: .normal)
             cameraButton.setImage(cameraImage, for: .highlighted)
             cameraButton.setImage(cameraImage, for: .selected)
             cameraButton.tintColor = nil
 
-            videoButton.setImage(videoImage, for: UIControlState())
+            videoButton.setImage(videoImage, for: .normal)
             videoButton.setImage(videoImage, for: .highlighted)
             videoButton.setImage(videoImage, for: .selected)
             videoButton.tintColor = nil
             
-            closeButton.setImage(closeImage, for: UIControlState())
-            doneButton.setImage(checkImage, for: UIControlState())
+            closeButton.setImage(closeImage, for: .normal)
+            doneButton.setImage(checkImage, for: .normal)
         }
         
         cameraButton.clipsToBounds  = true
