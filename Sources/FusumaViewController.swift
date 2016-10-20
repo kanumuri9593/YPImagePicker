@@ -160,10 +160,10 @@ public final class FusumaViewController: UIViewController {
             closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .selected)
             closeButton.tintColor = fusumaBaseTintColor
             
-            videoButton.setImage(videoImage, for: .normal)
-            videoButton.setImage(videoImage, for: .highlighted)
-            videoButton.setImage(videoImage, for: .selected)
-            videoButton.tintColor  = fusumaTintColor
+            videoButton.setImage(videoImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            videoButton.setImage(videoImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+            videoButton.setImage(videoImage?.withRenderingMode(.alwaysTemplate), for: .selected)
+            videoButton.tintColor = fusumaTintColor
             videoButton.adjustsImageWhenHighlighted = false
             
             doneButton.setImage(checkImage?.withRenderingMode(.alwaysTemplate), for: .normal)
