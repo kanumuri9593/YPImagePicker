@@ -104,6 +104,12 @@ public final class FusumaViewController: UIViewController {
     public lazy var cameraView = FSCameraView.instance()
     lazy var videoView = FSVideoCameraView.instance()
     
+    public func didSelectImage(block:@escaping (UIImage) -> Void)  {
+        didSelectImageCallback = block
+    }
+    fileprivate var didSelectImageCallback:(UIImage) -> Void = { _ in }
+
+    
 
     fileprivate var hasGalleryPermission: Bool {
         return PHPhotoLibrary.authorizationStatus() == .authorized
@@ -327,6 +333,7 @@ public final class FusumaViewController: UIViewController {
                     
                     DispatchQueue.main.async(execute: {
                         self.delegate?.fusumaImageSelected(result!)
+                        self.didSelectImageCallback(result!)
                         
                         self.dismiss(animated: true, completion: {
                             self.delegate?.fusumaDismissedWithImage?(result!)
@@ -337,6 +344,7 @@ public final class FusumaViewController: UIViewController {
         } else {
             print("no image crop ")
             delegate?.fusumaImageSelected((view?.image)!)
+            didSelectImageCallback((view?.image)!)
             
             self.dismiss(animated: true, completion: {
                 self.delegate?.fusumaDismissedWithImage?((view?.image)!)
@@ -352,6 +360,7 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
     func cameraShotFinished(_ image: UIImage) {
         
         delegate?.fusumaImageSelected(image)
+        didSelectImageCallback(image)
         self.dismiss(animated: true, completion: {
             
             self.delegate?.fusumaDismissedWithImage?(image)
