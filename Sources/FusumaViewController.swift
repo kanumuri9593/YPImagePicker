@@ -79,6 +79,7 @@ public final class FusumaViewController: UIViewController {
     }
 
     public var hasVideo = false
+    public var startsOnCameraMode = false
 
     var mode: Mode = Mode.camera
     public var modeOrder: FusumaModeOrder = .libraryFirst
@@ -237,7 +238,9 @@ public final class FusumaViewController: UIViewController {
     
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        if startsOnCameraMode {
+            changeMode(.camera)
+        }
     }
 
     override public func viewDidAppear(_ animated: Bool) {
