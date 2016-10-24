@@ -15,170 +15,117 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     var imageSize: CGSize?
     
     var image: UIImage! = nil {
-        
         didSet {
-            
             if image != nil {
-                
                 if !imageView.isDescendant(of: self) {
-                    self.imageView.alpha = 1.0
-                    self.addSubview(imageView)
+                    imageView.alpha = 1.0
+                    addSubview(imageView)
                 }
-                
             } else {
-                
                 imageView.image = nil
                 return
             }
             
             if !fusumaCropImage {
                 // Disable scroll view and set image to fit in view
-                imageView.frame = self.frame
+                imageView.frame = frame
                 imageView.contentMode = .scaleAspectFit
-                self.isUserInteractionEnabled = false
-
+                isUserInteractionEnabled = false
                 imageView.image = image
                 return
             }
 
             let imageSize = self.imageSize ?? image.size
             
-            if imageSize.width < self.frame.width || imageSize.height < self.frame.height {
-                
+            if imageSize.width < frame.width || imageSize.height < frame.height {
                 // The width or height of the image is smaller than the frame size
-                
                 if imageSize.width > imageSize.height {
-                    
                     // Width > Height
-                    
-                    let ratio = self.frame.width / imageSize.width
-                    
+                    let ratio = frame.width / imageSize.width
                     imageView.frame = CGRect(
                         origin: CGPoint.zero,
-                        size: CGSize(width: self.frame.width, height: imageSize.height * ratio)
+                        size: CGSize(width: frame.width, height: imageSize.height * ratio)
                     )
-                    
                 } else {
-                    
                     // Width <= Height
-                    
-                    let ratio = self.frame.height / imageSize.height
-                    
+                    let ratio = frame.height / imageSize.height
                     imageView.frame = CGRect(
                         origin: CGPoint.zero,
-                        size: CGSize(width: imageSize.width * ratio, height: self.frame.size.height)
+                        size: CGSize(width: imageSize.width * ratio, height: frame.size.height)
                     )
-                    
                 }
-                
-                imageView.center = self.center
-                
+                imageView.center = center
             } else {
-
                 // The width or height of the image is bigger than the frame size
-
                 if imageSize.width > imageSize.height {
-                    
                     // Width > Height
-                    
-                    let ratio = self.frame.height / imageSize.height
-                    
+                    let ratio = frame.height / imageSize.height
                     imageView.frame = CGRect(
                         origin: CGPoint.zero,
-                        size: CGSize(width: imageSize.width * ratio, height: self.frame.height)
+                        size: CGSize(width: imageSize.width * ratio, height: frame.height)
                     )
-                    
                 } else {
-                    
                     // Width <= Height
-
-                    let ratio = self.frame.width / imageSize.width
-                    
+                    let ratio = frame.width / imageSize.width
                     imageView.frame = CGRect(
                         origin: CGPoint.zero,
-                        size: CGSize(width: self.frame.width, height: imageSize.height * ratio)
+                        size: CGSize(width: frame.width, height: imageSize.height * ratio)
                     )
-                    
                 }
-                
-                self.contentOffset = CGPoint(
-                    x: imageView.center.x - self.center.x,
-                    y: imageView.center.y - self.center.y
+                contentOffset = CGPoint(
+                    x: imageView.center.x - center.x,
+                    y: imageView.center.y - center.y
                 )
             }
-            
-            self.contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
-            
+            contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
             imageView.image = image
-            
-            self.zoomScale = 1.0
-            
+            zoomScale = 1.0
         }
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
-        
         super.init(coder: aDecoder)!
-        
-        self.backgroundColor = fusumaBackgroundColor
-        self.frame.size      = CGSize.zero
-        self.clipsToBounds   = true
-        self.imageView.alpha = 0.0
-        
+        backgroundColor = fusumaBackgroundColor
+        frame.size      = CGSize.zero
+        clipsToBounds   = true
+        imageView.alpha = 0.0
         imageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
-        
-        self.maximumZoomScale = 2.0
-        self.minimumZoomScale = 0.8
-        self.showsHorizontalScrollIndicator = false
-        self.showsVerticalScrollIndicator   = false
-        self.bouncesZoom = true
-        self.bounces = true
-        
-        self.delegate = self
+        maximumZoomScale = 2.0
+        minimumZoomScale = 0.8
+        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator   = false
+        bouncesZoom = true
+        bounces = true
+        delegate = self
     }
     
-    
     func changeScrollable(_ isScrollable: Bool) {
-        
-        self.isScrollEnabled = isScrollable
+        isScrollEnabled = isScrollable
     }
     
     // MARK: UIScrollViewDelegate Protocol
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        
         return imageView
-
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        
         let boundsSize = scrollView.bounds.size
         var contentsFrame = imageView.frame
-        
         if contentsFrame.size.width < boundsSize.width {
-            
             contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0
-            
         } else {
             contentsFrame.origin.x = 0.0
         }
         
         if contentsFrame.size.height < boundsSize.height {
-            
             contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0
         } else {
-            
             contentsFrame.origin.y = 0.0
         }
-        
         imageView.frame = contentsFrame
-        
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        
-        self.contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
+        contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
     }
-    
 }

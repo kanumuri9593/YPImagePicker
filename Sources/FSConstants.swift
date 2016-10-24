@@ -8,11 +8,9 @@
 
 import UIKit
 
-// Extension
 internal extension UIColor {
     
     class func hex (_ hexStr : NSString, alpha : CGFloat) -> UIColor {
-        
         let realHexStr = hexStr.replacingOccurrences(of: "#", with: "")
         let scanner = Scanner(string: realHexStr as String)
         var color: UInt32 = 0
@@ -29,7 +27,6 @@ internal extension UIColor {
 }
 
 extension UIView {
-    
     func addBottomBorder(_ color: UIColor, width: CGFloat) {
         let border = CALayer()
         border.borderColor = color.cgColor
@@ -37,5 +34,4 @@ extension UIView {
         border.borderWidth = width
         self.layer.addSublayer(border)
     }
-
 }

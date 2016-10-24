@@ -14,22 +14,20 @@ final class FSAlbumViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     
     var image: UIImage? {
-        
         didSet {
-            
-            self.imageView.image = image            
+            imageView.image = image
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.isSelected = false
+        isSelected = false
     }
     
     override var isSelected : Bool {
         didSet {
-            self.layer.borderColor = isSelected ? fusumaTintColor.cgColor : UIColor.clear.cgColor
-            self.layer.borderWidth = isSelected ? 2 : 0
+            layer.borderColor = isSelected ? fusumaTintColor.cgColor : UIColor.clear.cgColor
+            layer.borderWidth = isSelected ? 2 : 0
         }
     }
 }
