@@ -30,10 +30,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 @objc public protocol FusumaDelegate: class {
-    
-    func fusumaVideoCompleted(withFileURL fileURL: URL)
     func fusumaCameraRollUnauthorized()
-    
     @objc optional func fusumaClosed()
 }
 
@@ -67,7 +64,7 @@ public enum FusumaModeOrder {
     case libraryFirst
 }
 
-//@objc public class FusumaViewController: UIViewController, FSCameraViewDelegate, FSAlbumViewDelegate {
+
 public final class FusumaViewController: UIViewController {
     
     enum Mode {
@@ -103,6 +100,7 @@ public final class FusumaViewController: UIViewController {
     lazy var videoView = FSVideoCameraView.instance()
     
     public var didSelectImage:((UIImage) -> Void)?
+    public var didSelectVideo:((URL) -> Void)?
     
 
     fileprivate var hasGalleryPermission: Bool {
@@ -349,8 +347,7 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
     }
     
     func videoFinished(withFileURL fileURL: URL) {
-        delegate?.fusumaVideoCompleted(withFileURL: fileURL)
-        self.dismiss(animated: true, completion: nil)
+        didSelectVideo?(fileURL)
     }
     
 }
