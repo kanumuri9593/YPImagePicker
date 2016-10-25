@@ -42,12 +42,11 @@ public final class FusumaViewController: UIViewController {
     @IBOutlet var cameraFirstConstraints: [NSLayoutConstraint]!
     
     lazy var albumView  = FSAlbumView.instance()
-    public lazy var cameraView = FSCameraView.instance()
+    public lazy var cameraVC = FSCameraVC()
     lazy var videoView = FSVideoCameraView.instance()
     
     public var didSelectImage:((UIImage) -> Void)?
     public var didSelectVideo:((URL) -> Void)?
-    public var didClose:(() -> Void)?
     public var cameraRollUnauthorized:(() -> Void)?
     
     fileprivate var hasGalleryPermission: Bool {
@@ -70,7 +69,7 @@ public final class FusumaViewController: UIViewController {
         super.viewDidLoad()
         navigationController?.navigationBar.barTintColor = UIColor(r: 247, g: 247, b: 247)
         view.backgroundColor = fusumaBackgroundColor
-        cameraView.delegate = self
+//        cameraVC.delegate = self
         albumView.delegate  = self
         videoView.delegate = self
 //        menuView.backgroundColor = fusumaBackgroundColor
@@ -119,7 +118,7 @@ public final class FusumaViewController: UIViewController {
         changeMode(Mode.library)
         
         photoLibraryViewerContainer.addSubview(albumView)
-        cameraShotContainer.addSubview(cameraView)
+        cameraShotContainer.addSubview(cameraVC.view)
         videoShotContainer.addSubview(videoView)
         
         
@@ -158,11 +157,12 @@ public final class FusumaViewController: UIViewController {
         super.viewDidAppear(animated)
         albumView.frame  = CGRect(origin: CGPoint.zero, size: photoLibraryViewerContainer.frame.size)
         albumView.layoutIfNeeded()
-        cameraView.frame = CGRect(origin: CGPoint.zero, size: cameraShotContainer.frame.size)
-        cameraView.layoutIfNeeded()
+        cameraVC.view.frame = CGRect(origin: CGPoint.zero, size: cameraShotContainer.frame.size)
+        cameraVC.view.layoutIfNeeded()
 
         albumView.initialize()
-        cameraView.initialize()
+//        cameraVC.initialize()
+        
         
         if hasVideo {
             videoView.frame = CGRect(origin: CGPoint.zero, size: videoShotContainer.frame.size)
@@ -178,11 +178,7 @@ public final class FusumaViewController: UIViewController {
 
     override public var prefersStatusBarHidden : Bool { return true }
     
-    func close() {
-        dismiss(animated: true, completion: {
-            self.didClose?()
-        })
-    }
+
     
     @IBAction func libraryButtonPressed(_ sender: UIButton) {
         changeMode(Mode.library)
@@ -258,12 +254,6 @@ extension FusumaViewController: FSVideoCameraViewDelegate {
     }
 }
 
-extension FusumaViewController: FSCameraViewDelegate {
-    func cameraShotFinished(_ image: UIImage) {
-        didSelectImage?(image)
-    }
-}
-
 extension FusumaViewController: FSAlbumViewDelegate {
     public func albumViewCameraRollUnauthorized() {
         cameraRollUnauthorized?()
@@ -276,7 +266,7 @@ private extension FusumaViewController {
         if hasVideo {
             videoView.stopCamera()
         }
-        cameraView.stopCamera()
+        cameraVC.stopCamera()
     }
     
     func changeMode(_ aMode: Mode) {
@@ -288,7 +278,7 @@ private extension FusumaViewController {
         case .library:
             break
         case .camera:
-            cameraView.stopCamera()
+            cameraVC.stopCamera()
         case .video:
             videoView.stopCamera()
         }
@@ -301,7 +291,7 @@ private extension FusumaViewController {
         case .camera:
             highlightButton(cameraButton)
             view.bringSubview(toFront: cameraShotContainer)
-            cameraView.startCamera()
+            cameraVC.startCamera()
         case .video:
             highlightButton(videoButton)
             view.bringSubview(toFront: videoShotContainer)
@@ -313,25 +303,7 @@ private extension FusumaViewController {
         
         
         
-        // Update Nav Bar state.
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(close))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
-        switch aMode {
-        case .library:
-            title = NSLocalizedString(fusumaCameraRollTitle, comment: "").capitalized
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
-            
-            
-            
-        case .camera:
-            title = NSLocalizedString(fusumaCameraTitle, comment: "").capitalized
-            navigationItem.rightBarButtonItem = nil
-        case .video:
-            title = NSLocalizedString(fusumaVideoTitle, comment: "").capitalized
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.plain, target: self, action: #selector(done))
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
+
 //        navigationItem.rightBarButtonItem?.isHidden = !hasGalleryPermission
 
         
@@ -379,7 +351,7 @@ private extension FusumaViewController {
 }
 
 
-fileprivate extension UIColor {
+extension UIColor {
     convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 1.0) {
         self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: a)
     }

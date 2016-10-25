@@ -111,7 +111,7 @@ final class FSVideoCameraView: UIView {
             shotButton.setImage(videoStartImage, for: .normal)
         }
         
-        flashConfiguration()
+        disableFlash()
         startCamera()
     }
     
@@ -180,45 +180,21 @@ final class FSVideoCameraView: UIView {
     }
     
     @IBAction func flipButtonPressed(_ sender: UIButton) {
-        session?.stopRunning()
-        do {
-            session?.beginConfiguration()
-            if let session = session {
-                for input in session.inputs {
-                    session.removeInput(input as! AVCaptureInput)
-                }
-                
-                let position = (videoInput?.device.position == AVCaptureDevicePosition.front) ? AVCaptureDevicePosition.back : AVCaptureDevicePosition.front
-                for device in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) {
-                    if let device = device as? AVCaptureDevice , device.position == position {
-                        videoInput = try AVCaptureDeviceInput(device: device)
-                        session.addInput(videoInput)
-                    }
-                }
-            }
-            session?.commitConfiguration()
-        } catch {
+        if let deviceInput = videoInput, let s = session  {
+            videoInput = flipCameraFor(captureDeviceInput: deviceInput, onSession: s)
         }
-        session?.startRunning()
     }
     
     @IBAction func flashButtonPressed(_ sender: UIButton) {
-        do {
-            if let device = device {
-                try device.lockForConfiguration()
-                let mode = device.flashMode
-                if mode == AVCaptureFlashMode.off {
-                    device.flashMode = AVCaptureFlashMode.on
-                    flashButton.setImage(flashOnImage, for: .normal)
-                } else if mode == AVCaptureFlashMode.on {
-                    device.flashMode = AVCaptureFlashMode.off
-                    flashButton.setImage(flashOffImage, for: .normal)
-                }
-                device.unlockForConfiguration()
-            }
-        } catch _ {
-            flashButton.setImage(flashOffImage, for: .normal)
-            return
+        device?.tryToggleFlash()
+        refreshFlashButton()
+    }
+    
+    func flashImage(forAVCaptureFlashMode:AVCaptureFlashMode) -> UIImage {
+        switch forAVCaptureFlashMode {
+        case .on: return flashOnImage!
+        case .off: return flashOffImage!
+        default: return flashOffImage!
         }
     }
 }
@@ -260,35 +236,22 @@ extension FSVideoCameraView {
         
         device?.unlockForConfiguration()
         
-        focusView?.alpha = 0.0
-        focusView?.center = point
-        focusView?.backgroundColor = UIColor.clear
-        focusView?.layer.borderColor = UIColor.white.cgColor
-        focusView?.layer.borderWidth = 1.0
-        focusView!.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-        addSubview(focusView!)
-        
-        UIView.animate(withDuration: 0.8, delay: 0.0, usingSpringWithDamping: 0.8,
-                                   initialSpringVelocity: 3.0, options: UIViewAnimationOptions.curveEaseIn, // UIViewAnimationOptions.BeginFromCurrentState
-            animations: {
-                self.focusView!.alpha = 1.0
-                self.focusView!.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
-            }, completion: {(finished) in
-                self.focusView!.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                self.focusView!.removeFromSuperview()
-        })
+        if let fv = focusView {
+            fv.center = point
+            configureFocusView(fv)
+            addSubview(fv)
+            animateFocusView(fv)
+        }
+    }
+
+    func disableFlash() {
+        device?.disableFlash()
+        refreshFlashButton()
     }
     
-    func flashConfiguration() {
-        do {
-            if let device = device {
-                try device.lockForConfiguration()
-                device.flashMode = AVCaptureFlashMode.off
-                flashButton.setImage(flashOffImage, for: .normal)
-                device.unlockForConfiguration()
-            }
-        } catch _ {
-            return
+    func refreshFlashButton() {
+        if let device = device {
+            flashButton.setImage(flashImage(forAVCaptureFlashMode:device.flashMode), for: .normal)
         }
     }
 }
