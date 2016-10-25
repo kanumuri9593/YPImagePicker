@@ -38,7 +38,7 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
         case up
         case down
     }
-    let imageCropViewOriginalConstraintTop: CGFloat = 50
+    let imageCropViewOriginalConstraintTop: CGFloat = 0
     let imageCropViewMinimalVisibleHeight: CGFloat  = 100
     var dragDirection = Direction.up
     var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
@@ -64,7 +64,7 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
         addGestureRecognizer(panGesture)
         
         collectionViewConstraintHeight.constant = frame.height - imageCropView.frame.height - imageCropViewOriginalConstraintTop
-        imageCropViewConstraintTop.constant = 50
+        imageCropViewConstraintTop.constant = 0
         dragDirection = Direction.up
         
         imageCropViewContainer.layer.shadowColor   = UIColor.black.cgColor
