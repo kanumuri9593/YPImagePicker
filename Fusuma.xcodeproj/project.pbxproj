@@ -16,7 +16,6 @@
 		EDDC0B541D0511F2009135DB /* FSAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */; };
 		EDDC0B551D0511F2009135DB /* FSAlbumView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */; };
 		EDDC0B561D0511F2009135DB /* FSAlbumViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */; };
-		EDDC0B571D0511F2009135DB /* FSAlbumViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDDC0B4F1D0511F2009135DB /* FSAlbumViewCell.xib */; };
 		EDDC0B581D0511F2009135DB /* FSCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B501D0511F2009135DB /* FSCameraView.swift */; };
 		EDDC0B591D0511F2009135DB /* FSCameraView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDDC0B511D0511F2009135DB /* FSCameraView.xib */; };
 		EDDC0B5A1D0511F2009135DB /* FSConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B521D0511F2009135DB /* FSConstants.swift */; };
@@ -36,7 +35,6 @@
 		EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumView.swift; sourceTree = "<group>"; };
 		EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAlbumView.xib; sourceTree = "<group>"; };
 		EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumViewCell.swift; sourceTree = "<group>"; };
-		EDDC0B4F1D0511F2009135DB /* FSAlbumViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAlbumViewCell.xib; sourceTree = "<group>"; };
 		EDDC0B501D0511F2009135DB /* FSCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSCameraView.swift; sourceTree = "<group>"; };
 		EDDC0B511D0511F2009135DB /* FSCameraView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSCameraView.xib; sourceTree = "<group>"; };
 		EDDC0B521D0511F2009135DB /* FSConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSConstants.swift; sourceTree = "<group>"; };
@@ -92,7 +90,6 @@
 				EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */,
 				EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */,
 				EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */,
-				EDDC0B4F1D0511F2009135DB /* FSAlbumViewCell.xib */,
 				EDDC0B501D0511F2009135DB /* FSCameraView.swift */,
 				EDDC0B511D0511F2009135DB /* FSCameraView.xib */,
 				EDDC0B521D0511F2009135DB /* FSConstants.swift */,
@@ -174,7 +171,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EDDC0B3F1D04F53E009135DB /* FSVideoCameraView.xib in Resources */,
-				EDDC0B571D0511F2009135DB /* FSAlbumViewCell.xib in Resources */,
 				EDDC0B591D0511F2009135DB /* FSCameraView.xib in Resources */,
 				EDDC0B551D0511F2009135DB /* FSAlbumView.xib in Resources */,
 				EDDC0B5D1D051245009135DB /* Assets.xcassets in Resources */,
@@ -311,6 +307,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				INFOPLIST_FILE = Fusuma/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -332,6 +329,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				INFOPLIST_FILE = Fusuma/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

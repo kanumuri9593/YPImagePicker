@@ -72,7 +72,8 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
         imageCropViewContainer.layer.shadowOpacity = 0.9
         imageCropViewContainer.layer.shadowOffset  = CGSize.zero
         
-        collectionView.register(UINib(nibName: "FSAlbumViewCell", bundle: Bundle(for: self.classForCoder)), forCellWithReuseIdentifier: "FSAlbumViewCell")
+        
+        collectionView.register(FSAlbumViewCell.self, forCellWithReuseIdentifier: "FSAlbumViewCell")
 		collectionView.backgroundColor = fusumaBackgroundColor
 		
         // Never load photos Unless the user allows to access to photo album

@@ -7,23 +7,47 @@
 //
 
 import UIKit
-import Photos
+import Stevia
 
-final class FSAlbumViewCell: UICollectionViewCell {
+class FSAlbumViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var durationLabel: UILabel!
+    let imageView = UIImageView()
+    let durationLabel = UILabel()
+    let selectionOverlay = UIView()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        isSelected = false
+    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        sv(
+            imageView,
+            durationLabel,
+            selectionOverlay
+        )
+
+        imageView.fillContainer()
+        selectionOverlay.fillContainer()
+        layout(
+            durationLabel-5-|,
+            5
+        )
+        
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        durationLabel.textColor = .white
+        durationLabel.font = .systemFont(ofSize: 12)
         durationLabel.isHidden = true
+        selectionOverlay.backgroundColor = .black
+        selectionOverlay.alpha = 0
+    }
+
+    override var isSelected : Bool {
+        didSet { isHighlighted = isSelected }
     }
     
-    override var isSelected : Bool {
+    override var isHighlighted: Bool {
         didSet {
-            layer.borderColor = isSelected ? fusumaTintColor.cgColor : UIColor.clear.cgColor
-            layer.borderWidth = isSelected ? 2 : 0
+            selectionOverlay.alpha = isHighlighted ? 0.5 : 0
         }
     }
 }
