@@ -222,7 +222,7 @@ public final class FusumaViewController: UIViewController {
             
             let cropRect = CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
             
-            DispatchQueue.global(qos: .default).async(execute: {
+            DispatchQueue.global(qos: .default).async() {
                 
                 let options = PHImageRequestOptions()
                 options.deliveryMode = .highQualityFormat
@@ -236,14 +236,29 @@ public final class FusumaViewController: UIViewController {
                 
                 let targetSize = CGSize(width: dimension, height: dimension)
                 
-                PHImageManager.default().requestImage(for: self.albumView.phAsset, targetSize: targetSize,
-                contentMode: .aspectFill, options: options) {
-                    result, info in
-                    DispatchQueue.main.async(execute: {
-                        self.didSelectImage?(result!)
-                    })
+                
+                let asset = self.albumView.phAsset!
+                
+                if asset.mediaType == .video {
+                    PHImageManager.default().requestAVAsset(forVideo: asset,
+                                                            options: nil) { video, audioMix, info in
+                        DispatchQueue.main.async() {
+                            let urlAsset = video as! AVURLAsset
+                            self.didSelectVideo?(urlAsset.url)
+                        }
+                    }
+                } else {
+                    PHImageManager.default()
+                        .requestImage(for: asset,
+                                      targetSize: targetSize,
+                                      contentMode: .aspectFill,
+                                      options: options) { result, info in
+                        DispatchQueue.main.async() {
+                            self.didSelectImage?(result!)
+                        }
+                    }
                 }
-            })
+            }
         } else {
             didSelectImage?(view!.image)
         }

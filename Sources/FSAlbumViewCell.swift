@@ -12,16 +12,12 @@ import Photos
 final class FSAlbumViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
-    
-    var image: UIImage? {
-        didSet {
-            imageView.image = image
-        }
-    }
+    @IBOutlet weak var durationLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         isSelected = false
+        durationLabel.isHidden = true
     }
     
     override var isSelected : Bool {

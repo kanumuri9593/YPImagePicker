@@ -83,7 +83,7 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
         options.sortDescriptors = [
             NSSortDescriptor(key: "creationDate", ascending: false)
         ]
-        images = PHAsset.fetchAssets(with: .image, options: options)
+        images = PHAsset.fetchAssets(with: options)
         
         if images.count > 0 {
             changeImage(images[0])
@@ -192,11 +192,30 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
                                    contentMode: .aspectFill,
                                    options: nil) { result, info in
                                     if cell.tag == currentTag {
-                                        cell.image = result
+                                        cell.imageView.image = result
                                     }
         }
+        
+        
+    
+        if asset.mediaType == .video {
+            cell.durationLabel.isHidden = false
+            cell.durationLabel.text = formattedStrigFrom(asset.duration)
+        } else {
+            cell.durationLabel.isHidden = true
+            cell.durationLabel.text = ""
+        }
+        
         return cell
     }
+    
+    func formattedStrigFrom(_ timeInterval:TimeInterval) -> String {
+        let interval = Int(timeInterval)
+        let seconds = interval % 60
+        let minutes = (interval / 60) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
