@@ -1,4 +1,4 @@
-## Fusuma
+## YPusuma
 
 Fusuma is a Swift library that provides an Instagram-like photo browser and a camera feature with a few line of code.  
 You can use Fusuma instead of UIImagePickerController. It also has a feature to take a square-sized photo.
@@ -7,22 +7,33 @@ You can use Fusuma instead of UIImagePickerController. It also has a feature to 
 [![Platform](https://img.shields.io/cocoapods/p/Fusuma.svg?style=flat)](http://cocoapods.org/pods/Fusuma)
 [![CI Status](http://img.shields.io/travis/ytakzk/Fusuma.svg?style=flat)](https://travis-ci.org/ytakzk/Fusuma)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![codebeat](https://codebeat.co/badges/287ff7b1-4cda-4384-8780-88e1dbff95cd)](https://codebeat.co/projects/github-com-ytakzk-fusuma)
+[![codebeat badge](https://codebeat.co/badges/6a591267-c444-4c88-a410-56270d8ed9bc)](https://codebeat.co/projects/github-com-yummypets-ypfusuma)
+
+## Improvements
+YPFusuma is built from the great Fusuma library.
+
+Here are the improvements we added :
+- Improve Overall Code Quality
+- Added Filters View ala Instagram
+- Replaces icons with lighter Text
+- Preselect Front camera (e.g for avatars)
+- Scroll between tabs which feels smoother
+- Grab videos form the library view as well
+- Replaces Delegate based with callbacks based api
+- Uses Native Navigation bar over custom View (gotta be a good UIKit citizen)
+
 
 ## Preview
-<img src="https://raw.githubusercontent.com/wiki/ytakzk/Fusuma/images/fusuma.gif" width="340px">
 
-## Images
-<img src="https://raw.githubusercontent.com/wiki/ytakzk/Fusuma/images/shot1.jpg" width="340px">
-<img src="https://raw.githubusercontent.com/wiki/ytakzk/Fusuma/images/shot2.jpg" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/library.png" width="340px">
 
 ## Features
 - [x] UIImagePickerController alternative
 - [x] Cropping images in camera roll
 - [x] Taking a square-sized photo and a video using AVFoundation
-- [x] Flash: On Off 
-- [x] Camera Mode: Front Back 
-- [x] Video Mode 
+- [x] Flash: On Off
+- [x] Camera Mode: Front Back
+- [x] Video Mode
 
 Those features are available just with a few lines of code!
 
@@ -69,7 +80,7 @@ func fusumaImageSelected(image: UIImage) {
 
 // Return the image but called after is dismissed.
 func fusumaDismissedWithImage(image: UIImage) {
-        
+
   print("Called just after FusumaViewController is dismissed.")
 }
 
@@ -93,11 +104,11 @@ fusumaTintColor: UIColor // tint color
 fusumaBackgroundColor: UIColor // background color
 ```
 
-#### Customize Image Output 
-You can deselect image crop mode with: 
+#### Customize Image Output
+You can deselect image crop mode with:
 
 ```Swift
-fusumaCropImage:Bool // default is true for cropping the image 
+fusumaCropImage:Bool // default is true for cropping the image
 ```
 
 ## Fusuma for Xamarin
@@ -107,10 +118,10 @@ https://github.com/Cheesebaron/Chafu
 ## Author
 ytakzk  
  [http://ytakzk.me](http://ytakzk.me)
- 
+
 ## Donation
 Your support is welcome through Bitcoin 16485BTK9EoQUqkMmSecJ9xN6E9nhW8ePd
- 
+
 ## License
 Fusuma is released under the MIT license.  
 See LICENSE for details.
