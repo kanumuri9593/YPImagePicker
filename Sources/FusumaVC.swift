@@ -28,15 +28,15 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) {    }
 
     
-//    override public var prefersStatusBarHidden : Bool { return true }
+    override public var prefersStatusBarHidden : Bool { return true }
     
     //API
     public var didClose:(() -> Void)?
     public var didSelectImage:((UIImage) -> Void)?
     
     enum Mode {
-        case camera
         case library
+        case camera
         case video
     }
     
@@ -44,7 +44,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     let cameraVC = FSCameraVC()
     let videoVC = FSVideoVC()
     
-    var mode = Mode.camera
+    var mode = Mode.library
     
     var capturedImage:UIImage?
     
@@ -52,8 +52,11 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         super.viewDidLoad()
         view.backgroundColor = UIColor(r:247, g:247, b:247)
         cameraVC.didCapturePhoto = { img in
-            self.capturedImage = img
-            self.updateUI()
+//            self.capturedImage = img
+//            self.updateUI()
+            
+            
+            self.didSelectImage?(img)
         }
         videoVC.didCaptureVideo = { videoURL in
         
@@ -68,15 +71,65 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     }
     
     func pagerDidSelectController(_ vc: UIViewController) {
-        if vc == albumVC {
-            mode = .library
-        } else if vc == cameraVC {
-            mode = .camera
-        } else if vc == videoVC {
-            mode = .video
+        
+        var changedMode = true
+        
+        switch mode {
+        case .library where vc == albumVC:
+            changedMode = false
+        case .camera where vc == cameraVC:
+            changedMode = false
+        case .video where vc == videoVC:
+            changedMode = false
+        default:()
         }
         
-        updateUI()
+        
+        if changedMode {
+            
+            
+            
+//            let previousMode = mode
+
+            
+            
+            // Set new mode
+            if vc == albumVC {
+                mode = .library
+            } else if vc == cameraVC {
+                mode = .camera
+            } else if vc == videoVC {
+                mode = .video
+            }
+            
+            updateUI()
+            
+            
+            
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+                // Stop cameras not shown on screen.
+                if self.mode != .video {
+                    self.videoVC.stopCamera()
+                }
+                if self.mode != .camera {
+                    self.cameraVC.stopCamera()
+                }
+    //
+                //Start current camera
+                switch self.mode {
+                case .library: break
+                case .camera: self.cameraVC.startCamera()
+                case .video: self.videoVC.startCamera()
+                }
+            }
+//                view.bringSubview(toFront: menuView)
+//                navigationItem.rightBarButtonItem?.isHidden = !hasGalleryPermission
+//            
+//            updateUI()
+            
+            
+
+        }
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -97,8 +150,9 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
         switch mode {
         case .library:
-//            title = libraryVC.title
+            title = albumVC.title
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
+            navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
             title = cameraVC.title
             if let _ = capturedImage {
@@ -125,8 +179,8 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
                 didSelectImage?(img)
             }
         } else if mode == .library {
-            albumVC.selectedMedia(photo: { photo in
-                print(photo)
+            albumVC.selectedMedia(photo: { img in
+                self.didSelectImage?(img)
             }, video: { videoURL in
                 print(videoURL)
             })
@@ -178,31 +232,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
 //    }
 //}
 //
-//private extension FusumaViewController {
-//
-//
-//    func changeMode(_ aMode: Mode) {
-//        if mode == aMode {
-//            return
-//        }
-//        //operate this switch before changing mode to stop cameras
-//        switch mode {
-//        case .library:
-//            break
-//        case .camera:
-//            cameraVC.stopCamera()
-//        case .video:
-//            videoVC.stopCamera()
-//        }
-//        mode = aMode
-//        switch mode {
-//        case .library:()
-//        case .camera:
-//            cameraVC.startCamera()
-//        case .video:
-//            videoVC.startCamera()
-//        }
-////        view.bringSubview(toFront: menuView)
-////        navigationItem.rightBarButtonItem?.isHidden = !hasGalleryPermission
-//    }
+
+
 //}

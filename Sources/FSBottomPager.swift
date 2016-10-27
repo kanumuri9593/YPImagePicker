@@ -150,6 +150,7 @@ final class PagerView: UIView {
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.scrollsToTop = false
+        scrollView.bounces = false
     }
     
     func animateSelectorToPage(_ page: Int) {
@@ -185,18 +186,15 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.pagerScrollViewDidScroll(scrollView)
-        v.header.selector.leftConstraint?.constant =
-            scrollView.contentOffset.x / CGFloat(controllers.count)
-        UIView.animate(withDuration: 0.01, animations:v.layoutIfNeeded)
-        if v.header.menuItems.count > 1 {
+    }
+
+    
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if !v.header.menuItems.isEmpty {
             let threshold: CGFloat = v.frame.size.width / CGFloat(v.header.menuItems.count)
-            if scrollView.contentOffset.x > threshold {
-                v.header.menuItems[0].unselect()
-                v.header.menuItems[1].select()
-            } else {
-                v.header.menuItems[0].select()
-                v.header.menuItems[1].unselect()
-            }
+            let menuIndex = (scrollView.contentOffset.x + v.frame.size.width) / v.frame.size.width
+            let selectedIndex = Int(round(menuIndex)) - 1
+            selectPage(selectedIndex)
         }
     }
     
@@ -206,7 +204,7 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
             
             addChildViewController(c)
             let x: CGFloat = CGFloat(index) * viewWidth
-            c.view.frame = CGRect(x:x, y:0, width:viewWidth, height:v.frame.height)
+            c.view.frame = CGRect(x:x, y:0, width:viewWidth, height:v.frame.height - 50)
             v.scrollView.addSubview(c.view)
         }
         

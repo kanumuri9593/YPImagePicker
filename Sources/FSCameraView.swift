@@ -13,6 +13,7 @@ import Stevia
 class FSCameraView: UIView, UIGestureRecognizerDelegate {
     
     let previewViewContainer = UIView()
+    let buttonsContainer = UIView()
     let flipButton = UIButton()
     let shotButton = UIButton()
     let flashButton = UIButton()
@@ -25,21 +26,29 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
         
         sv(
             previewViewContainer,
-            flipButton,
-            shotButton,
-            flashButton
+            buttonsContainer.sv(
+                flipButton,
+                shotButton,
+                flashButton
+            )
         )
         
         layout(
             0,
             |previewViewContainer.heightEqualsWidth()|,
-            16,
-            shotButton.size(68).centerHorizontally()
+            0,
+            |buttonsContainer|,
+            0
         )
+        
+        shotButton.centerVertically()
+        shotButton.size(68).centerHorizontally()
         alignHorizontally(flipButton, shotButton, flashButton)
         |-15-flipButton.size(40)
         flashButton.size(40)-15-|
         backgroundColor = .clear
+        
+        previewViewContainer.backgroundColor = .red
     }
 }
     

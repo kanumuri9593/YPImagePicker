@@ -45,8 +45,6 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     public override func loadView() {
         let bundle = Bundle(for: self.classForCoder)
         v = UINib(nibName: "FSAlbumView", bundle:bundle).instantiate(withOwner: self, options: nil)[0] as! FSAlbumView
-        
-        print(v)
         view = v
     }
     
@@ -59,7 +57,6 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         super.viewDidLoad()
         v.collectionView.dataSource = self
         v.collectionView.delegate = self
-        
         initialize()
     }
 
