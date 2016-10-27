@@ -166,25 +166,25 @@ protocol PagerDelegate: class {
     func pagerDidSelectController(_ vc: UIViewController)
 }
 
-final class Pager: UIViewController, UIScrollViewDelegate {
+public class Pager: UIViewController, UIScrollViewDelegate {
     
     weak var delegate: PagerDelegate?
     var controllers = [UIViewController]() { didSet { reload() } }
     
     var v = PagerView()
     
-    override func loadView() {
+    override public func loadView() {
         self.automaticallyAdjustsScrollViewInsets = false
         v.scrollView.delegate = self
         view = v
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         v.animateSelectorToPage(currentPage())
         refreshSelection()
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.pagerScrollViewDidScroll(scrollView)
         v.header.selector.leftConstraint?.constant =
             scrollView.contentOffset.x / CGFloat(controllers.count)
