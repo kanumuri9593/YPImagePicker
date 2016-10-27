@@ -18,6 +18,7 @@ final class PagerMenu: UIView {
     
     convenience init() {
         self.init(frame:CGRect.zero)
+        backgroundColor = UIColor(r:247, g:247, b:247)
         
         sv(
             separator,

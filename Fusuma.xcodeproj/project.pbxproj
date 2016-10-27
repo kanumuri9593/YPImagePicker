@@ -12,6 +12,7 @@
 		99255A531DC1EB0D00D9FC72 /* FSVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99255A521DC1EB0D00D9FC72 /* FSVideoVC.swift */; };
 		996272611DBF9CCA0046E701 /* FSCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996272601DBF9CCA0046E701 /* FSCameraVC.swift */; };
 		996272661DBFA2480046E701 /* FusumaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996272651DBFA2480046E701 /* FusumaVC.swift */; };
+		996D03EE1DC206B00004E357 /* FSAlbumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996D03ED1DC206B00004E357 /* FSAlbumVC.swift */; };
 		997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997269861DBE617500AEB44F /* FSConfiguration.swift */; };
 		EDDC0B4A1D0511E7009135DB /* FusumaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B481D0511E7009135DB /* FusumaViewController.swift */; };
 		EDDC0B541D0511F2009135DB /* FSAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */; };
@@ -30,6 +31,7 @@
 		99255A521DC1EB0D00D9FC72 /* FSVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSVideoVC.swift; sourceTree = "<group>"; };
 		996272601DBF9CCA0046E701 /* FSCameraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSCameraVC.swift; sourceTree = "<group>"; };
 		996272651DBFA2480046E701 /* FusumaVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FusumaVC.swift; sourceTree = "<group>"; };
+		996D03ED1DC206B00004E357 /* FSAlbumVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumVC.swift; sourceTree = "<group>"; };
 		997269861DBE617500AEB44F /* FSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSConfiguration.swift; sourceTree = "<group>"; };
 		EDDC0B481D0511E7009135DB /* FusumaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = FusumaViewController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumView.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				EDDC0B531D0511F2009135DB /* FSImageCropView.swift */,
+				996D03ED1DC206B00004E357 /* FSAlbumVC.swift */,
 				EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */,
 				EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */,
 				EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */,
@@ -207,6 +210,7 @@
 				997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */,
 				99255A531DC1EB0D00D9FC72 /* FSVideoVC.swift in Sources */,
 				996272611DBF9CCA0046E701 /* FSCameraVC.swift in Sources */,
+				996D03EE1DC206B00004E357 /* FSAlbumVC.swift in Sources */,
 				EDDC0B581D0511F2009135DB /* FSCameraView.swift in Sources */,
 				EDDC0B4A1D0511E7009135DB /* FusumaViewController.swift in Sources */,
 				EDDC0B541D0511F2009135DB /* FSAlbumView.swift in Sources */,

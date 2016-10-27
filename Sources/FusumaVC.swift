@@ -40,6 +40,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         case video
     }
     
+    let albumVC = FSAlbumVC()
     let cameraVC = FSCameraVC()
     let videoVC = FSVideoVC()
     
@@ -67,7 +68,9 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     }
     
     func pagerDidSelectController(_ vc: UIViewController) {
-        if vc == cameraVC {
+        if vc == albumVC {
+            mode = .library
+        } else if vc == cameraVC {
             mode = .camera
         } else if vc == videoVC {
             mode = .video
@@ -84,7 +87,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if controllers.isEmpty {
-            controllers = [cameraVC, videoVC]
+            controllers = [albumVC, cameraVC, videoVC]
         }
     }
     
