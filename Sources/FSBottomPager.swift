@@ -1,5 +1,5 @@
 //
-//  FSPager.swift
+//  FSBottomPager.swift
 //  Fusuma
 //
 //  Created by Sacha Durand Saint Omer on 27/10/16.
@@ -18,8 +18,6 @@ final class PagerMenu: UIView {
     
     convenience init() {
         self.init(frame:CGRect.zero)
-        backgroundColor = .white
-        
         
         sv(
             separator,
@@ -166,7 +164,7 @@ protocol PagerDelegate: class {
     func pagerDidSelectController(_ vc: UIViewController)
 }
 
-public class Pager: UIViewController, UIScrollViewDelegate {
+public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     
     weak var delegate: PagerDelegate?
     var controllers = [UIViewController]() { didSet { reload() } }

@@ -49,10 +49,10 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func setupButtons() {
-        flashOnImage = fusumaFlashOnImage ?? imageFromBundle("ic_flash_on")
-        flashOffImage = fusumaFlashOffImage ?? imageFromBundle("ic_flash_off")
-        let flipImage = fusumaFlipImage ?? imageFromBundle("ic_loop")
-        let shotImage = fusumaShotImage ??  imageFromBundle("ic_radio_button_checked")
+        flashOnImage = imageFromBundle("ic_flash_on")
+        flashOffImage = imageFromBundle("ic_flash_off")
+        let flipImage = imageFromBundle("ic_loop")
+        let shotImage = imageFromBundle("ic_radio_button_checked")
         
         if fusumaTintIcons {
             v.flashButton.tintColor = fusumaBaseTintColor

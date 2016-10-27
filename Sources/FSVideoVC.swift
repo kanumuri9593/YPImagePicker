@@ -10,13 +10,9 @@
 import UIKit
 import AVFoundation
 
-@objc protocol FSVideoCameraViewDelegate: class {
-    func videoFinished(withFileURL fileURL: URL)
-}
-
 public class FSVideoVC: UIViewController {
     
-    weak var delegate: FSVideoCameraViewDelegate? = nil
+    public var didCaptureVideo:((URL) -> Void)?
     
     var session: AVCaptureSession?
     var device: AVCaptureDevice?
@@ -53,11 +49,11 @@ public class FSVideoVC: UIViewController {
     }
     
     func setupButtons() {
-        flashOnImage = fusumaFlashOnImage ?? imageFromBundle("ic_flash_on")
-        flashOffImage = fusumaFlashOffImage ?? imageFromBundle("ic_flash_off")
-        let flipImage = fusumaFlipImage ?? imageFromBundle("ic_loop")
-        videoStartImage = fusumaVideoStartImage ?? imageFromBundle("video_button")
-        videoStopImage = fusumaVideoStopImage ?? imageFromBundle("video_button_rec")
+        flashOnImage = imageFromBundle("ic_flash_on")
+        flashOffImage = imageFromBundle("ic_flash_off")
+        let flipImage = imageFromBundle("ic_loop")
+        videoStartImage = imageFromBundle("video_button")
+        videoStopImage = imageFromBundle("video_button_rec")
 
         if fusumaTintIcons {
             v.flashButton.tintColor = fusumaBaseTintColor
@@ -218,7 +214,7 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
     
     public func capture(_ captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAt outputFileURL: URL!, fromConnections connections: [Any]!, error: Error!) {
         print("finished recording to: \(outputFileURL)")
-        delegate?.videoFinished(withFileURL: outputFileURL)
+        didCaptureVideo?(outputFileURL)
     }
 }
 

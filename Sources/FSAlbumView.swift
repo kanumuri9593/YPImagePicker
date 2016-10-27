@@ -74,7 +74,7 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
         
         
         collectionView.register(FSAlbumViewCell.self, forCellWithReuseIdentifier: "FSAlbumViewCell")
-		collectionView.backgroundColor = fusumaBackgroundColor
+//		collectionView.backgroundColor = fusumaBackgroundColor
 		
         // Never load photos Unless the user allows to access to photo album
         checkPhotoAuth()

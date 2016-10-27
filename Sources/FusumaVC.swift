@@ -15,7 +15,20 @@ var videoStartImage: UIImage?
 var videoStopImage: UIImage?
 
 
-public class FusumaVC: Pager {
+
+extension UIColor {
+    convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 1.0) {
+        self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: a)
+    }
+}
+
+
+public class FusumaVC: FSBottomPager, PagerDelegate {
+    
+    internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) {    }
+
+    
+//    override public var prefersStatusBarHidden : Bool { return true }
     
     //API
     public var didClose:(() -> Void)?
@@ -30,7 +43,7 @@ public class FusumaVC: Pager {
     let cameraVC = FSCameraVC()
     let videoVC = FSVideoVC()
     
-    let mode = Mode.camera
+    var mode = Mode.camera
     
     var capturedImage:UIImage?
     
@@ -41,7 +54,31 @@ public class FusumaVC: Pager {
             self.capturedImage = img
             self.updateUI()
         }
+        videoVC.didCaptureVideo = { videoURL in
+        
+        }
+        delegate = self
+        
         updateUI()
+        
+        //has video set enum contreollers
+        
+        // Start onCameraMode -> index of selected controller
+    }
+    
+    func pagerDidSelectController(_ vc: UIViewController) {
+        if vc == cameraVC {
+            mode = .camera
+        } else if vc == videoVC {
+            mode = .video
+        }
+        
+        updateUI()
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopAll()
     }
     
     override public func viewDidAppear(_ animated: Bool) {
@@ -57,17 +94,17 @@ public class FusumaVC: Pager {
         navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
         switch mode {
         case .library:
-            title = NSLocalizedString(fusumaCameraRollTitle, comment: "").capitalized
+//            title = libraryVC.title
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
         case .camera:
-            title = NSLocalizedString(fusumaCameraTitle, comment: "").capitalized
+            title = cameraVC.title
             if let _ = capturedImage {
                 navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
             } else {
                 navigationItem.rightBarButtonItem = nil
             }
         case .video:
-            title = NSLocalizedString(fusumaVideoTitle, comment: "").capitalized
+            title = videoVC.title
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.plain, target: self, action: #selector(done))
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
@@ -85,6 +122,13 @@ public class FusumaVC: Pager {
                 didSelectImage?(img)
             }
         }
+    }
+    
+    func stopAll() {
+//        if hasVideo {
+            videoVC.stopCamera()
+//        }
+        cameraVC.stopCamera()
     }
     
 }
