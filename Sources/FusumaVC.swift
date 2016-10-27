@@ -10,6 +10,20 @@ import Foundation
 import Stevia
 
 
+class FusumaView: UIView {
+    
+    var pager: UIView!
+    
+    convenience init(aPager: Pager) {
+        self.init(frame: CGRect.zero)
+        pager = aPager.view
+        sv(
+            pager
+        )
+        pager.fillContainer()
+    }
+}
+
 
 public class FusumaVC: UIViewController {
     
@@ -23,29 +37,43 @@ public class FusumaVC: UIViewController {
         case video
     }
     
+    let pager = Pager()
+    
     let cameraVC = FSCameraVC()
+    let videoVC = FSVideoVC()
     
     let mode = Mode.camera
     
     var capturedImage:UIImage?
     
+    var v = FusumaView()
+    
+    
+    override public func loadView() {
+        self.v = FusumaView(aPager: pager)
+        self.view = self.v
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(r:247, g:247, b:247)
-        addCameraVCToView()
         cameraVC.didCapturePhoto = { img in
             self.capturedImage = img
             self.updateUI()
         }
         updateUI()
+        
+//        pager.delegate = self
+        addChildViewController(pager)
+        v = FusumaView(aPager: pager)
+        view = v
     }
     
-    func addCameraVCToView() {
-        addChildViewController(cameraVC)
-        view.sv(
-            cameraVC.view
-        )
-        cameraVC.view.fillContainer()
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if pager.controllers.isEmpty {
+            pager.controllers = [cameraVC, videoVC]
+        }
     }
     
     func updateUI() {

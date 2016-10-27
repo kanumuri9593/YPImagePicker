@@ -43,7 +43,7 @@ public final class FusumaViewController: UIViewController {
     
     lazy var albumView  = FSAlbumView.instance()
     public lazy var cameraVC = FSCameraVC()
-    lazy var videoView = FSVideoCameraView.instance()
+    lazy var videoVC = FSVideoVC()
     
     public var didSelectImage:((UIImage) -> Void)?
     public var didSelectVideo:((URL) -> Void)?
@@ -71,7 +71,7 @@ public final class FusumaViewController: UIViewController {
         view.backgroundColor = fusumaBackgroundColor
 //        cameraVC.delegate = self
         albumView.delegate  = self
-        videoView.delegate = self
+        videoVC.delegate = self
 //        menuView.backgroundColor = fusumaBackgroundColor
 //        menuView.addBottomBorder(UIColor.black, width: 1.0)
         
@@ -119,7 +119,7 @@ public final class FusumaViewController: UIViewController {
         
         photoLibraryViewerContainer.addSubview(albumView)
         cameraShotContainer.addSubview(cameraVC.view)
-        videoShotContainer.addSubview(videoView)
+        videoShotContainer.addSubview(videoVC.view)
         
         
         if !hasVideo {
@@ -161,13 +161,11 @@ public final class FusumaViewController: UIViewController {
         cameraVC.view.layoutIfNeeded()
 
         albumView.initialize()
-//        cameraVC.initialize()
-        
         
         if hasVideo {
-            videoView.frame = CGRect(origin: CGPoint.zero, size: videoShotContainer.frame.size)
-            videoView.layoutIfNeeded()
-            videoView.initialize()
+            videoVC.view.frame = CGRect(origin: CGPoint.zero, size: videoShotContainer.frame.size)
+            videoVC.view.layoutIfNeeded()
+//            videoVC.view.initialize()// TODO only if present?
         }
     }
     
@@ -264,7 +262,7 @@ private extension FusumaViewController {
     
     func stopAll() {
         if hasVideo {
-            videoView.stopCamera()
+            videoVC.stopCamera()
         }
         cameraVC.stopCamera()
     }
@@ -280,7 +278,7 @@ private extension FusumaViewController {
         case .camera:
             cameraVC.stopCamera()
         case .video:
-            videoView.stopCamera()
+            videoVC.stopCamera()
         }
         mode = aMode
         dishighlightButtons()
@@ -295,7 +293,7 @@ private extension FusumaViewController {
         case .video:
             highlightButton(videoButton)
             view.bringSubview(toFront: videoShotContainer)
-            videoView.startCamera()
+            videoVC.startCamera()
         }
         
 //        view.bringSubview(toFront: menuView)

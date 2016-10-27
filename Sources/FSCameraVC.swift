@@ -29,6 +29,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     convenience init() {
         self.init(nibName:nil, bundle:nil)
+        title = "Photo"
     }
     
     override public func viewDidLoad() {
@@ -41,7 +42,13 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        startCaptureSession()
+        if #available(iOS 10.0, *) { //TODO remove
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
+                self.startCaptureSession()
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
     func setupButtons() {
@@ -95,6 +102,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                 let videoLayer = AVCaptureVideoPreviewLayer(session: session)
                 videoLayer?.frame = v.previewViewContainer.bounds
                 print(v.previewViewContainer.bounds)
+                print(v.previewViewContainer.frame)
                 videoLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
                 v.previewViewContainer.layer.addSublayer(videoLayer!)
                 session.sessionPreset = AVCaptureSessionPresetPhoto
