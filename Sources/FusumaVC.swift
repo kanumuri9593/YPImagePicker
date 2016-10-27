@@ -9,6 +9,12 @@
 import Foundation
 import Stevia
 
+var flashOffImage: UIImage?
+var flashOnImage: UIImage?
+var videoStartImage: UIImage?
+var videoStopImage: UIImage?
+
+
 public class FusumaVC: Pager {
     
     //API

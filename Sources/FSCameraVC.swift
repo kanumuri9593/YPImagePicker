@@ -14,14 +14,11 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     public var useFrontCamera = false
     public var didCapturePhoto:((UIImage) -> Void)?
     
-    
     var session: AVCaptureSession?
     var device: AVCaptureDevice?
     var videoInput: AVCaptureDeviceInput?
     var imageOutput: AVCaptureStillImageOutput?
     var focusView: UIView?
-    var flashOffImage: UIImage?
-    var flashOnImage: UIImage?
     
     var v = FSCameraView()
     
@@ -133,26 +130,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         let point = recognizer.location(in: v)
         let viewsize = v.bounds.size
         let newPoint = CGPoint(x: point.y/viewsize.height, y: 1.0-point.x/viewsize.width)
-        
-        let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-        
-        do {
-            try device?.lockForConfiguration()
-        } catch _ {
-            return
-        }
-        
-        if device?.isFocusModeSupported(AVCaptureFocusMode.autoFocus) == true {
-            device?.focusMode = AVCaptureFocusMode.autoFocus
-            device?.focusPointOfInterest = newPoint
-        }
-        
-        if device?.isExposureModeSupported(AVCaptureExposureMode.continuousAutoExposure) == true {
-            device?.exposureMode = AVCaptureExposureMode.continuousAutoExposure
-            device?.exposurePointOfInterest = newPoint
-        }
-        
-        device?.unlockForConfiguration()
+        setFocusPointOnCurrentDevice(newPoint)
         
         if let fv = focusView {
             fv.center = point
@@ -354,4 +332,25 @@ func animateFocusView(_ v:UIView) {
         v.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
         v.removeFromSuperview()
     })
+}
+
+
+
+func setFocusPointOnCurrentDevice(_ point:CGPoint) {
+    if let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) {
+        do {
+            try device.lockForConfiguration()
+            if device.isFocusModeSupported(AVCaptureFocusMode.autoFocus) == true {
+                device.focusMode = AVCaptureFocusMode.autoFocus
+                device.focusPointOfInterest = point
+            }
+            if device.isExposureModeSupported(AVCaptureExposureMode.continuousAutoExposure) == true {
+                device.exposureMode = AVCaptureExposureMode.continuousAutoExposure
+                device.exposurePointOfInterest = point
+            }
+        } catch _ {
+            return
+        }
+        device.unlockForConfiguration()
+    }
 }

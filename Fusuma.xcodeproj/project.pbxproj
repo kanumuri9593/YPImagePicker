@@ -13,7 +13,6 @@
 		996272611DBF9CCA0046E701 /* FSCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996272601DBF9CCA0046E701 /* FSCameraVC.swift */; };
 		996272661DBFA2480046E701 /* FusumaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996272651DBFA2480046E701 /* FusumaVC.swift */; };
 		997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997269861DBE617500AEB44F /* FSConfiguration.swift */; };
-		EDDC0B3E1D04F53E009135DB /* FSVideoCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B3C1D04F53E009135DB /* FSVideoCameraView.swift */; };
 		EDDC0B3F1D04F53E009135DB /* FSVideoCameraViewOld.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDDC0B3D1D04F53E009135DB /* FSVideoCameraViewOld.xib */; };
 		EDDC0B4A1D0511E7009135DB /* FusumaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B481D0511E7009135DB /* FusumaViewController.swift */; };
 		EDDC0B4B1D0511E7009135DB /* FusumaViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDDC0B491D0511E7009135DB /* FusumaViewController.xib */; };
@@ -36,7 +35,6 @@
 		996272601DBF9CCA0046E701 /* FSCameraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSCameraVC.swift; sourceTree = "<group>"; };
 		996272651DBFA2480046E701 /* FusumaVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FusumaVC.swift; sourceTree = "<group>"; };
 		997269861DBE617500AEB44F /* FSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSConfiguration.swift; sourceTree = "<group>"; };
-		EDDC0B3C1D04F53E009135DB /* FSVideoCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSVideoCameraView.swift; sourceTree = "<group>"; };
 		EDDC0B3D1D04F53E009135DB /* FSVideoCameraViewOld.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSVideoCameraViewOld.xib; sourceTree = "<group>"; };
 		EDDC0B481D0511E7009135DB /* FusumaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = FusumaViewController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		EDDC0B491D0511E7009135DB /* FusumaViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FusumaViewController.xib; sourceTree = "<group>"; };
@@ -131,7 +129,6 @@
 			isa = PBXGroup;
 			children = (
 				99255A521DC1EB0D00D9FC72 /* FSVideoVC.swift */,
-				EDDC0B3C1D04F53E009135DB /* FSVideoCameraView.swift */,
 				EDDC0B3D1D04F53E009135DB /* FSVideoCameraViewOld.xib */,
 			);
 			name = Video;
@@ -221,7 +218,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EDDC0B3E1D04F53E009135DB /* FSVideoCameraView.swift in Sources */,
 				99255A511DC1E69A00D9FC72 /* FSPager.swift in Sources */,
 				997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */,
 				99255A531DC1EB0D00D9FC72 /* FSVideoVC.swift in Sources */,

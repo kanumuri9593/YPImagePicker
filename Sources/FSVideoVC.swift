@@ -23,14 +23,8 @@ public class FSVideoVC: UIViewController {
     var videoInput: AVCaptureDeviceInput?
     var videoOutput: AVCaptureMovieFileOutput?
     var focusView: UIView?
-    
-    var flashOffImage: UIImage?
-    var flashOnImage: UIImage?
-    var videoStartImage: UIImage?
-    var videoStopImage: UIImage?
-    
-    
-    var v = FSVideoView()
+
+    var v = FSCameraView()
     
     override public func loadView() { view = v }
     
@@ -234,24 +228,8 @@ extension FSVideoVC {
         let point = recognizer.location(in: v)
         let viewsize = v.bounds.size
         let newPoint = CGPoint(x: point.y/viewsize.height, y: 1.0-point.x/viewsize.width)
-        let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-        do {
-            try device?.lockForConfiguration()
-        } catch _ {
-            return
-        }
-        
-        if device?.isFocusModeSupported(AVCaptureFocusMode.autoFocus) == true {
-            device?.focusMode = AVCaptureFocusMode.autoFocus
-            device?.focusPointOfInterest = newPoint
-        }
-        
-        if device?.isExposureModeSupported(AVCaptureExposureMode.continuousAutoExposure) == true {
-            device?.exposureMode = AVCaptureExposureMode.continuousAutoExposure
-            device?.exposurePointOfInterest = newPoint
-        }
-        
-        device?.unlockForConfiguration()
+        setFocusPointOnCurrentDevice(newPoint)
+
         
         if let fv = focusView {
             fv.center = point
