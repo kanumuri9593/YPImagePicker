@@ -11,7 +11,7 @@ import AVFoundation
 
 public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
-    public var useFrontCamera = false
+    public var usesFrontCamera = false
     public var didCapturePhoto:((UIImage) -> Void)?
     
     var session: AVCaptureSession?
@@ -49,8 +49,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func setupButtons() {
-        flashOnImage = imageFromBundle("ic_flash_on")
-        flashOffImage = imageFromBundle("ic_flash_off")
+    
         let flipImage = imageFromBundle("ic_loop")
         let shotImage = imageFromBundle("ic_radio_button_checked")
         
@@ -61,7 +60,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         }
         
         if(fusumaTintIcons) {
-            v.flashButton.setImage(flashOffImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            v.flashButton.setImage(flashOffImage, for: .normal)
             v.flipButton.setImage(flipImage.withRenderingMode(.alwaysTemplate), for: .normal)
             v.shotButton.setImage(shotImage.withRenderingMode(.alwaysTemplate), for: .normal)
         } else {
@@ -79,7 +78,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     private func startCaptureSession() {
         session = AVCaptureSession()
         for device in AVCaptureDevice.devices() {
-            let cameraPosition: AVCaptureDevicePosition = useFrontCamera
+            let cameraPosition: AVCaptureDevicePosition = usesFrontCamera
                 ? .front
                 : .back
             if let device = device as? AVCaptureDevice , device.position == cameraPosition {

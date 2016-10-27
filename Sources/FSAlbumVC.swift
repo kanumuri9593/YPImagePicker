@@ -18,6 +18,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     
     weak var delegate: FSAlbumViewDelegate? = nil
     
+    public var showsVideo = false
     var images: PHFetchResult<PHAsset>!
     var imageManager: PHCachingImageManager?
     var previousPreheatRect: CGRect = CGRect.zero
@@ -405,7 +406,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         return assets
     }
     
-    public func selectedMedia(photo:@escaping (_ photo:UIImage) -> Void, video:@escaping (_ videoURL:AVURLAsset) -> Void) {
+    public func selectedMedia(photo:@escaping (_ photo:UIImage) -> Void, video:@escaping (_ videoURL:URL) -> Void) {
         let view = v.imageCropView
         
         if fusumaCropImage {
@@ -438,7 +439,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                                                             options: nil) { v, audioMix, info in
                                                                 DispatchQueue.main.async() {
                                                                     let urlAsset = v as! AVURLAsset
-                                                                    video(urlAsset)
+                                                                    video(urlAsset.url)
                                                                 }
                     }
                 } else {

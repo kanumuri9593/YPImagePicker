@@ -49,8 +49,6 @@ public class FSVideoVC: UIViewController {
     }
     
     func setupButtons() {
-        flashOnImage = imageFromBundle("ic_flash_on")
-        flashOffImage = imageFromBundle("ic_flash_off")
         let flipImage = imageFromBundle("ic_loop")
         videoStartImage = imageFromBundle("video_button")
         videoStopImage = imageFromBundle("video_button_rec")
@@ -62,7 +60,7 @@ public class FSVideoVC: UIViewController {
         }
         
         if(fusumaTintIcons) {
-            v.flashButton.setImage(flashOffImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            v.flashButton.setImage(flashOffImage, for: .normal)
             v.flipButton.setImage(flipImage.withRenderingMode(.alwaysTemplate), for: .normal)
             v.shotButton.setImage(videoStartImage!.withRenderingMode(.alwaysTemplate), for: .normal)
         } else {

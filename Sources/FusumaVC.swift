@@ -15,7 +15,6 @@ var videoStartImage: UIImage?
 var videoStopImage: UIImage?
 
 
-
 extension UIColor {
     convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 1.0) {
         self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: a)
@@ -25,14 +24,21 @@ extension UIColor {
 
 public class FusumaVC: FSBottomPager, PagerDelegate {
     
-    internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) {    }
-
+    
+    //has video set enum contreollers
+    
+    // Start onCameraMode -> index of selected controller
+    
+    public var showsVideo = false
+    public var usesFrontCamera = false
+    public var startsOnCameraMode = false
     
     override public var prefersStatusBarHidden : Bool { return true }
     
     //API
     public var didClose:(() -> Void)?
     public var didSelectImage:((UIImage) -> Void)?
+    public var didSelectVideo:((URL) -> Void)?
     
     enum Mode {
         case library
@@ -47,28 +53,49 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     var mode = Mode.library
     
     var capturedImage:UIImage?
+    var capturedVideo:URL?
+    
+    func imageFromBundle(_ named:String) -> UIImage {
+        let bundle = Bundle(for: self.classForCoder)
+        return UIImage(named: named, in: bundle, compatibleWith: nil) ?? UIImage()
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        
+        flashOnImage = imageFromBundle("ic_flash_on").withRenderingMode(.alwaysTemplate)
+        flashOffImage = imageFromBundle("ic_flash_off").withRenderingMode(.alwaysTemplate)
+        
+        
+        albumVC.showsVideo = showsVideo
+        cameraVC.usesFrontCamera = usesFrontCamera
+        
+        
         view.backgroundColor = UIColor(r:247, g:247, b:247)
         cameraVC.didCapturePhoto = { img in
-//            self.capturedImage = img
-//            self.updateUI()
-            
-            
             self.didSelectImage?(img)
         }
         videoVC.didCaptureVideo = { videoURL in
-        
+            self.capturedVideo = videoURL
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
         }
         delegate = self
         
         updateUI()
-        
-        //has video set enum contreollers
-        
-        // Start onCameraMode -> index of selected controller
     }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if controllers.isEmpty {
+            if showsVideo {
+                controllers = [albumVC, cameraVC, videoVC]
+            } else {
+                controllers = [albumVC, cameraVC]
+            }
+        }
+    }
+    
+    internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) {    }
     
     func pagerDidSelectController(_ vc: UIViewController) {
         
@@ -87,12 +114,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         
         if changedMode {
             
-            
-            
-//            let previousMode = mode
-
-            
-            
             // Set new mode
             if vc == albumVC {
                 mode = .library
@@ -104,8 +125,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             
             updateUI()
             
-            
-            
             DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
                 // Stop cameras not shown on screen.
                 if self.mode != .video {
@@ -114,7 +133,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
                 if self.mode != .camera {
                     self.cameraVC.stopCamera()
                 }
-    //
+                
                 //Start current camera
                 switch self.mode {
                 case .library: break
@@ -122,13 +141,8 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
                 case .video: self.videoVC.startCamera()
                 }
             }
-//                view.bringSubview(toFront: menuView)
 //                navigationItem.rightBarButtonItem?.isHidden = !hasGalleryPermission
-//            
-//            updateUI()
-            
-            
-
+//
         }
     }
     
@@ -137,12 +151,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         stopAll()
     }
     
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if controllers.isEmpty {
-            controllers = [albumVC, cameraVC, videoVC]
-        }
-    }
+
     
     func updateUI() {
         // Update Nav Bar state.
@@ -155,11 +164,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
             title = cameraVC.title
-            if let _ = capturedImage {
-                navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
-            } else {
-                navigationItem.rightBarButtonItem = nil
-            }
         case .video:
             title = videoVC.title
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.plain, target: self, action: #selector(done))
@@ -174,31 +178,27 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     }
     
     func done() {
-        if mode == .camera {
-            if let img = capturedImage {
-                didSelectImage?(img)
-            }
-        } else if mode == .library {
+        if mode == .library {
             albumVC.selectedMedia(photo: { img in
                 self.didSelectImage?(img)
             }, video: { videoURL in
-                print(videoURL)
+                self.didSelectVideo?(videoURL)
             })
+        } else if mode == .video {
+            if let videoURL = capturedVideo {
+                didSelectVideo?(videoURL)
+            }
         }
     }
     
     func stopAll() {
-//        if hasVideo {
-            videoVC.stopCamera()
-//        }
+        videoVC.stopCamera()
         cameraVC.stopCamera()
     }
     
 }
 
 
-
-//
 //public final class FusumaViewController: UIViewController {
 //
 //
@@ -230,8 +230,4 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
 //    public func albumViewCameraRollUnauthorized() {
 //        cameraRollUnauthorized?()
 //    }
-//}
-//
-
-
 //}

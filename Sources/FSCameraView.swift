@@ -48,7 +48,7 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
         flashButton.size(40)-15-|
         backgroundColor = .clear
         
-        previewViewContainer.backgroundColor = .red
+        previewViewContainer.backgroundColor = .black
     }
 }
     
