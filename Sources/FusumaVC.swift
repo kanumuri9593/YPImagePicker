@@ -124,6 +124,12 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             if let img = capturedImage {
                 didSelectImage?(img)
             }
+        } else if mode == .library {
+            albumVC.selectedMedia(photo: { photo in
+                print(photo)
+            }, video: { videoURL in
+                print(videoURL)
+            })
         }
     }
     
@@ -135,3 +141,68 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     }
     
 }
+
+
+
+//
+//public final class FusumaViewController: UIViewController {
+//
+//
+//    public var cameraRollUnauthorized:(() -> Void)?
+//
+//    fileprivate var hasGalleryPermission: Bool {
+//        return PHPhotoLibrary.authorizationStatus() == .authorized
+//    }
+//
+//    override public func viewDidLoad() {
+//        super.viewDidLoad()
+//        navigationController?.navigationBar.barTintColor = UIColor(r: 247, g: 247, b: 247)
+//
+//        albumView.delegate  = self
+//        changeMode(Mode.library)
+//
+//
+////        if fusumaCropImage {
+////            cameraView.fullAspectRatioConstraint.isActive = false
+////            cameraView.croppedAspectRatioConstraint.isActive = true
+////        } else {
+////            cameraView.fullAspectRatioConstraint.isActive = true
+////            cameraView.croppedAspectRatioConstraint.isActive = false
+////        }
+//    }
+//
+//
+//extension FusumaViewController: FSAlbumViewDelegate {
+//    public func albumViewCameraRollUnauthorized() {
+//        cameraRollUnauthorized?()
+//    }
+//}
+//
+//private extension FusumaViewController {
+//
+//
+//    func changeMode(_ aMode: Mode) {
+//        if mode == aMode {
+//            return
+//        }
+//        //operate this switch before changing mode to stop cameras
+//        switch mode {
+//        case .library:
+//            break
+//        case .camera:
+//            cameraVC.stopCamera()
+//        case .video:
+//            videoVC.stopCamera()
+//        }
+//        mode = aMode
+//        switch mode {
+//        case .library:()
+//        case .camera:
+//            cameraVC.startCamera()
+//        case .video:
+//            videoVC.startCamera()
+//        }
+////        view.bringSubview(toFront: menuView)
+////        navigationItem.rightBarButtonItem?.isHidden = !hasGalleryPermission
+//    }
+//}

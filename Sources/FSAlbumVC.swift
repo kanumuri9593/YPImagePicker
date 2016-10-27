@@ -10,6 +10,10 @@ import UIKit
 import Photos
 
 
+@objc public protocol FSAlbumViewDelegate: class {
+    func albumViewCameraRollUnauthorized()
+}
+
 public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
     weak var delegate: FSAlbumViewDelegate? = nil
@@ -403,9 +407,60 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         }
         return assets
     }
+    
+    public func selectedMedia(photo:@escaping (_ photo:UIImage) -> Void, video:@escaping (_ videoURL:AVURLAsset) -> Void) {
+        let view = v.imageCropView
+        
+        if fusumaCropImage {
+            let normalizedX = (view?.contentOffset.x)! / (view?.contentSize.width)!
+            let normalizedY = (view?.contentOffset.y)! / (view?.contentSize.height)!
+            
+            let normalizedWidth = (view?.frame.width)! / (view?.contentSize.width)!
+            let normalizedHeight = (view?.frame.height)! / (view?.contentSize.height)!
+            
+            let cropRect = CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
+            
+            DispatchQueue.global(qos: .default).async() {
+                
+                let options = PHImageRequestOptions()
+                options.deliveryMode = .highQualityFormat
+                options.isNetworkAccessAllowed = true
+                options.normalizedCropRect = cropRect
+                options.resizeMode = .exact
+                
+                let targetWidth = floor(CGFloat(self.phAsset.pixelWidth) * cropRect.width)
+                let targetHeight = floor(CGFloat(self.phAsset.pixelHeight) * cropRect.height)
+                let dimension = max(min(targetHeight, targetWidth), 1024 * UIScreen.main.scale)
+                
+                let targetSize = CGSize(width: dimension, height: dimension)
+                
+                let asset = self.phAsset!
+                
+                if asset.mediaType == .video {
+                    PHImageManager.default().requestAVAsset(forVideo: asset,
+                                                            options: nil) { v, audioMix, info in
+                                                                DispatchQueue.main.async() {
+                                                                    let urlAsset = v as! AVURLAsset
+                                                                    video(urlAsset)
+                                                                }
+                    }
+                } else {
+                    PHImageManager.default()
+                        .requestImage(for: asset,
+                                      targetSize: targetSize,
+                                      contentMode: .aspectFill,
+                                      options: options) { result, info in
+                                        DispatchQueue.main.async() {
+                                            photo(result!)
+                                        }
+                    }
+                }
+            }
+        } else {
+            photo(view!.image)
+        }
+    }
 }
-
-
 
 internal extension UICollectionView {
     

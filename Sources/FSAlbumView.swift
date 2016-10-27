@@ -8,10 +8,6 @@
 
 import UIKit
 
-@objc public protocol FSAlbumViewDelegate: class {
-    func albumViewCameraRollUnauthorized()
-}
-
 final class FSAlbumView: UIView {
     
     @IBOutlet weak var collectionView: UICollectionView!
