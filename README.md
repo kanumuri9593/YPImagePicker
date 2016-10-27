@@ -25,7 +25,10 @@ Here are the improvements we added :
 
 ## Preview
 
-<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/library.png" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/library.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/photo.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/video.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/filters.PNG" width="340px">
 
 ## Features
 - [x] UIImagePickerController alternative
