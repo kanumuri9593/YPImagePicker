@@ -164,6 +164,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
             title = cameraVC.title
+            navigationItem.rightBarButtonItem = nil
         case .video:
             title = videoVC.title
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.plain, target: self, action: #selector(done))
