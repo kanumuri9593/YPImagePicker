@@ -30,7 +30,7 @@ struct Filter {
             filter.setValue(ciImage, forKey: kCIInputImageKey)
             if let outputImage = filter.outputImage,
                 let cgImg = context.createCGImage(outputImage, from: outputImage.extent) {
-                return UIImage(cgImage:cgImg)
+                return UIImage(cgImage: cgImg, scale: image.scale, orientation: image.imageOrientation)
             } else {
                 return UIImage()
             }
