@@ -81,17 +81,21 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         }
         delegate = self
         
-        updateUI()
-    }
-    
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         if controllers.isEmpty {
             if showsVideo {
                 controllers = [albumVC, cameraVC, videoVC]
             } else {
                 controllers = [albumVC, cameraVC]
             }
+        }
+        
+        updateUI()
+    }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if startsOnCameraMode {
+            self.showPage(1)
         }
     }
     

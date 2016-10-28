@@ -191,7 +191,6 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if !v.header.menuItems.isEmpty {
-            let threshold: CGFloat = v.frame.size.width / CGFloat(v.header.menuItems.count)
             let menuIndex = (scrollView.contentOffset.x + v.frame.size.width) / v.frame.size.width
             let selectedIndex = Int(round(menuIndex)) - 1
             selectPage(selectedIndex)
@@ -199,13 +198,15 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     func reload() {
-        let viewWidth: CGFloat = v.frame.width
+        let viewWidth: CGFloat = UIScreen.main.bounds.width
         for (index, c) in controllers.enumerated() {
-            
             addChildViewController(c)
             let x: CGFloat = CGFloat(index) * viewWidth
-            c.view.frame = CGRect(x:x, y:0, width:viewWidth, height:v.frame.height - 50)
-            v.scrollView.addSubview(c.view)
+            v.scrollView.sv(c.view)
+            c.view.left(x)
+            c.view.top(0)
+            c.view.width(viewWidth)
+            c.view.height(UIScreen.main.bounds.height - 50)
         }
         
         let scrollableWidth: CGFloat = CGFloat(controllers.count) * CGFloat(viewWidth)
@@ -234,10 +235,10 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         showPage(b.tag)
     }
     
-    func showPage(_ page: Int) {
+    func showPage(_ page: Int, animated:Bool = true) {
         v.animateSelectorToPage(page)
         let x = CGFloat(page) * UIScreen.main.bounds.width
-        v.scrollView.setContentOffset(CGPoint(x:x, y:0), animated: true)
+        v.scrollView.setContentOffset(CGPoint(x:x, y:0), animated: animated)
         selectPage(page)
     }
     
