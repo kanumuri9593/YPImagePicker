@@ -26,10 +26,10 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
         
         sv(
             previewViewContainer,
+            flashButton,
+            flipButton,
             buttonsContainer.sv(
-                flipButton,
-                shotButton,
-                flashButton
+                shotButton
             )
         )
         
@@ -41,11 +41,19 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
             0
         )
         
+        layout(
+            15,
+            |-15-flashButton.size(40)
+        )
+        
+        layout(
+            15,
+            flipButton.size(40)-15-|
+        )
+        
         shotButton.centerVertically()
         shotButton.size(68).centerHorizontally()
-        alignHorizontally(flipButton, shotButton, flashButton)
-        |-15-flipButton.size(40)
-        flashButton.size(40)-15-|
+    
         backgroundColor = .clear
         
         previewViewContainer.backgroundColor = .black
