@@ -33,6 +33,7 @@ public class FSVideoVC: UIViewController {
         super.viewDidLoad()
         setupButtons()
         v.flashButton.tap(flashButtonTapped)
+        v.flashButton.isHidden = true
         v.shotButton.tap(shotButtonTapped)
         v.flipButton.tap(flipButtonTapped)
     }
