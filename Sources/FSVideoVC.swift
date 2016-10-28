@@ -14,13 +14,14 @@ public class FSVideoVC: UIViewController {
     
     public var didCaptureVideo:((URL) -> Void)?
     
-    var session: AVCaptureSession?
-    var device: AVCaptureDevice?
-    var videoInput: AVCaptureDeviceInput?
-    var videoOutput: AVCaptureMovieFileOutput?
-    var focusView: UIView?
-
-    var v = FSCameraView()
+    fileprivate var session: AVCaptureSession?
+    fileprivate var device: AVCaptureDevice?
+    fileprivate var videoInput: AVCaptureDeviceInput?
+    fileprivate var videoOutput: AVCaptureMovieFileOutput?
+    fileprivate var focusView: UIView?
+    fileprivate var timer = Timer()
+    fileprivate var dateVideoStarted = Date()
+    fileprivate var v = FSCameraView()
     
     override public func loadView() { view = v }
     
@@ -34,6 +35,7 @@ public class FSVideoVC: UIViewController {
         setupButtons()
         v.flashButton.tap(flashButtonTapped)
         v.flashButton.isHidden = true
+        v.timeElapsedLabel.isHidden = false
         v.shotButton.tap(shotButtonTapped)
         v.flipButton.tap(flipButtonTapped)
     }
@@ -51,8 +53,8 @@ public class FSVideoVC: UIViewController {
     
     func setupButtons() {
         let flipImage = imageFromBundle("yp_iconLoop")
-        videoStartImage = imageFromBundle("video_button")
-        videoStopImage = imageFromBundle("video_button_rec")
+        videoStartImage = imageFromBundle("yp_iconVideoCapture")
+        videoStopImage = imageFromBundle("yp_iconVideoCaptureRecording")
         v.flashButton.setImage(flashOffImage, for: .normal)
         v.flipButton.setImage(flipImage, for: .normal)
         v.shotButton.setImage(videoStartImage, for: .normal)
@@ -196,11 +198,34 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
     
     public func capture(_ captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAt fileURL: URL!, fromConnections connections: [Any]!) {
         print("started recording to: \(fileURL)")
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
+        dateVideoStarted = Date()
+    }
+    
+    func tick() {
+        let timeElapsed = Date().timeIntervalSince(dateVideoStarted)
+        v.timeElapsedLabel.text = formattedStrigFrom(timeElapsed)
+        let p:Float = Float(timeElapsed) / Float(30)
+        DispatchQueue.main.async {
+            self.v.progressBar.progress = p
+            UIView.animate(withDuration: 1, animations: {
+                self.v.layoutIfNeeded()
+            })
+        }
+    }
+    
+    func foo(_ timeInterval:TimeInterval) -> String {
+        let interval = Int(timeInterval)
+        let seconds = interval % 60
+        let r = timeInterval-Double(interval)
+        let miliseconds:Int = Int(r*100)
+        return String(format: "%02d:%02d", seconds, miliseconds)
     }
     
     public func capture(_ captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAt outputFileURL: URL!, fromConnections connections: [Any]!, error: Error!) {
         print("finished recording to: \(outputFileURL)")
         didCaptureVideo?(outputFileURL)
+        timer.invalidate()
     }
 }
 

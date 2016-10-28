@@ -216,15 +216,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         
         return cell
     }
-    
-    func formattedStrigFrom(_ timeInterval:TimeInterval) -> String {
-        let interval = Int(timeInterval)
-        let seconds = interval % 60
-        let minutes = (interval / 60) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
-    
-    
+
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -488,3 +480,10 @@ internal extension IndexSet {
 }
 
     
+
+func formattedStrigFrom(_ timeInterval:TimeInterval) -> String {
+    let interval = Int(timeInterval)
+    let seconds = interval % 60
+    let minutes = (interval / 60) % 60
+    return String(format: "%02d:%02d", minutes, seconds)
+}
