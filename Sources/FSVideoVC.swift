@@ -50,25 +50,12 @@ public class FSVideoVC: UIViewController {
     }
     
     func setupButtons() {
-        let flipImage = imageFromBundle("ic_loop")
+        let flipImage = imageFromBundle("yp_iconLoop")
         videoStartImage = imageFromBundle("video_button")
         videoStopImage = imageFromBundle("video_button_rec")
-
-        if fusumaTintIcons {
-            v.flashButton.tintColor = fusumaBaseTintColor
-            v.flipButton.tintColor  = fusumaBaseTintColor
-            v.shotButton.tintColor  = fusumaBaseTintColor
-        }
-        
-        if(fusumaTintIcons) {
-            v.flashButton.setImage(flashOffImage, for: .normal)
-            v.flipButton.setImage(flipImage.withRenderingMode(.alwaysTemplate), for: .normal)
-            v.shotButton.setImage(videoStartImage!.withRenderingMode(.alwaysTemplate), for: .normal)
-        } else {
-            v.flashButton.setImage(flashOffImage, for: .normal)
-            v.flipButton.setImage(flipImage, for: .normal)
-            v.shotButton.setImage(videoStartImage, for: .normal)
-        }
+        v.flashButton.setImage(flashOffImage, for: .normal)
+        v.flipButton.setImage(flipImage, for: .normal)
+        v.shotButton.setImage(videoStartImage, for: .normal)
     }
     
     func imageFromBundle(_ named:String) -> UIImage {

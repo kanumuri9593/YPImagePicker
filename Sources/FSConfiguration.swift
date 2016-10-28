@@ -10,4 +10,3 @@ import Foundation
 
 public var fusumaBaseTintColor   = UIColor(r: 204, g: 204, b: 204)
 public var fusumaCropImage: Bool = true
-public var fusumaTintIcons : Bool = true

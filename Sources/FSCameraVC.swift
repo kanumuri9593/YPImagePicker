@@ -32,6 +32,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     override public func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
+        v.flashButton.isHidden = true
         v.flashButton.tap(flashButtonTapped)
         v.shotButton.tap(shotButtonTapped)
         v.flipButton.tap(flipButtonTapped)
@@ -49,25 +50,11 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func setupButtons() {
-    
-        let flipImage = imageFromBundle("ic_loop")
-        let shotImage = imageFromBundle("ic_radio_button_checked")
-        
-        if fusumaTintIcons {
-            v.flashButton.tintColor = fusumaBaseTintColor
-            v.flipButton.tintColor  = fusumaBaseTintColor
-            v.shotButton.tintColor  = fusumaBaseTintColor
-        }
-        
-        if(fusumaTintIcons) {
-            v.flashButton.setImage(flashOffImage, for: .normal)
-            v.flipButton.setImage(flipImage.withRenderingMode(.alwaysTemplate), for: .normal)
-            v.shotButton.setImage(shotImage.withRenderingMode(.alwaysTemplate), for: .normal)
-        } else {
-            v.flashButton.setImage(flashOffImage, for: .normal)
-            v.flipButton.setImage(flipImage, for: .normal)
-            v.shotButton.setImage(shotImage, for: .normal)
-        }
+        let flipImage = imageFromBundle("yp_iconLoop")
+        let shotImage = imageFromBundle("yp_iconCapture")
+        v.flashButton.setImage(flashOffImage, for: .normal)
+        v.flipButton.setImage(flipImage, for: .normal)
+        v.shotButton.setImage(shotImage, for: .normal)
     }
     
     func imageFromBundle(_ named:String) -> UIImage {
@@ -88,7 +75,6 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                 }
             }
         }
-        
         do {
             if let session = session {
                 videoInput = try AVCaptureDeviceInput(device: device)
@@ -114,6 +100,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         disableFlash()
         startCamera()
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForegroundNotification(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        refreshFlashButton()
     }
     
     func willEnterForegroundNotification(_ notification: Notification) {
@@ -166,6 +153,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         if let deviceInput = videoInput, let s = session, cameraIsAvailable()  {
             videoInput = flipCameraFor(captureDeviceInput: deviceInput, onSession: s)
         }
+        refreshFlashButton()
     }
     
     func shotButtonTapped() {
@@ -240,6 +228,9 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     func refreshFlashButton() {
         if let device = device {
             v.flashButton.setImage(flashImage(forAVCaptureFlashMode:device.flashMode), for: .normal)
+            if let d = videoInput?.device {
+                v.flashButton.isHidden = !d.hasFlash
+            }
         }
     }
 
@@ -296,12 +287,12 @@ func flipCameraFor(captureDeviceInput:AVCaptureDeviceInput, onSession s:AVCaptur
     for input in s.inputs {
         s.removeInput(input as! AVCaptureInput)
     }
-    let position:AVCaptureDevicePosition = (captureDeviceInput.device.position == .front)
+    let toggledPosition:AVCaptureDevicePosition = (captureDeviceInput.device.position == .front)
         ? .back
         : .front
     
     for device in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) {
-        if let device = device as? AVCaptureDevice , device.position == position {
+        if let device = device as? AVCaptureDevice , device.position == toggledPosition {
             out = try? AVCaptureDeviceInput(device: device)
             s.addInput(captureDeviceInput)
         }

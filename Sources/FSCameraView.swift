@@ -43,16 +43,16 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
         
         layout(
             15,
-            |-15-flashButton.size(40)
+            |-15-flashButton.size(42)
         )
         
         layout(
             15,
-            flipButton.size(40)-15-|
+            flipButton.size(42)-15-|
         )
         
         shotButton.centerVertically()
-        shotButton.size(68).centerHorizontally()
+        shotButton.size(84).centerHorizontally()
     
         backgroundColor = .clear
         

@@ -63,8 +63,8 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        flashOnImage = imageFromBundle("ic_flash_on").withRenderingMode(.alwaysTemplate)
-        flashOffImage = imageFromBundle("ic_flash_off").withRenderingMode(.alwaysTemplate)
+        flashOnImage = imageFromBundle("yp_iconFlash_on")
+        flashOffImage = imageFromBundle("yp_iconFlash_off")
         
         
         albumVC.showsVideo = showsVideo
@@ -215,12 +215,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
 //
 //    override public func viewDidLoad() {
 //        super.viewDidLoad()
-//        navigationController?.navigationBar.barTintColor = UIColor(r: 247, g: 247, b: 247)
-//
-//        albumView.delegate  = self
-//        changeMode(Mode.library)
-//
-//
 ////        if fusumaCropImage {
 ////            cameraView.fullAspectRatioConstraint.isActive = false
 ////            cameraView.croppedAspectRatioConstraint.isActive = true
