@@ -9,7 +9,7 @@
 import UIKit
 
 
-public class YPimagePicker: UINavigationController {
+public class YPImagePicker: UINavigationController {
     
     public var showsVideo = false
     public var usesFrontCamera = false
@@ -37,16 +37,16 @@ public class YPimagePicker: UINavigationController {
             
             if self.showsFilters {
                 let filterVC = FiltersVC(image:pickedImage)
-                filterVC.didDissmissWithImage = { filteredImage in
-                    print(filteredImage)
+                filterVC.didSelectImage = { filteredImage in
+                    self.didSelectImage?(filteredImage)
                 }
                 
+                // Use Fade transition instead of default push animation
                 let transition = CATransition()
-                transition.duration = 1 //0.1//0.5
+                transition.duration = 0.3
                 transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
                 transition.type = kCATransitionFade
                 self.view.layer.add(transition, forKey: nil)
-                
                 
                 self.pushViewController(filterVC, animated: false)
             } else {

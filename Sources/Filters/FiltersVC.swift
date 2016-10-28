@@ -20,16 +20,13 @@ class FiltersVC: UIViewController {
     var originalImage = UIImage()
     var thumbImage = UIImage()
     
-    var didDissmissWithImage:((UIImage) -> Void)?
+    var didSelectImage:((UIImage) -> Void)?
     
     override func loadView() { view = v }
     
     required init(image:UIImage) {
         super.init(nibName: nil, bundle: nil)
         self.originalImage = image
-        
-//        self.originalImage = UIImage(named:"testImage")! // TEST
-        
         
         filterPreviews = [
             FilterPreview("Normal"),
@@ -90,7 +87,7 @@ class FiltersVC: UIViewController {
     }
     
     func done() {
-        didDissmissWithImage?(v.imageView.image!)
+        didSelectImage?(v.imageView.image!)
     }
 }
 
