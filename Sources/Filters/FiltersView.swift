@@ -26,12 +26,15 @@ class FiltersView: UIView {
         layout(
             0,
             |imageView|,
-            20,
-            |collectionView| ~ 170
+            0,
+            |collectionView|,
+            0
         )
         imageView.heightEqualsWidth()
         
         backgroundColor = UIColor(r: 247, g: 247, b: 247)
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
     }
@@ -41,7 +44,7 @@ class FiltersView: UIView {
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 4
         layout.sectionInset = UIEdgeInsets(top: 0, left: 18, bottom: 0, right: 18)
-        layout.itemSize = CGSize(width: 100, height: 125)
+        layout.itemSize = CGSize(width: 100, height: 120)
         return layout
     }
 }

@@ -95,14 +95,14 @@
 			isa = PBXGroup;
 			children = (
 				EDDC0B5C1D051245009135DB /* Assets.xcassets */,
+				997269861DBE617500AEB44F /* FSConfiguration.swift */,
 				996272651DBFA2480046E701 /* FusumaVC.swift */,
 				99A7BA7C1DC261CA00CED1D9 /* YPImagePicker.swift */,
 				99255A501DC1E69A00D9FC72 /* FSBottomPager.swift */,
-				99A7BA7E1DC2623900CED1D9 /* Filters */,
 				996272631DBFA03E0046E701 /* Album */,
 				996272621DBFA0300046E701 /* Camera */,
 				996272641DBFA0520046E701 /* Video */,
-				997269861DBE617500AEB44F /* FSConfiguration.swift */,
+				99A7BA7E1DC2623900CED1D9 /* Filters */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

@@ -26,6 +26,7 @@ class FiltersVC: UIViewController {
     
     required init(image:UIImage) {
         super.init(nibName: nil, bundle: nil)
+        title = "Filtres" // TODO localize
         self.originalImage = image
         
         filterPreviews = [
@@ -60,8 +61,8 @@ class FiltersVC: UIViewController {
     }
     
     func thumbFromImage(_ img: UIImage) -> UIImage {
-        let width: CGFloat = 100
-        let height: CGFloat = 100
+        let width: CGFloat = 200
+        let height: CGFloat = 200
         UIGraphicsBeginImageContext(CGSize(width:width, height:height))
         img.draw(in: CGRect(x:0, y:0, width:width, height:height))
         let smallImage = UIGraphicsGetImageFromCurrentImageContext()
