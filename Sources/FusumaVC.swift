@@ -72,10 +72,10 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         
         
         view.backgroundColor = UIColor(r:247, g:247, b:247)
-        cameraVC.didCapturePhoto = { img in
+        cameraVC.didCapturePhoto = { [unowned self] img in
             self.didSelectImage?(img)
         }
-        videoVC.didCaptureVideo = { videoURL in
+        videoVC.didCaptureVideo = { [unowned self] videoURL in
             self.capturedVideo = videoURL
             self.navigationItem.rightBarButtonItem?.isEnabled = true
         }

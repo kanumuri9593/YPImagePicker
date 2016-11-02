@@ -33,8 +33,7 @@ public class YPImagePicker: UINavigationController {
         navigationBar.isTranslucent = false
         
         
-        fusuma.didSelectImage = { pickedImage in
-            
+        fusuma.didSelectImage = { [unowned self] pickedImage in
             if self.showsFilters {
                 let filterVC = FiltersVC(image:pickedImage)
                 filterVC.didSelectImage = { filteredImage in
@@ -55,7 +54,7 @@ public class YPImagePicker: UINavigationController {
             }
         }
         
-        fusuma.didSelectVideo = {
+        fusuma.didSelectVideo = { [unowned self] in
             self.didSelectVideo?($0)
             self.dismiss(animated: true, completion: nil)
         }
