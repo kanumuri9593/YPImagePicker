@@ -50,13 +50,11 @@ public class YPImagePicker: UINavigationController {
                 self.pushViewController(filterVC, animated: false)
             } else {
                 self.didSelectImage?(pickedImage)
-                self.dismiss(animated: true, completion: nil)
             }
         }
         
         fusuma.didSelectVideo = { [unowned self] in
             self.didSelectVideo?($0)
-            self.dismiss(animated: true, completion: nil)
         }
     }
 }
