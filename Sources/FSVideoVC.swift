@@ -42,13 +42,7 @@ public class FSVideoVC: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if #available(iOS 10.0, *) { //TODO remove
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
-                self.startCaptureSession()
-            }
-        } else {
-            // Fallback on earlier versions
-        }
+        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startCaptureSession), userInfo: nil, repeats: false)
     }
     
     func setupButtons() {
@@ -69,7 +63,7 @@ public class FSVideoVC: UIViewController {
     fileprivate var isRecording = false
     
     
-    private func startCaptureSession() {
+    @objc private func startCaptureSession() {
         session = AVCaptureSession()
         for device in AVCaptureDevice.devices() {
             if let device = device as? AVCaptureDevice , device.position == AVCaptureDevicePosition.back {
@@ -80,6 +74,15 @@ public class FSVideoVC: UIViewController {
             if let session = session {
                 videoInput = try AVCaptureDeviceInput(device: device)
                 session.addInput(videoInput)
+                
+                // Add audio recording
+                for device in AVCaptureDevice.devices(withMediaType:AVMediaTypeAudio) {
+                    if let device = device as? AVCaptureDevice, let audioInput = try? AVCaptureDeviceInput(device: device) {
+                        session.addInput(audioInput)
+                    }
+                }
+                
+                
                 videoOutput = AVCaptureMovieFileOutput()
                 let totalSeconds = 30.0 //Total Seconds of capture time
                 let timeScale: Int32 = 30 //FPS
@@ -178,6 +181,15 @@ public class FSVideoVC: UIViewController {
         if let deviceInput = videoInput, let s = session  {
             videoInput = flipCameraFor(captureDeviceInput: deviceInput, onSession: s)
         }
+    
+        
+        // Add audio recording
+        for device in AVCaptureDevice.devices(withMediaType:AVMediaTypeAudio) {
+            if let device = device as? AVCaptureDevice, let audioInput = try? AVCaptureDeviceInput(device: device) {
+                session?.addInput(audioInput)
+            }
+        }
+        
     }
     
     func flashButtonTapped() {
