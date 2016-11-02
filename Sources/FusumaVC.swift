@@ -53,7 +53,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     var mode = Mode.library
     
     var capturedImage:UIImage?
-    var capturedVideo:URL?
     
     func imageFromBundle(_ named:String) -> UIImage {
         let bundle = Bundle(for: self.classForCoder)
@@ -76,8 +75,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             self.didSelectImage?(img)
         }
         videoVC.didCaptureVideo = { [unowned self] videoURL in
-            self.capturedVideo = videoURL
-            self.navigationItem.rightBarButtonItem?.isEnabled = true
+            self.didSelectVideo?(videoURL)
         }
         delegate = self
         
@@ -171,8 +169,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             navigationItem.rightBarButtonItem = nil
         case .video:
             title = videoVC.title
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.plain, target: self, action: #selector(done))
-            navigationItem.rightBarButtonItem?.isEnabled = false
+            navigationItem.rightBarButtonItem = nil
         }
     }
     
@@ -189,10 +186,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             }, video: { videoURL in
                 self.didSelectVideo?(videoURL)
             })
-        } else if mode == .video {
-            if let videoURL = capturedVideo {
-                didSelectVideo?(videoURL)
-            }
         }
     }
     
