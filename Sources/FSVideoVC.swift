@@ -27,7 +27,7 @@ public class FSVideoVC: UIViewController {
     
     convenience init() {
         self.init(nibName:nil, bundle:nil)
-        title = "Video"
+        title = fsLocalized("YPFusumaVideo")
     }
     
     override public func viewDidLoad() {

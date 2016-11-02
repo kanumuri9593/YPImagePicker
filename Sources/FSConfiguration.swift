@@ -10,3 +10,12 @@ import Foundation
 
 public var fusumaBaseTintColor   = UIColor(r: 204, g: 204, b: 204)
 public var fusumaCropImage: Bool = true
+
+
+func fsLocalized(_ str: String) -> String {
+    return NSLocalizedString(str,
+                             tableName: nil,
+                             bundle: Bundle(for:FusumaVC.self),
+                             value: "",
+                             comment: "")
+}

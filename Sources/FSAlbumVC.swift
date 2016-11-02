@@ -51,7 +51,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     
     convenience init() {
         self.init(nibName:nil, bundle:nil)
-        title = "Bibliothèque"
+        title = fsLocalized("YPFusumaLibrary")
     }
     
     public override func viewDidLoad() {

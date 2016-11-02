@@ -26,7 +26,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     convenience init() {
         self.init(nibName:nil, bundle:nil)
-        title = "Photo"
+        title = fsLocalized("YPFusumaPhoto")
     }
     
     override public func viewDidLoad() {
@@ -40,13 +40,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if #available(iOS 10.0, *) { //TODO remove
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
-                self.startCaptureSession()
-            }
-        } else {
-            // Fallback on earlier versions
-        }
+        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startCaptureSession), userInfo: nil, repeats: false)
     }
     
     func setupButtons() {
@@ -62,7 +56,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         return UIImage(named: named, in: bundle, compatibleWith: nil) ?? UIImage()
     }
     
-    private func startCaptureSession() {
+    @objc private func startCaptureSession() {
         session = AVCaptureSession()
         for device in AVCaptureDevice.devices() {
             let cameraPosition: AVCaptureDevicePosition = usesFrontCamera
@@ -297,6 +291,7 @@ func flipCameraFor(captureDeviceInput:AVCaptureDeviceInput, onSession s:AVCaptur
             s.addInput(captureDeviceInput)
         }
     }
+    
     s.commitConfiguration()
     s.startRunning()
     return out

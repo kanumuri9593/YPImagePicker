@@ -162,7 +162,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         switch mode {
         case .library:
             title = albumVC.title
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPFusumaNext"), style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
             title = cameraVC.title

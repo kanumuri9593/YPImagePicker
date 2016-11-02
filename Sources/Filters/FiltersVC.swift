@@ -26,7 +26,7 @@ class FiltersVC: UIViewController {
     
     required init(image:UIImage) {
         super.init(nibName: nil, bundle: nil)
-        title = "Filtres" // TODO localize
+        title = fsLocalized("YPFusumaFilter")
         self.originalImage = image
         
         filterPreviews = [
