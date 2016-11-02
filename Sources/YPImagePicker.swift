@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 public class YPImagePicker: UINavigationController {
     
     public var showsVideo = false
@@ -31,7 +30,7 @@ public class YPImagePicker: UINavigationController {
         viewControllers = [fusuma]
         
         navigationBar.isTranslucent = false
-    
+        
         
         fusuma.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
             if self.showsFilters {

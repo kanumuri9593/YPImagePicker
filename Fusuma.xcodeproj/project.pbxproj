@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		52412A971CA6114A0073C4BE /* Fusuma.h in Headers */ = {isa = PBXBuildFile; fileRef = 52412A961CA6114A0073C4BE /* Fusuma.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		990630351DCA2A710040AFE9 /* YPImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990630341DCA2A710040AFE9 /* YPImagePicker.swift */; };
 		99255A511DC1E69A00D9FC72 /* FSBottomPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99255A501DC1E69A00D9FC72 /* FSBottomPager.swift */; };
 		99255A531DC1EB0D00D9FC72 /* FSVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99255A521DC1EB0D00D9FC72 /* FSVideoVC.swift */; };
 		996272611DBF9CCA0046E701 /* FSCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996272601DBF9CCA0046E701 /* FSCameraVC.swift */; };
@@ -15,7 +16,6 @@
 		996D03EE1DC206B00004E357 /* FSAlbumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996D03ED1DC206B00004E357 /* FSAlbumVC.swift */; };
 		997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997269861DBE617500AEB44F /* FSConfiguration.swift */; };
 		9992CFE21DCA133400D47E4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9992CFE41DCA133400D47E4B /* Localizable.strings */; };
-		99A7BA7D1DC261CA00CED1D9 /* YPImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA7C1DC261CA00CED1D9 /* YPImagePicker.swift */; };
 		99A7BA841DC2623900CED1D9 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA7F1DC2623900CED1D9 /* Filter.swift */; };
 		99A7BA851DC2623900CED1D9 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA801DC2623900CED1D9 /* FilterCollectionViewCell.swift */; };
 		99A7BA861DC2623900CED1D9 /* FilterPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA811DC2623900CED1D9 /* FilterPreview.swift */; };
@@ -33,6 +33,7 @@
 		52412A931CA6114A0073C4BE /* Fusuma.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fusuma.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52412A961CA6114A0073C4BE /* Fusuma.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fusuma.h; sourceTree = "<group>"; };
 		52412A981CA6114A0073C4BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		990630341DCA2A710040AFE9 /* YPImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPImagePicker.swift; sourceTree = "<group>"; };
 		99255A501DC1E69A00D9FC72 /* FSBottomPager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSBottomPager.swift; sourceTree = "<group>"; };
 		99255A521DC1EB0D00D9FC72 /* FSVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSVideoVC.swift; sourceTree = "<group>"; };
 		996272601DBF9CCA0046E701 /* FSCameraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSCameraVC.swift; sourceTree = "<group>"; };
@@ -42,7 +43,6 @@
 		9992CFE31DCA133400D47E4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9992CFE51DCA14D300D47E4B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9992CFE61DCA14DC00D47E4B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		99A7BA7C1DC261CA00CED1D9 /* YPImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPImagePicker.swift; sourceTree = "<group>"; };
 		99A7BA7F1DC2623900CED1D9 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		99A7BA801DC2623900CED1D9 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		99A7BA811DC2623900CED1D9 /* FilterPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterPreview.swift; sourceTree = "<group>"; };
@@ -100,8 +100,8 @@
 			children = (
 				EDDC0B5C1D051245009135DB /* Assets.xcassets */,
 				9992CFE41DCA133400D47E4B /* Localizable.strings */,
+				990630341DCA2A710040AFE9 /* YPImagePicker.swift */,
 				997269861DBE617500AEB44F /* FSConfiguration.swift */,
-				99A7BA7C1DC261CA00CED1D9 /* YPImagePicker.swift */,
 				996272651DBFA2480046E701 /* FusumaVC.swift */,
 				99255A501DC1E69A00D9FC72 /* FSBottomPager.swift */,
 				996272631DBFA03E0046E701 /* Album */,
@@ -239,10 +239,10 @@
 			files = (
 				99A7BA881DC2623900CED1D9 /* FiltersView.swift in Sources */,
 				99A7BA861DC2623900CED1D9 /* FilterPreview.swift in Sources */,
-				99A7BA7D1DC261CA00CED1D9 /* YPImagePicker.swift in Sources */,
 				99A7BA841DC2623900CED1D9 /* Filter.swift in Sources */,
 				99A7BA871DC2623900CED1D9 /* FiltersVC.swift in Sources */,
 				99255A511DC1E69A00D9FC72 /* FSBottomPager.swift in Sources */,
+				990630351DCA2A710040AFE9 /* YPImagePicker.swift in Sources */,
 				997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */,
 				99255A531DC1EB0D00D9FC72 /* FSVideoVC.swift in Sources */,
 				996272611DBF9CCA0046E701 /* FSCameraVC.swift in Sources */,
