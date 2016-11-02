@@ -81,7 +81,7 @@ public class FSVideoVC: UIViewController {
                 videoInput = try AVCaptureDeviceInput(device: device)
                 session.addInput(videoInput)
                 videoOutput = AVCaptureMovieFileOutput()
-                let totalSeconds = 60.0 //Total Seconds of capture time
+                let totalSeconds = 30.0 //Total Seconds of capture time
                 let timeScale: Int32 = 30 //FPS
                 
                 let maxDuration = CMTimeMakeWithSeconds(totalSeconds, timeScale)
