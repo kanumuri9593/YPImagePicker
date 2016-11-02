@@ -31,13 +31,14 @@ public class YPImagePicker: UINavigationController {
         viewControllers = [fusuma]
         
         navigationBar.isTranslucent = false
+    
         
-        
-        fusuma.didSelectImage = { [unowned self] pickedImage in
+        fusuma.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
             if self.showsFilters {
                 let filterVC = FiltersVC(image:pickedImage)
                 filterVC.didSelectImage = { filteredImage in
                     self.didSelectImage?(filteredImage)
+                    UIImageWriteToSavedPhotosAlbum(filteredImage, nil, nil, nil)
                 }
                 
                 // Use Fade transition instead of default push animation
@@ -50,6 +51,9 @@ public class YPImagePicker: UINavigationController {
                 self.pushViewController(filterVC, animated: false)
             } else {
                 self.didSelectImage?(pickedImage)
+                if isNewPhoto {
+                    UIImageWriteToSavedPhotosAlbum(pickedImage, nil, nil, nil)
+                }
             }
         }
         

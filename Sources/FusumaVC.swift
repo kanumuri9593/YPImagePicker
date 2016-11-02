@@ -37,7 +37,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     
     //API
     public var didClose:(() -> Void)?
-    public var didSelectImage:((UIImage) -> Void)?
+    public var didSelectImage:((UIImage, Bool) -> Void)?
     public var didSelectVideo:((URL) -> Void)?
     
     enum Mode {
@@ -72,7 +72,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         
         view.backgroundColor = UIColor(r:247, g:247, b:247)
         cameraVC.didCapturePhoto = { [unowned self] img in
-            self.didSelectImage?(img)
+            self.didSelectImage?(img, true)
         }
         videoVC.didCaptureVideo = { [unowned self] videoURL in
             self.didSelectVideo?(videoURL)
@@ -182,7 +182,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     func done() {
         if mode == .library {
             albumVC.selectedMedia(photo: { img in
-                self.didSelectImage?(img)
+                self.didSelectImage?(img, false)
             }, video: { videoURL in
                 self.didSelectVideo?(videoURL)
             })
