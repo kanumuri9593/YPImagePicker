@@ -74,6 +74,12 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
         }
         progressBar.trackTintColor = .clear
         progressBar.tintColor = .red
+        
+        let flipImage = imageFromBundle("yp_iconLoop")
+        let shotImage = imageFromBundle("yp_iconCapture")
+        flashButton.setImage(flashOffImage, for: .normal)
+        flipButton.setImage(flipImage, for: .normal)
+        shotButton.setImage(shotImage, for: .normal)
     }
 }
     
