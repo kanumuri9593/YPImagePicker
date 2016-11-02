@@ -81,7 +81,6 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         
         
         v.collectionView.register(FSAlbumViewCell.self, forCellWithReuseIdentifier: "FSAlbumViewCell")
-        //		collectionView.backgroundColor = fusumaBackgroundColor
         
         // Never load photos Unless the user allows to access to photo album
         checkPhotoAuth()
@@ -91,7 +90,8 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         options.sortDescriptors = [
             NSSortDescriptor(key: "creationDate", ascending: false)
         ]
-        images = PHAsset.fetchAssets(with: options)
+        
+        images =  showsVideo ? PHAsset.fetchAssets(with: options) : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
         
         if images.count > 0 {
             changeImage(images[0])
