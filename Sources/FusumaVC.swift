@@ -24,18 +24,11 @@ extension UIColor {
 
 public class FusumaVC: FSBottomPager, PagerDelegate {
     
-    
-    //has video set enum contreollers
-    
-    // Start onCameraMode -> index of selected controller
-    
     public var showsVideo = false
     public var usesFrontCamera = false
-    public var startsOnCameraMode = false
     
     override public var prefersStatusBarHidden : Bool { return true }
     
-    //API
     public var didClose:(() -> Void)?
     public var didSelectImage:((UIImage, Bool) -> Void)?
     public var didSelectVideo:((URL) -> Void)?
@@ -87,14 +80,10 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             }
         }
         
+        showPage(1, animated:false)
+        
+        
         updateUI()
-    }
-    
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if startsOnCameraMode {
-            self.showPage(1)
-        }
     }
     
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) {    }
@@ -112,7 +101,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             changedMode = false
         default:()
         }
-        
         
         if changedMode {
             
@@ -143,8 +131,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
                 case .video: self.videoVC.startCamera()
                 }
             }
-//                navigationItem.rightBarButtonItem?.isHidden = !hasGalleryPermission
-//
         }
     }
     
@@ -152,8 +138,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         super.viewWillDisappear(animated)
         stopAll()
     }
-    
-
     
     func updateUI() {
         // Update Nav Bar state.
@@ -193,33 +177,4 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         videoVC.stopCamera()
         cameraVC.stopCamera()
     }
-    
 }
-
-
-//public final class FusumaViewController: UIViewController {
-//
-//
-//    public var cameraRollUnauthorized:(() -> Void)?
-//
-//    fileprivate var hasGalleryPermission: Bool {
-//        return PHPhotoLibrary.authorizationStatus() == .authorized
-//    }
-//
-//    override public func viewDidLoad() {
-//        super.viewDidLoad()
-////        if fusumaCropImage {
-////            cameraView.fullAspectRatioConstraint.isActive = false
-////            cameraView.croppedAspectRatioConstraint.isActive = true
-////        } else {
-////            cameraView.fullAspectRatioConstraint.isActive = true
-////            cameraView.croppedAspectRatioConstraint.isActive = false
-////        }
-//    }
-//
-//
-//extension FusumaViewController: FSAlbumViewDelegate {
-//    public func albumViewCameraRollUnauthorized() {
-//        cameraRollUnauthorized?()
-//    }
-//}

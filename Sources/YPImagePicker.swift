@@ -12,26 +12,27 @@ public class YPImagePicker: UINavigationController {
     
     public var showsVideo = false
     public var usesFrontCamera = false
-    public var startsOnCameraMode = false
     public var showsFilters = true
     public var didSelectImage:((UIImage) -> Void)?
     public var didSelectVideo:((URL) -> Void)?
     
     private let fusuma = FusumaVC()
     
+    required public init() {
+        super.init(nibName: nil, bundle: nil)
+        _ = self.view // Optimisation force loading view on init
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
         fusuma.usesFrontCamera = usesFrontCamera
-        fusuma.startsOnCameraMode = startsOnCameraMode
         fusuma.showsVideo = showsVideo
-        
         viewControllers = [fusuma]
-        
         navigationBar.isTranslucent = false
-        
-        
         fusuma.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
             if self.showsFilters {
                 let filterVC = FiltersVC(image:pickedImage)
@@ -59,5 +60,7 @@ public class YPImagePicker: UINavigationController {
         fusuma.didSelectVideo = { [unowned self] in
             self.didSelectVideo?($0)
         }
+        //force fusuma load view
+        _ = fusuma.view
     }
 }
