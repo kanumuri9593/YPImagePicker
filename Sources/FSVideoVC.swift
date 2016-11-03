@@ -14,11 +14,15 @@ public class FSVideoVC: UIViewController {
     
     public var didCaptureVideo:((URL) -> Void)?
     
-    fileprivate var session: AVCaptureSession?
-    fileprivate var device: AVCaptureDevice?
-    fileprivate var videoInput: AVCaptureDeviceInput?
-    fileprivate var videoOutput: AVCaptureMovieFileOutput?
-    fileprivate var focusView: UIView?
+    private let sessionQueue = DispatchQueue(label: "FSVideoVCSerialQueue")
+    let session = AVCaptureSession()
+    var device: AVCaptureDevice! {
+        return videoInput.device
+    }
+    
+    fileprivate var videoInput: AVCaptureDeviceInput!
+    fileprivate var videoOutput = AVCaptureMovieFileOutput()
+    let focusView = UIView(frame: CGRect(x: 0, y: 0, width: 90, height: 90))
     fileprivate var timer = Timer()
     fileprivate var dateVideoStarted = Date()
     fileprivate var v = FSCameraView()
@@ -33,16 +37,31 @@ public class FSVideoVC: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         setupButtons()
-        v.flashButton.tap(flashButtonTapped)
+        v.flashButton.addTarget(self, action: #selector(flashButtonTapped), for: .touchUpInside)
         v.flashButton.isHidden = true
         v.timeElapsedLabel.isHidden = false
-        v.shotButton.tap(shotButtonTapped)
-        v.flipButton.tap(flipButtonTapped)
+        v.shotButton.addTarget(self, action: #selector(shotButtonTapped), for: .touchUpInside)
+        v.flipButton.addTarget(self, action: #selector(flipButtonTapped), for: .touchUpInside)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startCaptureSession), userInfo: nil, repeats: false)
+        sessionQueue.async { [unowned self] in
+            self.setupCaptureSession()
+            DispatchQueue.main.async {
+                self.setupPreview()
+            }
+        }
+    }
+    
+    func setupPreview() {
+        let videoLayer = AVCaptureVideoPreviewLayer(session: session)
+        videoLayer?.frame = v.previewViewContainer.bounds
+        videoLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+        v.previewViewContainer.layer.addSublayer(videoLayer!)
+        let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focus(_:)))
+        v.previewViewContainer.addGestureRecognizer(tapRecognizer)
+        refreshFlashButton()
     }
     
     func setupButtons() {
@@ -54,83 +73,54 @@ public class FSVideoVC: UIViewController {
         v.shotButton.setImage(videoStartImage, for: .normal)
     }
     
-    func imageFromBundle(_ named:String) -> UIImage {
-        let bundle = Bundle(for: self.classForCoder)
-        return UIImage(named: named, in: bundle, compatibleWith: nil) ?? UIImage()
-    }
-    
-    
     fileprivate var isRecording = false
     
-    
-    @objc private func startCaptureSession() {
-        session = AVCaptureSession()
-        for device in AVCaptureDevice.devices() {
-            if let device = device as? AVCaptureDevice , device.position == AVCaptureDevicePosition.back {
-                self.device = device
+    private func setupCaptureSession() {
+        session.beginConfiguration()
+        let aDevice = deviceForPosition(.back)
+        videoInput = try? AVCaptureDeviceInput(device: aDevice)
+        if session.canAddInput(videoInput) {
+            session.addInput(videoInput)
+        }
+        
+        // Add audio recording
+        for device in AVCaptureDevice.devices(withMediaType:AVMediaTypeAudio) {
+            if let device = device as? AVCaptureDevice, let audioInput = try? AVCaptureDeviceInput(device: device) {
+                if session.canAddInput(audioInput) {
+                    session.addInput(audioInput)
+                }
             }
         }
-        do {
-            if let session = session {
-                videoInput = try AVCaptureDeviceInput(device: device)
-                session.addInput(videoInput)
-                
-                // Add audio recording
-                for device in AVCaptureDevice.devices(withMediaType:AVMediaTypeAudio) {
-                    if let device = device as? AVCaptureDevice, let audioInput = try? AVCaptureDeviceInput(device: device) {
-                        session.addInput(audioInput)
-                    }
-                }
-                
-                
-                videoOutput = AVCaptureMovieFileOutput()
-                let totalSeconds = 30.0 //Total Seconds of capture time
-                let timeScale: Int32 = 30 //FPS
-                
-                let maxDuration = CMTimeMakeWithSeconds(totalSeconds, timeScale)
-                
-                videoOutput?.maxRecordedDuration = maxDuration
-                videoOutput?.minFreeDiskSpaceLimit = 1024 * 1024 //SET MIN FREE SPACE IN BYTES FOR RECORDING TO CONTINUE ON A VOLUME
-                
-                if session.canAddOutput(videoOutput) {
-                    session.addOutput(videoOutput)
-                }
-                let videoLayer = AVCaptureVideoPreviewLayer(session: session)
-                videoLayer?.frame = v.previewViewContainer.bounds
-                videoLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-                v.previewViewContainer.layer.addSublayer(videoLayer!)
-                session.startRunning()
-                
-            }
-            
-            // Focus View
-            focusView = UIView(frame: CGRect(x: 0, y: 0, width: 90, height: 90))
-            let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(focus(_:)))
-            v.previewViewContainer.addGestureRecognizer(tapRecognizer)
-        } catch {
+        
+        let totalSeconds = 30.0 //Total Seconds of capture time
+        let timeScale: Int32 = 30 //FPS
+        let maxDuration = CMTimeMakeWithSeconds(totalSeconds, timeScale)
+        videoOutput.maxRecordedDuration = maxDuration
+        videoOutput.minFreeDiskSpaceLimit = 1024 * 1024 //SET MIN FREE SPACE IN BYTES FOR RECORDING TO CONTINUE ON A VOLUME
+        if session.canAddOutput(videoOutput) {
+            session.addOutput(videoOutput)
         }
-        disableFlash()
-        startCamera()
+        session.commitConfiguration()
+        session.startRunning()
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
+
     func startCamera() {
-        let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
-        if status == AVAuthorizationStatus.authorized {
-            session?.startRunning()
-        } else if status == AVAuthorizationStatus.denied || status == AVAuthorizationStatus.restricted {
-            session?.stopRunning()
+        sessionQueue.async { [unowned self] in
+            let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+            switch status {
+            case .notDetermined, .restricted, .denied:
+                self.session.stopRunning()
+            case .authorized:
+                self.session.startRunning()
+            }
         }
     }
     
     func stopCamera() {
-        if isRecording {
-            toggleRecording()
+        sessionQueue.async { [unowned self] in
+            self.session.stopRunning()
         }
-        session?.stopRunning()
     }
     
     func shotButtonTapped() {
@@ -138,10 +128,6 @@ public class FSVideoVC: UIViewController {
     }
     
     fileprivate func toggleRecording() {
-        guard let videoOutput = videoOutput else {
-            return
-        }
-        
         isRecording = !isRecording
         
         let shotImage: UIImage?
@@ -178,18 +164,27 @@ public class FSVideoVC: UIViewController {
     }
     
     func flipButtonTapped() {
-        if let deviceInput = videoInput, let s = session  {
-            videoInput = flipCameraFor(captureDeviceInput: deviceInput, onSession: s)
-        }
-    
-        
-        // Add audio recording
-        for device in AVCaptureDevice.devices(withMediaType:AVMediaTypeAudio) {
-            if let device = device as? AVCaptureDevice, let audioInput = try? AVCaptureDeviceInput(device: device) {
-                session?.addInput(audioInput)
+        sessionQueue.async { [unowned self] in
+            self.session.beginConfiguration()
+            self.session.resetInputs()
+            self.videoInput = flippedDeviceInputForInput(self.videoInput)
+            if self.session.canAddInput(self.videoInput) {
+                self.session.addInput(self.videoInput)
+            }
+            
+            // Re Add audio recording
+            for device in AVCaptureDevice.devices(withMediaType:AVMediaTypeAudio) {
+                if let device = device as? AVCaptureDevice, let audioInput = try? AVCaptureDeviceInput(device: device) {
+                    if self.session.canAddInput(audioInput) {
+                        self.session.addInput(audioInput)
+                    }
+                }
+            }
+            self.session.commitConfiguration()
+            DispatchQueue.main.async {
+                self.refreshFlashButton()
             }
         }
-        
     }
     
     func flashButtonTapped() {
@@ -244,23 +239,14 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
 extension FSVideoVC {
     
     func focus(_ recognizer: UITapGestureRecognizer) {
-        let point = recognizer.location(in: v)
-        let viewsize = v.bounds.size
-        let newPoint = CGPoint(x: point.y/viewsize.height, y: 1.0-point.x/viewsize.width)
-        setFocusPointOnCurrentDevice(newPoint)
-
-        
-        if let fv = focusView {
-            fv.center = point
-            configureFocusView(fv)
-            v.addSubview(fv)
-            animateFocusView(fv)
-        }
-    }
-    
-    func disableFlash() {
-        device?.disableFlash()
-        refreshFlashButton()
+        let point = recognizer.location(in: v.previewViewContainer)
+        let viewsize = v.previewViewContainer.bounds.size
+        let newPoint = CGPoint(x:point.x/viewsize.width, y:point.y/viewsize.height)
+        setFocusPointOnDevice(device: device, point: newPoint)
+        focusView.center = point
+        configureFocusView(focusView)
+        v.addSubview(focusView)
+        animateFocusView(focusView)
     }
     
     func refreshFlashButton() {

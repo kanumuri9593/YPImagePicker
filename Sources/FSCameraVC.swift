@@ -15,7 +15,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     public var didCapturePhoto:((UIImage) -> Void)?
     
     private let sessionQueue = DispatchQueue(label: "FSCameraVCSerialQueue")
-    var session = AVCaptureSession()
+    let session = AVCaptureSession()
     var device: AVCaptureDevice! {
         return videoInput.device
     }
@@ -35,9 +35,9 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     override public func viewDidLoad() {
         super.viewDidLoad()
         v.flashButton.isHidden = true
-        v.flashButton.tap(flashButtonTapped)
-        v.shotButton.tap(shotButtonTapped)
-        v.flipButton.tap(flipButtonTapped)
+        v.flashButton.addTarget(self, action: #selector(flashButtonTapped), for: .touchUpInside)
+        v.shotButton.addTarget(self, action: #selector(shotButtonTapped), for: .touchUpInside)
+        v.flipButton.addTarget(self, action: #selector(flipButtonTapped), for: .touchUpInside)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -89,7 +89,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
 //        }
 //    }
     
-    @objc func focus(_ recognizer: UITapGestureRecognizer) {
+    func focus(_ recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: v.previewViewContainer)
         let viewsize = v.previewViewContainer.bounds.size
         let newPoint = CGPoint(x:point.x/viewsize.width, y:point.y/viewsize.height)
@@ -175,6 +175,8 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                         if fusumaCropImage {
                             var resizedImage = UIImage(cgImage: imageRef!, scale: sw/iw, orientation: image.imageOrientation)
                             if let device = self.device, let cgImg =  resizedImage.cgImage, device.position == .front {
+                                
+                                print(image.imageOrientation)
                                 resizedImage = UIImage(cgImage: cgImg, scale: resizedImage.scale, orientation:.leftMirrored)
                             }
                             self.didCapturePhoto?(resizedImage)
