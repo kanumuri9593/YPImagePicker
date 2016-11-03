@@ -18,13 +18,8 @@ public class YPImagePicker: UINavigationController {
     
     private let fusuma = FusumaVC()
     
-    required public init() {
-        super.init(nibName: nil, bundle: nil)
-        _ = self.view // Optimisation force loading view on init
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    public func preheat() {
+        _ = self.view
     }
     
     override public func viewDidLoad() {
