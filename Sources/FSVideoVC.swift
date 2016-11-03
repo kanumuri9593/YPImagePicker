@@ -27,6 +27,9 @@ public class FSVideoVC: UIViewController {
     fileprivate var dateVideoStarted = Date()
     fileprivate var v = FSCameraView()
     
+    
+    var isSetup = false
+    
     override public func loadView() { view = v }
     
     convenience init() {
@@ -42,16 +45,6 @@ public class FSVideoVC: UIViewController {
         v.timeElapsedLabel.isHidden = false
         v.shotButton.addTarget(self, action: #selector(shotButtonTapped), for: .touchUpInside)
         v.flipButton.addTarget(self, action: #selector(flipButtonTapped), for: .touchUpInside)
-    }
-    
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        sessionQueue.async { [unowned self] in
-            self.setupCaptureSession()
-            DispatchQueue.main.async {
-                self.setupPreview()
-            }
-        }
     }
     
     func setupPreview() {
@@ -106,13 +99,23 @@ public class FSVideoVC: UIViewController {
     
 
     func startCamera() {
-        sessionQueue.async { [unowned self] in
-            let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
-            switch status {
-            case .notDetermined, .restricted, .denied:
-                self.session.stopRunning()
-            case .authorized:
-                self.session.startRunning()
+        if !isSetup {
+            sessionQueue.async { [unowned self] in
+                self.setupCaptureSession()
+                self.isSetup = true
+                DispatchQueue.main.async {
+                    self.setupPreview()
+                }
+            }
+        } else {
+            sessionQueue.async { [unowned self] in
+                let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+                switch status {
+                case .notDetermined, .restricted, .denied:
+                    self.session.stopRunning()
+                case .authorized:
+                    self.session.startRunning()
+                }
             }
         }
     }
