@@ -142,8 +142,14 @@ final class PagerView: UIView {
             header
         )
         
-        (|header| ~ 50).bottom(0)
-        scrollView.fillContainer()
+        layout(
+            0,
+            |scrollView|,
+            0,
+            |header| ~ 50,
+            0
+        )
+
         
         clipsToBounds = false
         scrollView.clipsToBounds = false
@@ -206,7 +212,7 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
             c.view.left(x)
             c.view.top(0)
             c.view.width(viewWidth)
-            c.view.height(UIScreen.main.bounds.height - 50)
+            equalHeights(c.view, v.scrollView)
         }
         
         let scrollableWidth: CGFloat = CGFloat(controllers.count) * CGFloat(viewWidth)
