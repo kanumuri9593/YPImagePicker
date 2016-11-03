@@ -24,10 +24,13 @@ extension UIColor {
 
 public class FusumaVC: FSBottomPager, PagerDelegate {
     
+    var shouldShowStatusBar = false
+    
+    override public var prefersStatusBarHidden: Bool { return shouldShowStatusBar }
+    
+    
     public var showsVideo = false
     public var usesFrontCamera = false
-    
-    override public var prefersStatusBarHidden : Bool { return true }
     
     public var didClose:(() -> Void)?
     public var didSelectImage:((UIImage, Bool) -> Void)?
@@ -84,6 +87,14 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         
         
         updateUI()
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        shouldShowStatusBar = true
+        UIView.animate(withDuration: 0.3) {
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
     }
     
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) {    }
