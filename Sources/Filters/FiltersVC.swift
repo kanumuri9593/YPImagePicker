@@ -88,7 +88,6 @@ class FiltersVC: UIViewController {
     }
     
     func done() {
-        _ = navigationController?.popToRootViewController(animated: false)
         didSelectImage?(v.imageView.image!)
     }
 }
