@@ -46,7 +46,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     let cameraVC = FSCameraVC()
     let videoVC = FSVideoVC()
     
-    var mode = Mode.library
+    var mode = Mode.camera
     
     var capturedImage:UIImage?
     
@@ -83,10 +83,16 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             }
         }
         
-        showPage(1, animated:false)
+        startOnPage(1)
         
         
         updateUI()
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        //cameraVC.startCamera()
+        startCurrentCamera()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -125,28 +131,36 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
             }
             
             updateUI()
-            
-            DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-                // Stop cameras not shown on screen.
-                if self.mode != .video {
-                    self.videoVC.stopCamera()
-                }
-                if self.mode != .camera {
-                    self.cameraVC.stopCamera()
-                }
-                
-                //Start current camera
-                switch self.mode {
-                case .library: break
-                case .camera: self.cameraVC.startCamera()
-                case .video: self.videoVC.startCamera()
-                }
-            }
+            stopCamerasNotShownOnScreen()
+            startCurrentCamera()
         }
     }
     
+    func stopCamerasNotShownOnScreen() {
+        if mode != .video {
+            videoVC.stopCamera()
+        }
+        if mode != .camera {
+            cameraVC.stopCamera()
+        }
+    }
+    
+    func startCurrentCamera() {
+        //Start current camera
+        switch mode {
+        case .library:
+            break
+        case .camera:
+            self.cameraVC.startCamera()
+        case .video:
+            self.videoVC.startCamera()
+        }
+    }
+    
+    
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        shouldShowStatusBar = false
         stopAll()
     }
     

@@ -25,11 +25,18 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     var v = FSCameraView()
     
+    
+    
+    var isPreviewSetup = false
+    
     override public func loadView() { view = v }
     
     convenience init() {
         self.init(nibName:nil, bundle:nil)
         title = fsLocalized("YPFusumaPhoto")
+        sessionQueue.async { [unowned self] in
+            self.setupCaptureSession()
+        }
     }
     
     override public func viewDidLoad() {
@@ -42,12 +49,11 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        sessionQueue.async { [unowned self] in
-            self.setupCaptureSession()
-            DispatchQueue.main.async {
-                self.setupPreview()
-            }
+        if !isPreviewSetup {
+            setupPreview()
+            isPreviewSetup = true
         }
+        refreshFlashButton()
     }
     
     func setupPreview() {
@@ -58,7 +64,6 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focus(_:)))
         tapRecognizer.delegate = self
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
-        refreshFlashButton()
     }
     
     private func setupCaptureSession() {
@@ -75,19 +80,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
             session.addOutput(imageOutput)
         }
         session.commitConfiguration()
-        session.startRunning()
-        
-//        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForegroundNotification(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
     }
-    
-//    func willEnterForegroundNotification(_ notification: Notification) {
-//        let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
-//        if status == AVAuthorizationStatus.authorized {
-//            session.startRunning()
-//        } else if status == AVAuthorizationStatus.denied || status == AVAuthorizationStatus.restricted {
-//            session.stopRunning()
-//        }
-//    }
     
     func focus(_ recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: v.previewViewContainer)
@@ -113,8 +106,10 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func stopCamera() {
-        sessionQueue.async { [unowned self] in
-            self.session.stopRunning()
+        if session.isRunning {
+            sessionQueue.async { [unowned self] in
+                self.session.stopRunning()
+            }
         }
     }
     
@@ -207,9 +202,5 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         case .off: return flashOffImage!
         default: return flashOffImage!
         }
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 }
