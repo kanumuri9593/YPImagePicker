@@ -23,9 +23,12 @@ class FiltersView: UIView {
             collectionView
         )
         
+        let isIphone4 = UIScreen.main.bounds.height == 480
+        let sideMargin:CGFloat = isIphone4 ? 20 : 0
+        
         layout(
             0,
-            |imageView|,
+            |-sideMargin-imageView-sideMargin-|,
             0,
             |collectionView|,
             0

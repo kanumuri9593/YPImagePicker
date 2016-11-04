@@ -36,9 +36,13 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
             )
         )
         
+        
+        let isIphone4 = UIScreen.main.bounds.height == 480
+        let sideMargin:CGFloat = isIphone4 ? 20 : 0
+        
         layout(
             0,
-            |previewViewContainer.heightEqualsWidth()|,
+            |-sideMargin-previewViewContainer-sideMargin-|,
             -2,
             |progressBar|,
             0,
@@ -46,20 +50,22 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
             0
         )
         
+        previewViewContainer.heightEqualsWidth()
+        
         layout(
             15,
-            |-15-flashButton.size(42)
+            |-(15+sideMargin)-flashButton.size(42)
         )
         
         layout(
             15,
-            flipButton.size(42)-15-|
+            flipButton.size(42)-(15+sideMargin)-|
         )
         
         addConstraint(item: timeElapsedLabel, attribute: .bottom,
                       toItem: previewViewContainer, constant: -15)
         
-        timeElapsedLabel-15-|
+        timeElapsedLabel-(15+sideMargin)-|
         
         shotButton.centerVertically()
         shotButton.size(84).centerHorizontally()

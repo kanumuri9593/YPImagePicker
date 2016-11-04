@@ -16,8 +16,8 @@ public class FSVideoVC: UIViewController {
     
     private let sessionQueue = DispatchQueue(label: "FSVideoVCSerialQueue")
     let session = AVCaptureSession()
-    var device: AVCaptureDevice! {
-        return videoInput.device
+    var device: AVCaptureDevice? {
+        return videoInput?.device
     }
     
     fileprivate var videoInput: AVCaptureDeviceInput!
@@ -247,7 +247,7 @@ extension FSVideoVC {
         let point = recognizer.location(in: v.previewViewContainer)
         let viewsize = v.previewViewContainer.bounds.size
         let newPoint = CGPoint(x:point.x/viewsize.width, y:point.y/viewsize.height)
-        setFocusPointOnDevice(device: device, point: newPoint)
+        setFocusPointOnDevice(device: device!, point: newPoint)
         focusView.center = point
         configureFocusView(focusView)
         v.addSubview(focusView)

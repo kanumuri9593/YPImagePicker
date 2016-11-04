@@ -40,8 +40,9 @@ struct Filter {
     
     func filterSharedContext() -> CIContext {
         if _filterSharedContext == nil {
-            let openGLContext = EAGLContext(api: .openGLES3)! // 3 or 2
-            _filterSharedContext = CIContext(eaglContext: openGLContext) // faster?
+            if let context = EAGLContext(api: .openGLES2) {
+                _filterSharedContext = CIContext(eaglContext: context)
+            }
             return _filterSharedContext
         } else {
             return _filterSharedContext
