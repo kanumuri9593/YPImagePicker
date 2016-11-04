@@ -118,6 +118,11 @@ extension FiltersVC: UICollectionViewDataSource {
 extension FiltersVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedFilter = filters[indexPath.row]
-        v.imageView.image = selectedFilter.filter(originalImage)
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+            let filteredImage = selectedFilter.filter(self.originalImage)
+            DispatchQueue.main.async {
+                self.v.imageView.image = filteredImage
+            }
+        }
     }
 }
