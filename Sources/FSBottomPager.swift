@@ -174,10 +174,15 @@ protocol PagerDelegate: class {
 
 public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     
+    
+    
     weak var delegate: PagerDelegate?
     var controllers = [UIViewController]() { didSet { reload() } }
     
     var v = PagerView()
+    
+    
+    var currentPage = 0
     
     override public func loadView() {
         self.automaticallyAdjustsScrollViewInsets = false
@@ -186,20 +191,20 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        v.animateSelectorToPage(currentPage())
-        refreshSelection()
+        v.animateSelectorToPage(currentPage)
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.pagerScrollViewDidScroll(scrollView)
     }
 
-    
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if !v.header.menuItems.isEmpty {
-            let menuIndex = (scrollView.contentOffset.x + v.frame.size.width) / v.frame.size.width
+            let menuIndex = (targetContentOffset.pointee.x + v.frame.size.width) / v.frame.size.width
             let selectedIndex = Int(round(menuIndex)) - 1
-            selectPage(selectedIndex)
+            if selectedIndex != currentPage {
+                selectPage(selectedIndex)
+            }
         }
     }
     
@@ -247,16 +252,10 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         v.scrollView.setContentOffset(CGPoint(x:x, y:0), animated: animated)
         selectPage(page)
     }
-    
-    func refreshSelection() {
-        selectPage(currentPage())
-    }
-    
-    func currentPage() -> Int {
-        return Int(v.scrollView.contentOffset.x / v.frame.width)
-    }
+
     
     func selectPage(_ page: Int) {
+        currentPage = page
         //select menut item and deselect others
         for mi in v.header.menuItems {
             mi.unselect()
@@ -264,5 +263,18 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         let currentMenuItem = v.header.menuItems[page]
         currentMenuItem.select()
         delegate?.pagerDidSelectController(controllers[page])
+    }
+    
+    func startOnPage(_ page: Int) {
+        currentPage = page
+        v.animateSelectorToPage(page)
+        let x = CGFloat(page) * UIScreen.main.bounds.width
+        v.scrollView.setContentOffset(CGPoint(x:x, y:0), animated: false)
+        //select menut item and deselect others
+        for mi in v.header.menuItems {
+            mi.unselect()
+        }
+        let currentMenuItem = v.header.menuItems[page]
+        currentMenuItem.select()
     }
 }
