@@ -10,6 +10,7 @@ import UIKit
 
 final class FSAlbumView: UIView {
     
+    @IBOutlet weak var spinnerView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var imageCropView: FSImageCropView!
     @IBOutlet weak var imageCropViewContainer: UIView!

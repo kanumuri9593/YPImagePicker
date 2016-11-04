@@ -12,6 +12,8 @@ import Photos
 
 @objc public protocol FSAlbumViewDelegate: class {
     func albumViewCameraRollUnauthorized()
+    func albumViewStartedLoadingImage()
+    func albumViewFinishedLoadingImage()
 }
 
 public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
@@ -279,10 +281,17 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         }
     }
 
+    
+    
+    var latestImageTapped = ""
 
     func changeImage(_ asset: PHAsset) {
         v.imageCropView.image = nil
         phAsset = asset
+        
+        latestImageTapped = asset.localIdentifier
+        
+        
         DispatchQueue.global(qos: .default).async() {
             let options = PHImageRequestOptions()
             options.isNetworkAccessAllowed = true
@@ -290,10 +299,18 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                                             targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
                                             contentMode: .aspectFill,
                                             options: options) { result, info in
-                                                DispatchQueue.main.async() {
-                                                    self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
-                                                    self.v.imageCropView.image = result
-                                                }
+                // Prevent long images to come after user selected another in the meantime.
+                if self.latestImageTapped == asset.localIdentifier {
+                    DispatchQueue.main.async() {
+                        if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool, isFromCloud  == true {
+                            self.v.spinnerView.isHidden = false
+                        } else {
+                            self.v.spinnerView.isHidden = true
+                        }
+                        self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+                        self.v.imageCropView.image = result
+                    }
+                }
             }
         }
     }
@@ -435,12 +452,14 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                                                                 }
                     }
                 } else {
+                    self.delegate?.albumViewStartedLoadingImage()
                     PHImageManager.default()
                         .requestImage(for: asset,
                                       targetSize: targetSize,
                                       contentMode: .aspectFill,
                                       options: options) { result, info in
                                         DispatchQueue.main.async() {
+                                            self.delegate?.albumViewFinishedLoadingImage()
                                             photo(result!)
                                         }
                     }

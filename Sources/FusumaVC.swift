@@ -63,6 +63,7 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         
         
         albumVC.showsVideo = showsVideo
+        albumVC.delegate = self
         cameraVC.usesFrontCamera = usesFrontCamera
         
         
@@ -202,3 +203,23 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         cameraVC.stopCamera()
     }
 }
+
+extension FusumaVC: FSAlbumViewDelegate {
+    
+    public func albumViewStartedLoadingImage() {
+        DispatchQueue.main.async {
+            let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView:spinner)
+            spinner.startAnimating()
+        }
+    }
+    
+    public func albumViewFinishedLoadingImage() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPFusumaNext"), style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
+    }
+    
+    public func albumViewCameraRollUnauthorized() {
+        
+    }
+}
+
