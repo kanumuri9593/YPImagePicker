@@ -91,7 +91,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //cameraVC.startCamera()
         startCurrentCamera()
     }
     

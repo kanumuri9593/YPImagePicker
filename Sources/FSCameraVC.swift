@@ -25,8 +25,6 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     var v = FSCameraView()
     
-    
-    
     var isPreviewSetup = false
     
     override public func loadView() { view = v }
@@ -94,13 +92,15 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func startCamera() {
-        sessionQueue.async { [unowned self] in
-            let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
-            switch status {
-            case .notDetermined, .restricted, .denied:
-                self.session.stopRunning()
-            case .authorized:
-                self.session.startRunning()
+        if !session.isRunning {
+            sessionQueue.async { [unowned self] in
+                let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+                switch status {
+                case .notDetermined, .restricted, .denied:
+                    self.session.stopRunning()
+                case .authorized:
+                    self.session.startRunning()
+                }
             }
         }
     }

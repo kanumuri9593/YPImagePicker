@@ -27,14 +27,19 @@ public class FSVideoVC: UIViewController {
     fileprivate var dateVideoStarted = Date()
     fileprivate var v = FSCameraView()
     
+
     
-    var isSetup = false
+    var isPreviewSetup = false
+    
     
     override public func loadView() { view = v }
     
     convenience init() {
         self.init(nibName:nil, bundle:nil)
         title = fsLocalized("YPFusumaVideo")
+        sessionQueue.async { [unowned self] in
+            self.setupCaptureSession()
+        }
     }
     
     override public func viewDidLoad() {
@@ -47,6 +52,15 @@ public class FSVideoVC: UIViewController {
         v.flipButton.addTarget(self, action: #selector(flipButtonTapped), for: .touchUpInside)
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !isPreviewSetup {
+            setupPreview()
+            isPreviewSetup = true
+        }
+        refreshFlashButton()
+    }
+    
     func setupPreview() {
         let videoLayer = AVCaptureVideoPreviewLayer(session: session)
         videoLayer?.frame = v.previewViewContainer.bounds
@@ -54,7 +68,6 @@ public class FSVideoVC: UIViewController {
         v.previewViewContainer.layer.addSublayer(videoLayer!)
         let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focus(_:)))
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
-        refreshFlashButton()
     }
     
     func setupButtons() {
@@ -94,20 +107,11 @@ public class FSVideoVC: UIViewController {
             session.addOutput(videoOutput)
         }
         session.commitConfiguration()
-        session.startRunning()
     }
     
 
     func startCamera() {
-        if !isSetup {
-            sessionQueue.async { [unowned self] in
-                self.setupCaptureSession()
-                self.isSetup = true
-                DispatchQueue.main.async {
-                    self.setupPreview()
-                }
-            }
-        } else {
+        if !session.isRunning {
             sessionQueue.async { [unowned self] in
                 let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
                 switch status {
@@ -129,10 +133,6 @@ public class FSVideoVC: UIViewController {
     }
     
     func shotButtonTapped() {
-        toggleRecording()
-    }
-    
-    fileprivate func toggleRecording() {
         isRecording = !isRecording
         
         let shotImage: UIImage?
