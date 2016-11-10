@@ -90,7 +90,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
         clipsToBounds   = true
         imageView.alpha = 0.0
         imageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
-        maximumZoomScale = 2.0
+        maximumZoomScale = 6.0
         minimumZoomScale = 0.8
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator   = false
