@@ -10,6 +10,12 @@ import UIKit
 
 public class YPImagePicker: UINavigationController {
     
+    public static var albumName = "DefaultYPImagePickerAlbumName" {
+        didSet {
+            PhotoSaver.albumName = albumName
+        }
+    }
+    
     public var showsVideo = false
     public var usesFrontCamera = false
     public var showsFilters = true
@@ -34,7 +40,7 @@ public class YPImagePicker: UINavigationController {
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
                     self.didSelectImage?(filteredImage)
                     if isNewPhoto || isImageFiltered {
-                        UIImageWriteToSavedPhotosAlbum(filteredImage, nil, nil, nil)
+                        PhotoSaver.trySaveImage(filteredImage)
                     }
                 }
                 
@@ -49,7 +55,7 @@ public class YPImagePicker: UINavigationController {
             } else {
                 self.didSelectImage?(pickedImage)
                 if isNewPhoto {
-                    UIImageWriteToSavedPhotosAlbum(pickedImage, nil, nil, nil)
+                    PhotoSaver.trySaveImage(pickedImage)
                 }
             }
         }

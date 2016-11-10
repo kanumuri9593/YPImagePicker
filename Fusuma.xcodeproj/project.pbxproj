@@ -14,6 +14,7 @@
 		996272661DBFA2480046E701 /* FusumaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996272651DBFA2480046E701 /* FusumaVC.swift */; };
 		996D03EE1DC206B00004E357 /* FSAlbumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996D03ED1DC206B00004E357 /* FSAlbumVC.swift */; };
 		997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997269861DBE617500AEB44F /* FSConfiguration.swift */; };
+		9980A1871DD474C700E50A81 /* PhotoSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9980A1861DD474C700E50A81 /* PhotoSaver.swift */; };
 		9992CFE21DCA133400D47E4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9992CFE41DCA133400D47E4B /* Localizable.strings */; };
 		99A7BA841DC2623900CED1D9 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA7F1DC2623900CED1D9 /* Filter.swift */; };
 		99A7BA851DC2623900CED1D9 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA801DC2623900CED1D9 /* FilterCollectionViewCell.swift */; };
@@ -41,6 +42,7 @@
 		996272651DBFA2480046E701 /* FusumaVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FusumaVC.swift; sourceTree = "<group>"; };
 		996D03ED1DC206B00004E357 /* FSAlbumVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumVC.swift; sourceTree = "<group>"; };
 		997269861DBE617500AEB44F /* FSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSConfiguration.swift; sourceTree = "<group>"; };
+		9980A1861DD474C700E50A81 /* PhotoSaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoSaver.swift; sourceTree = "<group>"; };
 		9992CFE31DCA133400D47E4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9992CFE51DCA14D300D47E4B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9992CFE61DCA14DC00D47E4B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				EDDC0B5C1D051245009135DB /* Assets.xcassets */,
 				9992CFE41DCA133400D47E4B /* Localizable.strings */,
 				990630341DCA2A710040AFE9 /* YPImagePicker.swift */,
+				9980A1861DD474C700E50A81 /* PhotoSaver.swift */,
 				997269861DBE617500AEB44F /* FSConfiguration.swift */,
 				99DCD39C1DCA38FD00E3BBC3 /* FSHelpers.swift */,
 				996272651DBFA2480046E701 /* FusumaVC.swift */,
@@ -256,6 +259,7 @@
 				EDDC0B5B1D0511F2009135DB /* FSImageCropView.swift in Sources */,
 				EDDC0B561D0511F2009135DB /* FSAlbumViewCell.swift in Sources */,
 				99A7BA851DC2623900CED1D9 /* FilterCollectionViewCell.swift in Sources */,
+				9980A1871DD474C700E50A81 /* PhotoSaver.swift in Sources */,
 				996272661DBFA2480046E701 /* FusumaVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
