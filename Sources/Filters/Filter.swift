@@ -14,7 +14,7 @@ var _filterSharedContext:CIContext!
 
 struct Filter {
     
-    private var name = ""
+    var name = ""
     
     init(_ name:String) {
         self.name = name

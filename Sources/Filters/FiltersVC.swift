@@ -20,7 +20,9 @@ class FiltersVC: UIViewController {
     var originalImage = UIImage()
     var thumbImage = UIImage()
     
-    var didSelectImage:((UIImage) -> Void)?
+    var didSelectImage:((UIImage,Bool) -> Void)?
+    
+    var isImageFiltered = false
     
     override func loadView() { view = v }
     
@@ -88,7 +90,7 @@ class FiltersVC: UIViewController {
     }
     
     func done() {
-        didSelectImage?(v.imageView.image!)
+        didSelectImage?(v.imageView.image!, isImageFiltered)
     }
 }
 
@@ -122,6 +124,10 @@ extension FiltersVC: UICollectionViewDelegate {
             DispatchQueue.main.async {
                 self.v.imageView.image = filteredImage
             }
+        }
+        
+        if selectedFilter.name != "" {
+            self.isImageFiltered = true
         }
     }
 }
