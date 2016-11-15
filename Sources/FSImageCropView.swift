@@ -7,51 +7,11 @@
 //
 
 import UIKit
-import Stevia
-
-
-class FSGridView: UIView {
-    
-    let line1 = UIView()
-    let line2 = UIView()
-    let line3 = UIView()
-    let line4 = UIView()
-    
-    convenience init() {
-        self.init(frame:CGRect.zero)
-        isUserInteractionEnabled = false
-        sv(
-            line1,
-            line2,
-            line3,
-            line4
-        )
-        
-        let stroke:CGFloat = 0.5
-        line1.top(0).width(stroke).bottom(0)
-        addConstraint(item: line1, attribute: .right, toItem: self, attribute: .right, multiplier: 0.33, constant: 0)
-    
-        line2.top(0).width(stroke).bottom(0)
-        addConstraint(item: line2, attribute: .right, toItem: self, attribute: .right, multiplier: 0.66, constant: 0)
-
-        line3.left(0).height(stroke).right(0)
-        addConstraint(item: line3, attribute: .bottom, toItem: self, attribute: .bottom, multiplier: 0.33, constant: 0)
-
-        line4.left(0).height(stroke).right(0)
-        addConstraint(item: line4, attribute: .bottom, toItem: self, attribute: .bottom, multiplier: 0.66, constant: 0)
-    
-        
-        let color = UIColor.white.withAlphaComponent(0.6)
-        line1.backgroundColor = color
-        line2.backgroundColor = color
-        line3.backgroundColor = color
-        line4.backgroundColor = color
-    }
-}
-
 
 protocol FSImageCropViewDelegate: class {
     func fsImageCropViewDidLayoutSubviews()
+    func fsImageCropViewscrollViewDidZoom()
+    func fsImageCropViewscrollViewDidEndZooming()
 }
 
 final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
@@ -166,7 +126,11 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
         return imageView
     }
     
+
+    
+    
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        myDelegate?.fsImageCropViewscrollViewDidZoom()
         let boundsSize = scrollView.bounds.size
         var contentsFrame = imageView.frame
         if contentsFrame.size.width < boundsSize.width {
@@ -184,6 +148,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        myDelegate?.fsImageCropViewscrollViewDidEndZooming()
         contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
     }
 }

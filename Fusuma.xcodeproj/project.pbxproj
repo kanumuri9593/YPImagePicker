@@ -24,6 +24,7 @@
 		99DCD39B1DCA2EE000E3BBC3 /* YPImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990630341DCA2A710040AFE9 /* YPImagePicker.swift */; };
 		99DCD39D1DCA38FD00E3BBC3 /* FSHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DCD39C1DCA38FD00E3BBC3 /* FSHelpers.swift */; };
 		99EB07651DDB14F900A6DDF8 /* ImageCropViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB07641DDB14F900A6DDF8 /* ImageCropViewContainer.swift */; };
+		99EB07671DDB41CC00A6DDF8 /* FSGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB07661DDB41CC00A6DDF8 /* FSGridView.swift */; };
 		EDDC0B541D0511F2009135DB /* FSAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */; };
 		EDDC0B551D0511F2009135DB /* FSAlbumView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */; };
 		EDDC0B561D0511F2009135DB /* FSAlbumViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */; };
@@ -54,6 +55,7 @@
 		99A7BA831DC2623900CED1D9 /* FiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
 		99DCD39C1DCA38FD00E3BBC3 /* FSHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSHelpers.swift; sourceTree = "<group>"; };
 		99EB07641DDB14F900A6DDF8 /* ImageCropViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCropViewContainer.swift; sourceTree = "<group>"; };
+		99EB07661DDB41CC00A6DDF8 /* FSGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSGridView.swift; sourceTree = "<group>"; };
 		EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumView.swift; sourceTree = "<group>"; };
 		EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAlbumView.xib; sourceTree = "<group>"; };
 		EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumViewCell.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */,
 				EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */,
 				99EB07641DDB14F900A6DDF8 /* ImageCropViewContainer.swift */,
+				99EB07661DDB41CC00A6DDF8 /* FSGridView.swift */,
 			);
 			name = Album;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 				997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */,
 				99EB07651DDB14F900A6DDF8 /* ImageCropViewContainer.swift in Sources */,
 				99DCD39D1DCA38FD00E3BBC3 /* FSHelpers.swift in Sources */,
+				99EB07671DDB41CC00A6DDF8 /* FSGridView.swift in Sources */,
 				99255A531DC1EB0D00D9FC72 /* FSVideoVC.swift in Sources */,
 				996272611DBF9CCA0046E701 /* FSCameraVC.swift in Sources */,
 				996D03EE1DC206B00004E357 /* FSAlbumVC.swift in Sources */,

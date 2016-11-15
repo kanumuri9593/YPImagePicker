@@ -83,4 +83,18 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         grid.frame = frame.intersection(newFrame)
         grid.layoutIfNeeded()
     }
+    
+    func fsImageCropViewscrollViewDidZoom() {
+        if isShown {
+            UIView.animate(withDuration: 0.1) {
+                self.grid.alpha = 1
+            }
+        }
+    }
+    
+    func fsImageCropViewscrollViewDidEndZooming() {
+        UIView.animate(withDuration: 0.3) {
+            self.grid.alpha = 0
+        }
+    }
 }
