@@ -35,7 +35,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         case down
     }
     let imageCropViewOriginalConstraintTop: CGFloat = 0
-    let imageCropViewMinimalVisibleHeight: CGFloat  = 100
+    let imageCropViewMinimalVisibleHeight: CGFloat  = 50
     var dragDirection = Direction.up
     var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
     
