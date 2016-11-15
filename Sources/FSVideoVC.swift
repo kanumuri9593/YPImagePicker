@@ -106,9 +106,9 @@ public class FSVideoVC: UIViewController {
         if session.canAddOutput(videoOutput) {
             session.addOutput(videoOutput)
         }
+        session.sessionPreset = AVCaptureSessionPresetMedium
         session.commitConfiguration()
     }
-    
 
     func startCamera() {
         if !session.isRunning {
