@@ -122,6 +122,23 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: UICollectionViewScrollPosition())
         }
         PHPhotoLibrary.shared().register(self)
+        
+        
+        
+        let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
+        v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
+        
+    }
+    
+    func tappedImage() {
+        if !isImageShown {
+            v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
+            v.collectionViewConstraintHeight.constant = v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                self.v.layoutIfNeeded()
+            }, completion: nil)
+            refreshImageCurtainAlpha()
+        }
     }
     
     deinit {
