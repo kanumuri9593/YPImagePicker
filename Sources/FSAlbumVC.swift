@@ -341,20 +341,30 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             }
         }
     }
-
-    
     
     var latestImageTapped = ""
 
     func changeImage(_ asset: PHAsset) {
         v.imageCropView.image = nil
         phAsset = asset
-        
         latestImageTapped = asset.localIdentifier
-        
-        
         if asset.mediaType == PHAssetMediaType.video {
             v.imageCropViewContainer.isVideoMode = true
+            DispatchQueue.global(qos: .default).async() {
+                // Show Loading when video is from the cloud
+                let videosOptions = PHVideoRequestOptions()
+                videosOptions.isNetworkAccessAllowed = true
+                PHImageManager.default().requestAVAsset(forVideo: asset,
+                                                        options: videosOptions) { v, audioMix, info in
+                                                            DispatchQueue.main.async() {
+                                                                if v == nil {
+                                                                    self.v.imageCropViewContainer.spinnerView.isHidden = false
+                                                                } else {
+                                                                    self.v.imageCropViewContainer.spinnerView.isHidden = true
+                                                                }
+                                                            }
+                }
+            }
         } else {
             v.imageCropViewContainer.isVideoMode = false
         }
@@ -493,7 +503,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             let normalizedHeight = (view?.frame.height)! / (view?.contentSize.height)!
             
             let cropRect = CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
-            
+  
             DispatchQueue.global(qos: .default).async() {
                 
                 let options = PHImageRequestOptions()
@@ -511,11 +521,16 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                 let asset = self.phAsset!
                 
                 if asset.mediaType == .video {
+                    let videosOptions = PHVideoRequestOptions()
+                    videosOptions.isNetworkAccessAllowed = true
+                    self.delegate?.albumViewStartedLoadingImage()
                     PHImageManager.default().requestAVAsset(forVideo: asset,
-                                                            options: nil) { v, audioMix, info in
-                                                                DispatchQueue.main.async() {
-                                                                    let urlAsset = v as! AVURLAsset
-                                                                    video(urlAsset.url)
+                                                            options: videosOptions) { v, audioMix, info in
+                                                                if let urlAsset = v as? AVURLAsset {
+                                                                    DispatchQueue.main.async() {
+                                                                        self.delegate?.albumViewFinishedLoadingImage()
+                                                                        video(urlAsset.url)
+                                                                    }
                                                                 }
                     }
                 } else {
