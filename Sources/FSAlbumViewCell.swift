@@ -39,6 +39,7 @@ class FSAlbumViewCell: UICollectionViewCell {
         durationLabel.isHidden = true
         selectionOverlay.backgroundColor = .black
         selectionOverlay.alpha = 0
+        backgroundColor = UIColor(r: 247, g: 247, b: 247)
     }
 
     override var isSelected : Bool {
