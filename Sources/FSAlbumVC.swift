@@ -336,6 +336,12 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         latestImageTapped = asset.localIdentifier
         
         
+        if asset.mediaType == PHAssetMediaType.video {
+            v.imageCropViewContainer.isVideoMode = true
+        } else {
+            v.imageCropViewContainer.isVideoMode = false
+        }
+        
         DispatchQueue.global(qos: .default).async() {
             let options = PHImageRequestOptions()
             options.isNetworkAccessAllowed = true

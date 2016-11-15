@@ -16,6 +16,9 @@ protocol FSImageCropViewDelegate: class {
 
 final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     
+    
+    var isVideoMode = false
+    
     weak var myDelegate:FSImageCropViewDelegate?
     var imageView = UIImageView()
     
@@ -32,6 +35,16 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
                 imageView.image = nil
                 return
             }
+            
+            
+            if isVideoMode {
+                imageView.frame = frame
+                imageView.contentMode = .scaleAspectFit
+                imageView.image = image
+                contentSize = CGSize.zero
+                return
+            }
+            
             
             if !fusumaCropImage {
                 // Disable scroll view and set image to fit in view
@@ -103,10 +116,6 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
         bouncesZoom = true
         bounces = true
         delegate = self
-        
-        
-        print(alwaysBounceHorizontal)
-        print(alwaysBounceVertical)
         alwaysBounceHorizontal = true
         alwaysBounceVertical = true
         isScrollEnabled = true

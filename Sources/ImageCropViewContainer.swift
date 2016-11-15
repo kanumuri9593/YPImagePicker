@@ -19,6 +19,10 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
     
+    
+    var isVideoMode = false {
+        didSet { self.cropView?.isVideoMode = isVideoMode }
+    }
     var cropView:FSImageCropView?
     
     override func awakeFromNib() {
@@ -68,7 +72,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
 
         switch sender.state {
         case .began:
-            if isShown {
+            if isShown && !isVideoMode {
                 UIView.animate(withDuration: 0.1) {
                     self.grid.alpha = 1
                 }
@@ -89,7 +93,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     }
     
     func fsImageCropViewscrollViewDidZoom() {
-        if isShown {
+        if isShown  && !isVideoMode {
             UIView.animate(withDuration: 0.1) {
                 self.grid.alpha = 1
             }
