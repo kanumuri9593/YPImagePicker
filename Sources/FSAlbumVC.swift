@@ -224,6 +224,13 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         
         // Update isImageShown
         isImageShown = v.imageCropViewConstraintTop.constant == 0
+
+        refreshImageCurtainAlpha()
+    }
+    
+    func refreshImageCurtainAlpha() {
+        let imageCurtainAlpha = abs(v.imageCropViewConstraintTop.constant)/(v.imageCropViewContainer.frame.height - imageCropViewMinimalVisibleHeight)
+        v.imageCropViewContainer.curtain.alpha = imageCurtainAlpha
     }
     
     // MARK: - UICollectionViewDelegate Protocol
@@ -278,6 +285,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             }, completion: nil)
         dragDirection = Direction.up
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+        refreshImageCurtainAlpha()
     }
     
     // MARK: - ScrollViewDelegate

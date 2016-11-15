@@ -14,7 +14,8 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     
     var isShown = true
     let grid = FSGridView()
-    public let spinnerView = UIView()
+    let curtain = UIView()
+    let spinnerView = UIView()
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
     
@@ -45,15 +46,18 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         sv(
             spinnerView.sv(
                 spinner
-            )
+            ),
+            curtain
         )
+        
         spinnerView.fillContainer()
         spinner.centerInContainer()
+        curtain.fillContainer()
         
         spinner.startAnimating()
-    
         spinnerView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        
+        curtain.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        curtain.alpha = 0
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
