@@ -16,6 +16,7 @@ import Photos
     func albumViewFinishedLoadingImage()
 }
 
+
 public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
     weak var delegate: FSAlbumViewDelegate? = nil
@@ -41,8 +42,28 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     
     var cropBottomY: CGFloat  = 0.0
     var dragStartPos: CGPoint = CGPoint.zero
-    let dragDiff: CGFloat     = 20.0
+    let dragDiff: CGFloat     = 0//20.0
+
     
+    var _isImageShown = true
+    var isImageShown:Bool {
+        get { return self._isImageShown }
+        set {
+            if newValue != isImageShown {
+                self._isImageShown = newValue
+                v.imageCropViewContainer.isShown = newValue
+                
+                //Update imageCropContainer
+                if isImageShown {
+                    v.imageCropView.isScrollEnabled = true
+                } else {
+                   v.imageCropView.isScrollEnabled = false
+                }
+                
+            }
+        }
+    }
+
     var v:FSAlbumView!
     
     public override func loadView() {
@@ -113,8 +134,18 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         return true
     }
     
-    func panned(_ sender: UITapGestureRecognizer) {
-        
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let p = gestureRecognizer.location(ofTouch: 0, in: v)
+        // Desactivate pan on image when it is shown.
+        if isImageShown {
+            if p.y < v.imageCropView.frame.height {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func panned(_ sender: UIPanGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
             let view    = sender.view
             let loc     = sender.location(in: view)
@@ -188,6 +219,11 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                 dragDirection = Direction.up
             }
         }
+        
+        
+        
+        // Update isImageShown
+        isImageShown = v.imageCropViewConstraintTop.constant == 0
     }
     
     // MARK: - UICollectionViewDelegate Protocol
@@ -303,9 +339,9 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                 if self.latestImageTapped == asset.localIdentifier {
                     DispatchQueue.main.async() {
                         if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool, isFromCloud  == true {
-                            self.v.spinnerView.isHidden = false
+                            self.v.imageCropViewContainer.spinnerView.isHidden = false
                         } else {
-                            self.v.spinnerView.isHidden = true
+                            self.v.imageCropViewContainer.spinnerView.isHidden = true
                         }
                         self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
                         self.v.imageCropView.image = result

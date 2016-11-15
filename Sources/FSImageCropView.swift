@@ -7,9 +7,56 @@
 //
 
 import UIKit
+import Stevia
+
+
+class FSGridView: UIView {
+    
+    let line1 = UIView()
+    let line2 = UIView()
+    let line3 = UIView()
+    let line4 = UIView()
+    
+    convenience init() {
+        self.init(frame:CGRect.zero)
+        isUserInteractionEnabled = false
+        sv(
+            line1,
+            line2,
+            line3,
+            line4
+        )
+        
+        let stroke:CGFloat = 0.5
+        line1.top(0).width(stroke).bottom(0)
+        addConstraint(item: line1, attribute: .right, toItem: self, attribute: .right, multiplier: 0.33, constant: 0)
+    
+        line2.top(0).width(stroke).bottom(0)
+        addConstraint(item: line2, attribute: .right, toItem: self, attribute: .right, multiplier: 0.66, constant: 0)
+
+        line3.left(0).height(stroke).right(0)
+        addConstraint(item: line3, attribute: .bottom, toItem: self, attribute: .bottom, multiplier: 0.33, constant: 0)
+
+        line4.left(0).height(stroke).right(0)
+        addConstraint(item: line4, attribute: .bottom, toItem: self, attribute: .bottom, multiplier: 0.66, constant: 0)
+    
+        
+        let color = UIColor.white.withAlphaComponent(0.6)
+        line1.backgroundColor = color
+        line2.backgroundColor = color
+        line3.backgroundColor = color
+        line4.backgroundColor = color
+    }
+}
+
+
+protocol FSImageCropViewDelegate: class {
+    func fsImageCropViewDidLayoutSubviews()
+}
 
 final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     
+    weak var myDelegate:FSImageCropViewDelegate?
     var imageView = UIImageView()
     
     var imageSize: CGSize?
@@ -85,22 +132,33 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
-//        backgroundColor = fusumaBackgroundColor
         frame.size      = CGSize.zero
         clipsToBounds   = true
         imageView.alpha = 0.0
         imageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
         maximumZoomScale = 6.0
-        minimumZoomScale = 0.8
+        minimumZoomScale = 1
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator   = false
         bouncesZoom = true
         bounces = true
         delegate = self
+        
+        
+        print(alwaysBounceHorizontal)
+        print(alwaysBounceVertical)
+        alwaysBounceHorizontal = true
+        alwaysBounceVertical = true
+        isScrollEnabled = true
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        myDelegate?.fsImageCropViewDidLayoutSubviews()
     }
     
     func changeScrollable(_ isScrollable: Bool) {
-        isScrollEnabled = isScrollable
+//        isScrollEnabled = isScrollable
     }
     
     // MARK: UIScrollViewDelegate Protocol
