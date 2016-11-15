@@ -25,7 +25,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     var images: PHFetchResult<PHAsset>!
     var imageManager: PHCachingImageManager?
     var previousPreheatRect: CGRect = CGRect.zero
-    let cellSize = CGSize(width: 100, height: 100)
+    let cellSize = CGSize(width: UIScreen.main.bounds.width/4, height: UIScreen.main.bounds.width/4)
     var phAsset: PHAsset!
     
     // Variables for calculating the position
