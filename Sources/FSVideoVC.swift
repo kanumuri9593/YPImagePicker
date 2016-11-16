@@ -237,7 +237,13 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
     public func capture(_ captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAt outputFileURL: URL!, fromConnections connections: [Any]!, error: Error!) {
         print("finished recording to: \(outputFileURL)")
         didCaptureVideo?(outputFileURL)
+        resetVisualState()
         timer.invalidate()
+    }
+    
+    private func resetVisualState() {
+        v.progressBar.progress = 0
+        v.timeElapsedLabel.text = "00:00"
     }
 }
 
