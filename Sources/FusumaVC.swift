@@ -43,7 +43,9 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     }
     
     let albumVC = FSAlbumVC()
-    let cameraVC = FSCameraVC()
+    lazy var cameraVC:FSCameraVC = {
+        return FSCameraVC(shouldUseFrontCamera: self.usesFrontCamera)
+    }()
     let videoVC = FSVideoVC()
     
     var mode = Mode.camera
@@ -57,15 +59,12 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         flashOnImage = imageFromBundle("yp_iconFlash_on")
         flashOffImage = imageFromBundle("yp_iconFlash_off")
         
-        
         albumVC.showsVideo = showsVideo
         albumVC.delegate = self
-        cameraVC.usesFrontCamera = usesFrontCamera
-        
         
         view.backgroundColor = UIColor(r:247, g:247, b:247)
         cameraVC.didCapturePhoto = { [unowned self] img in

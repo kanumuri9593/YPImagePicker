@@ -11,13 +11,14 @@ import UIKit
 public class YPImagePicker: UINavigationController {
     
     public static var albumName = "DefaultYPImagePickerAlbumName" {
-        didSet {
-            PhotoSaver.albumName = albumName
-        }
+        didSet { PhotoSaver.albumName = albumName }
     }
     
     public var showsVideo = false
-    public var usesFrontCamera = false
+    public var usesFrontCamera: Bool {
+        get { return fusuma.usesFrontCamera }
+        set { fusuma.usesFrontCamera = newValue }
+    }
     public var showsFilters = true
     public var didSelectImage:((UIImage) -> Void)?
     public var didSelectVideo:((URL) -> Void)?
@@ -30,7 +31,6 @@ public class YPImagePicker: UINavigationController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        fusuma.usesFrontCamera = usesFrontCamera
         fusuma.showsVideo = showsVideo
         viewControllers = [fusuma]
         navigationBar.isTranslucent = false

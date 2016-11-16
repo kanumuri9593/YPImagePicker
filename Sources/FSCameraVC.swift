@@ -29,8 +29,9 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     override public func loadView() { view = v }
     
-    convenience init() {
+    convenience init(shouldUseFrontCamera:Bool) {
         self.init(nibName:nil, bundle:nil)
+        usesFrontCamera = shouldUseFrontCamera
         title = fsLocalized("YPFusumaPhoto")
         sessionQueue.async { [unowned self] in
             self.setupCaptureSession()
