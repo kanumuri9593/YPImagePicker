@@ -169,7 +169,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                     let imageRef = image.cgImage?.cropping(to: CGRect(x: rcy-iw*0.5, y: 0 , width: iw, height: iw))
                     DispatchQueue.main.async() {
                         if fusumaCropImage {
-                            var resizedImage = UIImage(cgImage: imageRef!, scale: sw/iw, orientation: image.imageOrientation)
+                            var resizedImage = UIImage(cgImage: imageRef!, scale: 1.0, orientation: image.imageOrientation)
                             if let device = self.device, let cgImg =  resizedImage.cgImage, device.position == .front {
                                 func flipImage(image: UIImage!) -> UIImage! {
                                     let imageSize:CGSize = image.size
