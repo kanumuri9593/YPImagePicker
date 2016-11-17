@@ -33,9 +33,6 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         self.init(nibName:nil, bundle:nil)
         usesFrontCamera = shouldUseFrontCamera
         title = fsLocalized("YPFusumaPhoto")
-        sessionQueue.async { [unowned self] in
-            self.setupCaptureSession()
-        }
     }
     
     override public func viewDidLoad() {
@@ -44,6 +41,9 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         v.flashButton.addTarget(self, action: #selector(flashButtonTapped), for: .touchUpInside)
         v.shotButton.addTarget(self, action: #selector(shotButtonTapped), for: .touchUpInside)
         v.flipButton.addTarget(self, action: #selector(flipButtonTapped), for: .touchUpInside)
+        sessionQueue.async { [unowned self] in
+            self.setupCaptureSession()
+        }
     }
     
     public override func viewDidAppear(_ animated: Bool) {
