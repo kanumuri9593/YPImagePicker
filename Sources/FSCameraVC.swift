@@ -95,6 +95,8 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     func startCamera() {
         if !session.isRunning {
             sessionQueue.async { [unowned self] in
+                // Re-apply session preset
+                self.session.sessionPreset = AVCaptureSessionPresetPhoto
                 let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
                 switch status {
                 case .notDetermined, .restricted, .denied:

@@ -27,8 +27,6 @@ public class FSVideoVC: UIViewController {
     fileprivate var dateVideoStarted = Date()
     fileprivate var v = FSCameraView()
     
-
-    
     var isPreviewSetup = false
     
     
@@ -113,6 +111,8 @@ public class FSVideoVC: UIViewController {
     func startCamera() {
         if !session.isRunning {
             sessionQueue.async { [unowned self] in
+                // Re-apply session preset
+                self.session.sessionPreset = AVCaptureSessionPresetMedium
                 let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
                 switch status {
                 case .notDetermined, .restricted, .denied:
