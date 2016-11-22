@@ -77,12 +77,16 @@ public class YPImagePicker: UINavigationController {
                     switch exportSession!.status {
                     case .completed:
                         if let videoData = FileManager.default.contents(atPath: uploadURL.path) {
-                            self.didSelectVideo?(videoData, thumb)
+                            DispatchQueue.main.async {
+                                self.didSelectVideo?(videoData, thumb)
+                            }
                         }
                     default:
                         // Fall back to default video size:
                         if let videoData = FileManager.default.contents(atPath: videoURL.path) {
-                            self.didSelectVideo?(videoData, thumb)
+                            DispatchQueue.main.async {
+                                self.didSelectVideo?(videoData, thumb)
+                            }
                         }
                     }
                 }
