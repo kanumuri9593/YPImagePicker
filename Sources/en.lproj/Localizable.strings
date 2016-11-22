@@ -11,5 +11,5 @@
 "YPFusumaVideo" = "Video";
 "YPFusumaNext" = "Next";
 "YPFusumaFilter" = "Filter";
-"YPFusumaVideoTooLongTitle" = "Too long";
+"YPFusumaVideoTooLongTitle" = "Video duration";
 "YPFusumaVideoTooLongDetail" = "Pick a video less than 60 seconds long.";
