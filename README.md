@@ -76,7 +76,7 @@ let picker = YPImagePicker()
 picker.didSelectImage = { img in
     // image picked
 }
-picker.didSelectVideo = { videoURL in
+picker.didSelectVideo = { videoData in
     // video picked
 }
 present(picker, animated: true, completion: nil)

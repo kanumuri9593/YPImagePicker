@@ -21,7 +21,7 @@ public class YPImagePicker: UINavigationController {
     }
     public var showsFilters = true
     public var didSelectImage:((UIImage) -> Void)?
-    public var didSelectVideo:((URL) -> Void)?
+    public var didSelectVideo:((Data) -> Void)?
     
     private let fusuma = FusumaVC()
     
@@ -61,7 +61,9 @@ public class YPImagePicker: UINavigationController {
         }
         
         fusuma.didSelectVideo = { [unowned self] in
-            self.didSelectVideo?($0)
+            if let videoData = FileManager.default.contents(atPath: $0.path) {
+                self.didSelectVideo?(videoData)
+            }
         }
         //force fusuma load view
         _ = fusuma.view
