@@ -62,9 +62,30 @@ public class YPImagePicker: UINavigationController {
         }
         
         fusuma.didSelectVideo = { [unowned self] videoURL in
-            if let videoData = FileManager.default.contents(atPath: videoURL.path) {
-                let thumb = thunbmailFromVideoPath(videoURL)
-                self.didSelectVideo?(videoData, thumb)
+            let thumb = thunbmailFromVideoPath(videoURL)
+            // Compress Video to 640x480 format.
+            let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+            if let firstPath = paths.first{
+                let path = firstPath + "/\(Int(Date().timeIntervalSince1970))temporary.mov"
+                let uploadURL = URL(fileURLWithPath: path)
+                let asset = AVURLAsset(url: videoURL)
+                let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPreset640x480)
+                exportSession?.outputURL = uploadURL
+                exportSession?.outputFileType = AVFileTypeQuickTimeMovie
+                exportSession?.shouldOptimizeForNetworkUse = true //USEFUL?
+                exportSession?.exportAsynchronously {
+                    switch exportSession!.status {
+                    case .completed:
+                        if let videoData = FileManager.default.contents(atPath: uploadURL.path) {
+                            self.didSelectVideo?(videoData, thumb)
+                        }
+                    default:
+                        // Fall back to default video size:
+                        if let videoData = FileManager.default.contents(atPath: videoURL.path) {
+                            self.didSelectVideo?(videoData, thumb)
+                        }
+                    }
+                }
             }
         }
         //force fusuma load view
