@@ -104,7 +104,7 @@ public class FSVideoVC: UIViewController {
         if session.canAddOutput(videoOutput) {
             session.addOutput(videoOutput)
         }
-        session.sessionPreset = AVCaptureSessionPresetMedium
+        session.sessionPreset = AVCaptureSessionPresetHigh
         session.commitConfiguration()
     }
 
@@ -112,7 +112,7 @@ public class FSVideoVC: UIViewController {
         if !session.isRunning {
             sessionQueue.async { [unowned self] in
                 // Re-apply session preset
-                self.session.sessionPreset = AVCaptureSessionPresetMedium
+                self.session.sessionPreset = AVCaptureSessionPresetHigh
                 let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
                 switch status {
                 case .notDetermined, .restricted, .denied:
