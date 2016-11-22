@@ -521,17 +521,25 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                 let asset = self.phAsset!
                 
                 if asset.mediaType == .video {
-                    let videosOptions = PHVideoRequestOptions()
-                    videosOptions.isNetworkAccessAllowed = true
-                    self.delegate?.albumViewStartedLoadingImage()
-                    PHImageManager.default().requestAVAsset(forVideo: asset,
-                                                            options: videosOptions) { v, audioMix, info in
-                                                                if let urlAsset = v as? AVURLAsset {
-                                                                    DispatchQueue.main.async() {
-                                                                        self.delegate?.albumViewFinishedLoadingImage()
-                                                                        video(urlAsset.url)
+                    if asset.duration > 60 {
+                        let alert = UIAlertController(title: fsLocalized("YPFusumaVideoTooLongTitle"),
+                                                      message: fsLocalized("YPFusumaVideoTooLongDetail"),
+                                                      preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        let videosOptions = PHVideoRequestOptions()
+                        videosOptions.isNetworkAccessAllowed = true
+                        self.delegate?.albumViewStartedLoadingImage()
+                        PHImageManager.default().requestAVAsset(forVideo: asset,
+                                                                options: videosOptions) { v, audioMix, info in
+                                                                    if let urlAsset = v as? AVURLAsset {
+                                                                        DispatchQueue.main.async() {
+                                                                            self.delegate?.albumViewFinishedLoadingImage()
+                                                                            video(urlAsset.url)
+                                                                        }
                                                                     }
-                                                                }
+                        }
                     }
                 } else {
                     self.delegate?.albumViewStartedLoadingImage()
