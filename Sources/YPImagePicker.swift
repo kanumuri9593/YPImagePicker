@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 public class YPImagePicker: UINavigationController {
     
@@ -21,7 +22,7 @@ public class YPImagePicker: UINavigationController {
     }
     public var showsFilters = true
     public var didSelectImage:((UIImage) -> Void)?
-    public var didSelectVideo:((Data) -> Void)?
+    public var didSelectVideo:((Data, UIImage) -> Void)?
     
     private let fusuma = FusumaVC()
     
@@ -60,12 +61,28 @@ public class YPImagePicker: UINavigationController {
             }
         }
         
-        fusuma.didSelectVideo = { [unowned self] in
-            if let videoData = FileManager.default.contents(atPath: $0.path) {
-                self.didSelectVideo?(videoData)
+        fusuma.didSelectVideo = { [unowned self] videoURL in
+            if let videoData = FileManager.default.contents(atPath: videoURL.path) {
+                let thumb = thunbmailFromVideoPath(videoURL)
+                self.didSelectVideo?(videoData, thumb)
             }
         }
         //force fusuma load view
         _ = fusuma.view
     }
+}
+
+func thunbmailFromVideoPath(_ path: URL) -> UIImage {
+    let asset = AVURLAsset(url: path, options: nil)
+    let gen = AVAssetImageGenerator(asset: asset)
+    gen.appliesPreferredTrackTransform = true
+    let time = CMTimeMakeWithSeconds(0.0, 600)
+    var actualTime = CMTimeMake(0, 0)
+    let image: CGImage
+    do {
+        image = try gen.copyCGImage(at: time, actualTime: &actualTime)
+        let thumbnail = UIImage(cgImage: image)
+        return thumbnail
+    } catch { }
+    return UIImage()
 }
