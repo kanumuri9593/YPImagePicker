@@ -1,9 +1,7 @@
-## YPFusuma
+## YPImagePicker
 
-### Warning, This is a Fusuma fork and not ready for production (yet!)
-
-Fusuma is a Swift library that provides an Instagram-like photo browser and a camera feature with a few line of code.  
-You can use Fusuma instead of UIImagePickerController. It also has a feature to take a square-sized photo.
+YPImagePicker is an instagram-like photo/video picker for iOS written in pure Swift.
+It comes with adjustable square crop and filters.
 
 [![Version](https://img.shields.io/cocoapods/v/Fusuma.svg?style=flat)](http://cocoapods.org/pods/Fusuma)
 [![Platform](https://img.shields.io/cocoapods/p/Fusuma.svg?style=flat)](http://cocoapods.org/pods/Fusuma)
@@ -12,11 +10,11 @@ You can use Fusuma instead of UIImagePickerController. It also has a feature to 
 [![codebeat badge](https://codebeat.co/badges/6a591267-c444-4c88-a410-56270d8ed9bc)](https://codebeat.co/projects/github-com-yummypets-ypfusuma)
 
 ## Improvements
-YPFusuma is built from the great Fusuma library.
+YPImagePicker is built from the great Fusuma library.
 
 Here are the improvements we added :
 - Improve Overall Code Quality
-- Simpler API
+- Simplify API
 - Added Filters View ala Instagram
 - Replaces icons with lighter Text
 - Preselect Front camera (e.g for avatars)
@@ -58,10 +56,10 @@ pod 'Fusuma'
 
 #### Using [Carthage](https://github.com/Carthage/Carthage)
 
-Add `github "Yummypets/YPFusuma"` to your `Cartfile` and run `carthage update`. If unfamiliar with Carthage then checkout their [Getting Started section](https://github.com/Carthage/Carthage#getting-started).
+Add `github "Yummypets/YPImagePicker"` to your `Cartfile` and run `carthage update`. If unfamiliar with Carthage then checkout their [Getting Started section](https://github.com/Carthage/Carthage#getting-started).
 
 ```
-github "Yummypets/YPFusuma"
+github "Yummypets/YPImagePicker"
 ```
 
 ## Usage
