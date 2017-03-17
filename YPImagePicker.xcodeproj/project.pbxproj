@@ -34,7 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		52412A931CA6114A0073C4BE /* Fusuma.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fusuma.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52412A931CA6114A0073C4BE /* YPImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YPImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52412A961CA6114A0073C4BE /* Fusuma.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fusuma.h; sourceTree = "<group>"; };
 		52412A981CA6114A0073C4BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		990630341DCA2A710040AFE9 /* YPImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPImagePicker.swift; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 		52412A941CA6114A0073C4BE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				52412A931CA6114A0073C4BE /* Fusuma.framework */,
+				52412A931CA6114A0073C4BE /* YPImagePicker.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -179,9 +179,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		52412A921CA6114A0073C4BE /* Fusuma */ = {
+		52412A921CA6114A0073C4BE /* YPImagePicker */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 52412A9B1CA6114A0073C4BE /* Build configuration list for PBXNativeTarget "Fusuma" */;
+			buildConfigurationList = 52412A9B1CA6114A0073C4BE /* Build configuration list for PBXNativeTarget "YPImagePicker" */;
 			buildPhases = (
 				52412A8E1CA6114A0073C4BE /* Sources */,
 				52412A8F1CA6114A0073C4BE /* Frameworks */,
@@ -192,9 +192,9 @@
 			);
 			dependencies = (
 			);
-			name = Fusuma;
+			name = YPImagePicker;
 			productName = Fusuma;
-			productReference = 52412A931CA6114A0073C4BE /* Fusuma.framework */;
+			productReference = 52412A931CA6114A0073C4BE /* YPImagePicker.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -212,7 +212,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 52412A8D1CA6114A0073C4BE /* Build configuration list for PBXProject "Fusuma" */;
+			buildConfigurationList = 52412A8D1CA6114A0073C4BE /* Build configuration list for PBXProject "YPImagePicker" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -226,7 +226,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				52412A921CA6114A0073C4BE /* Fusuma */,
+				52412A921CA6114A0073C4BE /* YPImagePicker */,
 			);
 		};
 /* End PBXProject section */
@@ -403,7 +403,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = me.ytakzk.Fusuma;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -425,7 +425,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = me.ytakzk.Fusuma;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -435,7 +435,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		52412A8D1CA6114A0073C4BE /* Build configuration list for PBXProject "Fusuma" */ = {
+		52412A8D1CA6114A0073C4BE /* Build configuration list for PBXProject "YPImagePicker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				52412A991CA6114A0073C4BE /* Debug */,
@@ -444,7 +444,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		52412A9B1CA6114A0073C4BE /* Build configuration list for PBXNativeTarget "Fusuma" */ = {
+		52412A9B1CA6114A0073C4BE /* Build configuration list for PBXNativeTarget "YPImagePicker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				52412A9C1CA6114A0073C4BE /* Debug */,

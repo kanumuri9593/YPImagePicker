@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import UIKit
 
 
 func fsLocalized(_ str: String) -> String {

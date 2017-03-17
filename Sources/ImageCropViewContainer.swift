@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import UIKit
 
 class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecognizerDelegate {
     
