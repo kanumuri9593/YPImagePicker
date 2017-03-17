@@ -27,7 +27,6 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
 
     var _images:PHFetchResult<PHAsset>?
     var images: PHFetchResult<PHAsset>? {
-        
         get {
             return myQueue.sync {
                 return _images
@@ -131,14 +130,16 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             NSSortDescriptor(key: "creationDate", ascending: false)
         ]
         
-        self.images = self.showsVideo ? PHAsset.fetchAssets(with: options) : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
-        
-        if let images = self.images, images.count > 0 {
-            self.changeImage(images[0])
-            self.v.collectionView.reloadData()
-            self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: UICollectionViewScrollPosition())
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+            self.images = self.showsVideo ? PHAsset.fetchAssets(with: options) : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+            DispatchQueue.main.async {
+                if let images = self.images, images.count > 0 {
+                    self.changeImage(images[0])
+                    self.v.collectionView.reloadData()
+                    self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: UICollectionViewScrollPosition())
+                }
+            }
         }
-
         PHPhotoLibrary.shared().register(self)
         
         let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
