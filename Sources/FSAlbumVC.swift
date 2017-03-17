@@ -22,7 +22,24 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     weak var delegate: FSAlbumViewDelegate? = nil
     
     public var showsVideo = false
-    var images: PHFetchResult<PHAsset>!
+    
+    let myQueue = DispatchQueue(label: "com.octopepper.ypImagePicker.imagesQueue")
+
+    var _images:PHFetchResult<PHAsset>?
+    var images: PHFetchResult<PHAsset>? {
+        
+        get {
+            return myQueue.sync {
+                return _images
+            }
+        }
+        set {
+            myQueue.sync {
+                _images = newValue
+            }
+        }
+    }
+    
     var imageManager: PHCachingImageManager?
     var previousPreheatRect: CGRect = CGRect.zero
     let cellSize = CGSize(width: UIScreen.main.bounds.width/4, height: UIScreen.main.bounds.width/4)
@@ -114,20 +131,18 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             NSSortDescriptor(key: "creationDate", ascending: false)
         ]
         
-        images =  showsVideo ? PHAsset.fetchAssets(with: options) : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+        self.images = self.showsVideo ? PHAsset.fetchAssets(with: options) : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
         
-        if images.count > 0 {
-            changeImage(images[0])
-            v.collectionView.reloadData()
-            v.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: UICollectionViewScrollPosition())
+        if let images = self.images, images.count > 0 {
+            self.changeImage(images[0])
+            self.v.collectionView.reloadData()
+            self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: UICollectionViewScrollPosition())
         }
+
         PHPhotoLibrary.shared().register(self)
-        
-        
         
         let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
         v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
-        
     }
     
     func tappedImage() {
@@ -255,27 +270,27 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FSAlbumViewCell", for: indexPath) as! FSAlbumViewCell
         let currentTag = cell.tag + 1
         cell.tag = currentTag
-        
-        let asset = images[(indexPath as NSIndexPath).item]
-        imageManager?.requestImage(for: asset,
-                                   targetSize: cellSize,
-                                   contentMode: .aspectFill,
-                                   options: nil) { result, info in
-                                    if cell.tag == currentTag {
-                                        cell.imageView.image = result
-                                    }
+        if let images = images {
+            let asset = images[(indexPath as NSIndexPath).item]
+            imageManager?.requestImage(for: asset,
+                                       targetSize: cellSize,
+                                       contentMode: .aspectFill,
+                                       options: nil) { result, info in
+                                        if cell.tag == currentTag {
+                                            cell.imageView.image = result
+                                        }
+            }
+            
+            
+            
+            if asset.mediaType == .video {
+                cell.durationLabel.isHidden = false
+                cell.durationLabel.text = formattedStrigFrom(asset.duration)
+            } else {
+                cell.durationLabel.isHidden = true
+                cell.durationLabel.text = ""
+            }
         }
-        
-        
-        
-        if asset.mediaType == .video {
-            cell.durationLabel.isHidden = false
-            cell.durationLabel.text = formattedStrigFrom(asset.duration)
-        } else {
-            cell.durationLabel.isHidden = true
-            cell.durationLabel.text = ""
-        }
-        
         return cell
     }
 
@@ -284,7 +299,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images == nil ? 0 : images.count
+        return images == nil ? 0 : images!.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
@@ -293,16 +308,18 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        changeImage(images[(indexPath as NSIndexPath).row])
-        v.imageCropView.changeScrollable(true)
-        v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-        v.collectionViewConstraintHeight.constant = v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
-        UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
-            self.v.layoutIfNeeded()
-            }, completion: nil)
-        dragDirection = Direction.up
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
-        refreshImageCurtainAlpha()
+        if let images = images {
+            changeImage(images[(indexPath as NSIndexPath).row])
+            v.imageCropView.changeScrollable(true)
+            v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
+            v.collectionViewConstraintHeight.constant = v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                self.v.layoutIfNeeded()
+                }, completion: nil)
+            dragDirection = Direction.up
+            collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+            refreshImageCurtainAlpha()
+        }
     }
     
     // MARK: - ScrollViewDelegate
@@ -315,29 +332,31 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     //MARK: - PHPhotoLibraryChangeObserver
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         DispatchQueue.main.async {
-            let collectionChanges = changeInstance.changeDetails(for: self.images)
-            if collectionChanges != nil {
-                self.images = collectionChanges!.fetchResultAfterChanges
-                let collectionView = self.v.collectionView!
-                if !collectionChanges!.hasIncrementalChanges || collectionChanges!.hasMoves {
-                    collectionView.reloadData()
-                } else {
-                    collectionView.performBatchUpdates({
-                        let removedIndexes = collectionChanges!.removedIndexes
-                        if (removedIndexes?.count ?? 0) != 0 {
-                            collectionView.deleteItems(at: removedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                        }
-                        let insertedIndexes = collectionChanges!.insertedIndexes
-                        if (insertedIndexes?.count ?? 0) != 0 {
-                            collectionView.insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                        }
-                        let changedIndexes = collectionChanges!.changedIndexes
-                        if (changedIndexes?.count ?? 0) != 0 {
-                            collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                        }
-                        }, completion: nil)
+            if let images = self.images {
+                let collectionChanges = changeInstance.changeDetails(for: images)
+                if collectionChanges != nil {
+                    self.images = collectionChanges!.fetchResultAfterChanges
+                    let collectionView = self.v.collectionView!
+                    if !collectionChanges!.hasIncrementalChanges || collectionChanges!.hasMoves {
+                        collectionView.reloadData()
+                    } else {
+                        collectionView.performBatchUpdates({
+                            let removedIndexes = collectionChanges!.removedIndexes
+                            if (removedIndexes?.count ?? 0) != 0 {
+                                collectionView.deleteItems(at: removedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                            }
+                            let insertedIndexes = collectionChanges!.insertedIndexes
+                            if (insertedIndexes?.count ?? 0) != 0 {
+                                collectionView.insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                            }
+                            let changedIndexes = collectionChanges!.changedIndexes
+                            if (changedIndexes?.count ?? 0) != 0 {
+                                collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                            }
+                            }, completion: nil)
+                    }
+                    self.resetCachedAssets()
                 }
-                self.resetCachedAssets()
             }
         }
     }
@@ -398,8 +417,8 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             switch status {
             case .authorized:
                 self.imageManager = PHCachingImageManager()
-                if self.images != nil && self.images.count > 0 {
-                    self.changeImage(self.images[0])
+                if let images = self.images, images.count > 0 {
+                    self.changeImage(images[0])
                 }
             case .restricted, .denied:
                 DispatchQueue.main.async() {
@@ -486,8 +505,10 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         var assets: [PHAsset] = []
         assets.reserveCapacity(indexPaths.count)
         for indexPath in indexPaths {
-            let asset = self.images[(indexPath as NSIndexPath).item]
-            assets.append(asset)
+            if let images = images {
+                let asset = images[(indexPath as NSIndexPath).item]
+                assets.append(asset)
+            }
         }
         return assets
     }

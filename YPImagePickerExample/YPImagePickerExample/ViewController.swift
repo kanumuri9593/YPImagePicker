@@ -10,15 +10,30 @@ import UIKit
 import YPImagePicker
 
 class ViewController: UIViewController {
+    
+    let imageView = UIImageView()
+    
+    let button = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        
+        imageView.contentMode = .scaleAspectFit
+        view.addSubview(imageView)
+        imageView.frame = view.frame
+        
+        
+        button.setTitle("Pick", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        view.addSubview(button)
+        button.center = view.center
+        button.addTarget(self, action: #selector(showPicker), for: .touchUpInside)
+        
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
+    func showPicker() {
         let picker = YPImagePicker()
         // picker.showsFilters = false
         // picker.startsOnCameraMode = true
@@ -26,6 +41,8 @@ class ViewController: UIViewController {
         picker.showsVideo = true
         picker.didSelectImage = { img in
             // image picked
+            self.imageView.image = img
+            picker.dismiss(animated: true, completion: nil)
         }
         picker.didSelectVideo = { videoData in
             // video picked

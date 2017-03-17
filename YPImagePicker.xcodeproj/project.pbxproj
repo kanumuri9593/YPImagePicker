@@ -138,9 +138,9 @@
 				996D03ED1DC206B00004E357 /* FSAlbumVC.swift */,
 				EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */,
 				EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */,
+				99EB07661DDB41CC00A6DDF8 /* FSGridView.swift */,
 				EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */,
 				99EB07641DDB14F900A6DDF8 /* ImageCropViewContainer.swift */,
-				99EB07661DDB41CC00A6DDF8 /* FSGridView.swift */,
 			);
 			name = Album;
 			sourceTree = "<group>";
