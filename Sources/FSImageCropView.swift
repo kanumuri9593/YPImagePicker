@@ -19,6 +19,9 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     
     var isVideoMode = false
     
+    
+    var squaredZoomScale: CGFloat = 1
+    
     weak var myDelegate:FSImageCropViewDelegate?
     var imageView = UIImageView()
     
@@ -26,6 +29,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     
     var image: UIImage! = nil {
         didSet {
+            setZoomScale(1.0, animated: true)
             if image != nil {
                 if !imageView.isDescendant(of: self) {
                     imageView.alpha = 1.0
@@ -46,60 +50,59 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
             }
             
             
-            if !fusumaCropImage {
-                // Disable scroll view and set image to fit in view
-                imageView.frame = frame
-                imageView.contentMode = .scaleAspectFit
-                isUserInteractionEnabled = false
-                imageView.image = image
-                return
-            }
-
-            let imageSize = self.imageSize ?? image.size
             
-            if imageSize.width < frame.width || imageSize.height < frame.height {
-                // The width or height of the image is smaller than the frame size
-                if imageSize.width > imageSize.height {
-                    // Width > Height
-                    let ratio = frame.width / imageSize.width
-                    imageView.frame = CGRect(
-                        origin: CGPoint.zero,
-                        size: CGSize(width: frame.width, height: imageSize.height * ratio)
-                    )
-                } else {
-                    // Width <= Height
-                    let ratio = frame.height / imageSize.height
-                    imageView.frame = CGRect(
-                        origin: CGPoint.zero,
-                        size: CGSize(width: imageSize.width * ratio, height: frame.size.height)
-                    )
-                }
-                imageView.center = center
-            } else {
-                // The width or height of the image is bigger than the frame size
-                if imageSize.width > imageSize.height {
-                    // Width > Height
-                    let ratio = frame.height / imageSize.height
-                    imageView.frame = CGRect(
-                        origin: CGPoint.zero,
-                        size: CGSize(width: imageSize.width * ratio, height: frame.height)
-                    )
-                } else {
-                    // Width <= Height
-                    let ratio = frame.width / imageSize.width
-                    imageView.frame = CGRect(
-                        origin: CGPoint.zero,
-                        size: CGSize(width: frame.width, height: imageSize.height * ratio)
-                    )
-                }
-                contentOffset = CGPoint(
-                    x: imageView.center.x - center.x,
-                    y: imageView.center.y - center.y
-                )
+            // Set image
+//            self.imageView.frame = self.frame
+            let screenSize:CGFloat = 375
+            self.imageView.frame.size.width = screenSize
+            self.imageView.frame.size.height = screenSize
+            
+            var squareZoomScale: CGFloat = 1.0
+            let w = image.size.width
+            let h = image.size.height
+            
+            if w > h { // Landscape
+                squareZoomScale = (1.0 / (w / h))
+                self.imageView.frame.size.width = screenSize
+                self.imageView.frame.size.height = screenSize*squareZoomScale
+                
+            } else if h > w { // Portrait
+                squareZoomScale = (1.0 / (h / w))
+                self.imageView.frame.size.width = screenSize*squareZoomScale
+                self.imageView.frame.size.height = screenSize
             }
-            contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
-            imageView.image = image
-            zoomScale = 1.0
+            
+            self.imageView.center = center
+            
+            self.imageView.contentMode = .scaleAspectFill
+            self.imageView.image = self.image
+            
+            
+            imageView.clipsToBounds = true
+            
+            refreshZoomScale()
+        }
+    }
+    
+    func refreshZoomScale() {
+        var squareZoomScale: CGFloat = 1.0
+        let w = image.size.width
+        let h = image.size.height
+        
+        if w > h { // Landscape
+            squareZoomScale = (w / h)
+        } else if h > w { // Portrait
+            squareZoomScale = (h / w)
+        }
+        squaredZoomScale = squareZoomScale
+    }
+    
+    func setFitImage(_ fit: Bool) {
+        refreshZoomScale()
+        if fit {
+            setZoomScale(squaredZoomScale, animated: true)
+        } else {
+            setZoomScale(1, animated: true)
         }
     }
     
@@ -113,8 +116,6 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
         minimumZoomScale = 1
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator   = false
-        bouncesZoom = true
-        bounces = true
         delegate = self
         alwaysBounceHorizontal = true
         alwaysBounceVertical = true
@@ -134,9 +135,6 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
-    
-
-    
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         myDelegate?.fsImageCropViewscrollViewDidZoom()

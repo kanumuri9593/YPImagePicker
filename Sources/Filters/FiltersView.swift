@@ -36,7 +36,7 @@ class FiltersView: UIView {
         imageView.heightEqualsWidth()
         
         backgroundColor = UIColor(r: 247, g: 247, b: 247)
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
