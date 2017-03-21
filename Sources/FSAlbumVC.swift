@@ -522,70 +522,64 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     }
     
     public func selectedMedia(photo:@escaping (_ photo:UIImage) -> Void, video:@escaping (_ videoURL:URL) -> Void) {
-        let view = v.imageCropView
-        
-        if fusumaCropImage {
-            let normalizedX = (view?.contentOffset.x)! / (view?.contentSize.width)!
-            let normalizedY = (view?.contentOffset.y)! / (view?.contentSize.height)!
+        var cropRect = CGRect.zero
+        if let cropView = v.imageCropView {
+            let normalizedX = min(1, cropView.contentOffset.x / cropView.contentSize.width)
+            let normalizedY = min(1, cropView.contentOffset.y / cropView.contentSize.height)
+            let normalizedWidth = min(1, cropView.frame.width / cropView.contentSize.width)
+            let normalizedHeight = min(1, cropView.frame.height / cropView.contentSize.height)
+            cropRect = CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
+        }
+        DispatchQueue.global(qos: .default).async() {
+            let options = PHImageRequestOptions()
+            options.deliveryMode = .highQualityFormat
+            options.isNetworkAccessAllowed = true
+            options.normalizedCropRect = cropRect
+            options.resizeMode = .exact
             
-            let normalizedWidth = (view?.frame.width)! / (view?.contentSize.width)!
-            let normalizedHeight = (view?.frame.height)! / (view?.contentSize.height)!
+            let targetWidth = floor(CGFloat(self.phAsset.pixelWidth) * cropRect.width)
+            let targetHeight = floor(CGFloat(self.phAsset.pixelHeight) * cropRect.height)
+            let dimension = max(min(targetHeight, targetWidth), 1024 * UIScreen.main.scale)
             
-            let cropRect = CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
-  
-            DispatchQueue.global(qos: .default).async() {
-                
-                let options = PHImageRequestOptions()
-                options.deliveryMode = .highQualityFormat
-                options.isNetworkAccessAllowed = true
-                options.normalizedCropRect = cropRect
-                options.resizeMode = .exact
-                
-                let targetWidth = floor(CGFloat(self.phAsset.pixelWidth) * cropRect.width)
-                let targetHeight = floor(CGFloat(self.phAsset.pixelHeight) * cropRect.height)
-                let dimension = max(min(targetHeight, targetWidth), 1024 * UIScreen.main.scale)
-                
-                let targetSize = CGSize(width: dimension, height: dimension)
-                
-                let asset = self.phAsset!
-                
-                if asset.mediaType == .video {
-                    if asset.duration > 60 {
-                        let alert = UIAlertController(title: fsLocalized("YPFusumaVideoTooLongTitle"),
-                                                      message: fsLocalized("YPFusumaVideoTooLongDetail"),
-                                                      preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                    } else {
-                        let videosOptions = PHVideoRequestOptions()
-                        videosOptions.isNetworkAccessAllowed = true
-                        self.delegate?.albumViewStartedLoadingImage()
-                        PHImageManager.default().requestAVAsset(forVideo: asset,
-                                                                options: videosOptions) { v, audioMix, info in
-                                                                    if let urlAsset = v as? AVURLAsset {
-                                                                        DispatchQueue.main.async() {
-                                                                            self.delegate?.albumViewFinishedLoadingImage()
-                                                                            video(urlAsset.url)
-                                                                        }
-                                                                    }
-                        }
-                    }
+            let targetSize = CGSize(width: dimension, height: dimension)
+            
+            let asset = self.phAsset!
+            
+            
+            if asset.mediaType == .video {
+                if asset.duration > 60 {
+                    let alert = UIAlertController(title: fsLocalized("YPFusumaVideoTooLongTitle"),
+                                                  message: fsLocalized("YPFusumaVideoTooLongDetail"),
+                                                  preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 } else {
+                    let videosOptions = PHVideoRequestOptions()
+                    videosOptions.isNetworkAccessAllowed = true
                     self.delegate?.albumViewStartedLoadingImage()
-                    PHImageManager.default()
-                        .requestImage(for: asset,
-                                      targetSize: targetSize,
-                                      contentMode: .aspectFill,
-                                      options: options) { result, info in
-                                        DispatchQueue.main.async() {
-                                            self.delegate?.albumViewFinishedLoadingImage()
-                                            photo(result!)
-                                        }
+                    PHImageManager.default().requestAVAsset(forVideo: asset,
+                                                            options: videosOptions) { v, audioMix, info in
+                                                                if let urlAsset = v as? AVURLAsset {
+                                                                    DispatchQueue.main.async() {
+                                                                        self.delegate?.albumViewFinishedLoadingImage()
+                                                                        video(urlAsset.url)
+                                                                    }
+                                                                }
                     }
                 }
+            } else {
+                self.delegate?.albumViewStartedLoadingImage()
+                PHImageManager.default()
+                    .requestImage(for: asset,
+                                  targetSize: targetSize,
+                                  contentMode: .aspectFit,
+                                  options: options) { result, info in
+                                    DispatchQueue.main.async() {
+                                        self.delegate?.albumViewFinishedLoadingImage()
+                                        photo(result!)
+                                    }
+                }
             }
-        } else {
-            photo(view!.image)
         }
     }
 }

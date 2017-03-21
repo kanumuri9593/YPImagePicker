@@ -170,27 +170,23 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                     let rcy = ih * 0.5
                     let imageRef = image.cgImage?.cropping(to: CGRect(x: rcy-iw*0.5, y: 0 , width: iw, height: iw))
                     DispatchQueue.main.async() {
-                        if fusumaCropImage {
-                            var resizedImage = UIImage(cgImage: imageRef!, scale: 1.0, orientation: image.imageOrientation)
-                            if let device = self.device, let cgImg =  resizedImage.cgImage, device.position == .front {
-                                func flipImage(image: UIImage!) -> UIImage! {
-                                    let imageSize:CGSize = image.size
-                                    UIGraphicsBeginImageContextWithOptions(imageSize, true, 1.0)
-                                    let ctx = UIGraphicsGetCurrentContext()!
-                                    ctx.rotate(by: CGFloat(M_PI/2.0))
-                                    ctx.translateBy(x: 0, y: -imageSize.width)
-                                    ctx.scaleBy(x: imageSize.height/imageSize.width, y: imageSize.width/imageSize.height)
-                                    ctx.draw(image.cgImage!, in: CGRect(x:0.0, y:0.0, width:imageSize.width, height:imageSize.height))
-                                    let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-                                    UIGraphicsEndImageContext()
-                                    return newImage
-                                }
-                                resizedImage = flipImage(image: resizedImage)
+                        var resizedImage = UIImage(cgImage: imageRef!, scale: 1.0, orientation: image.imageOrientation)
+                        if let device = self.device, let cgImg =  resizedImage.cgImage, device.position == .front {
+                            func flipImage(image: UIImage!) -> UIImage! {
+                                let imageSize:CGSize = image.size
+                                UIGraphicsBeginImageContextWithOptions(imageSize, true, 1.0)
+                                let ctx = UIGraphicsGetCurrentContext()!
+                                ctx.rotate(by: CGFloat(M_PI/2.0))
+                                ctx.translateBy(x: 0, y: -imageSize.width)
+                                ctx.scaleBy(x: imageSize.height/imageSize.width, y: imageSize.width/imageSize.height)
+                                ctx.draw(image.cgImage!, in: CGRect(x:0.0, y:0.0, width:imageSize.width, height:imageSize.height))
+                                let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+                                UIGraphicsEndImageContext()
+                                return newImage
                             }
-                            self.didCapturePhoto?(resizedImage)
-                        } else {
-                            self.didCapturePhoto?(image)
+                            resizedImage = flipImage(image: resizedImage)
                         }
+                        self.didCapturePhoto?(resizedImage)
                     }
                 }
             }
