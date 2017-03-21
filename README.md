@@ -9,6 +9,15 @@ It comes with adjustable square crop and filters.
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![codebeat badge](https://codebeat.co/badges/6a591267-c444-4c88-a410-56270d8ed9bc)](https://codebeat.co/projects/github-com-yummypets-ypfusuma)
 
+|         | Features  |
+----------|-----------------
+🌅        | Library
+📷        | Photo
+🎥        | Video
+✂️        | Crop
+⚡️        | Flash
+🖼        | Filters
+
 
 ## Preview
 
@@ -19,18 +28,6 @@ It comes with adjustable square crop and filters.
 
 
 Those features are available just with a few lines of code!
-
-## Features
-|        Features  |
---------------------------|
-🌅        | Library
-📷        | Photo
-🎥        | Video
-✂️        | Crop
-⚡️        | Flash
-🖼        | Filters
-
-
 
 ## Improvements
 YPImagePicker is built from the great Fusuma library.
