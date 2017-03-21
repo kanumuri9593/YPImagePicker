@@ -9,6 +9,29 @@ It comes with adjustable square crop and filters.
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![codebeat badge](https://codebeat.co/badges/6a591267-c444-4c88-a410-56270d8ed9bc)](https://codebeat.co/projects/github-com-yummypets-ypfusuma)
 
+
+## Preview
+
+<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/library.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/photo.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/video.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/filters.PNG" width="340px">
+
+
+Those features are available just with a few lines of code!
+
+## Features
+|        Features  |
+--------------------------|
+🌅        | Library
+📷        | Photo
+🎥        | Video
+✂️        | Crop
+⚡️        | Flash
+🖼        | Filters
+
+
+
 ## Improvements
 YPImagePicker is built from the great Fusuma library.
 
@@ -22,23 +45,6 @@ Here are the improvements we added :
 - Grab videos form the library view as well
 - Replaces Delegate based with callbacks based api
 - Uses Native Navigation bar over custom View (gotta be a good UIKit citizen)
-
-## Preview
-
-<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/library.PNG" width="340px">
-<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/photo.PNG" width="340px">
-<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/video.PNG" width="340px">
-<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/filters.PNG" width="340px">
-
-## Features
-- [x] UIImagePickerController alternative
-- [x] Cropping images in camera roll
-- [x] Taking a square-sized photo and a video using AVFoundation
-- [x] Flash: On Off
-- [x] Camera Mode: Front Back
-- [x] Video Mode
-
-Those features are available just with a few lines of code!
 
 ## Installation
 
