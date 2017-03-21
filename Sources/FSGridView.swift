@@ -27,16 +27,16 @@ class FSGridView: UIView {
         
         let stroke: CGFloat = 0.5
         line1.top(0).width(stroke).bottom(0)
-        addConstraint(item: line1, attribute: .right, toItem: self, attribute: .right, multiplier: 0.33, constant: 0)
+        line1.Right == 33 % Right
         
         line2.top(0).width(stroke).bottom(0)
-        addConstraint(item: line2, attribute: .right, toItem: self, attribute: .right, multiplier: 0.66, constant: 0)
+        line2.Right == 66 % Right
         
         line3.left(0).height(stroke).right(0)
-        addConstraint(item: line3, attribute: .bottom, toItem: self, attribute: .bottom, multiplier: 0.33, constant: 0)
+        line3.Bottom == 33 % Bottom
         
         line4.left(0).height(stroke).right(0)
-        addConstraint(item: line4, attribute: .bottom, toItem: self, attribute: .bottom, multiplier: 0.66, constant: 0)
+        line4.Bottom == 66 % Bottom
         
         let color = UIColor.white.withAlphaComponent(0.6)
         line1.backgroundColor = color
@@ -46,7 +46,6 @@ class FSGridView: UIView {
         
         applyShadow(to: line1)
         applyShadow(to: line2)
-        
         applyShadow(to: line3)
         applyShadow(to: line4)
     }

@@ -18,12 +18,10 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     let spinnerView = UIView()
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     let squareCropButton = UIButton()
-    
     var isVideoMode = false {
         didSet { self.cropView?.isVideoMode = isVideoMode }
     }
     var cropView: FSImageCropView?
-    
     var shouldCropToSquare = false
     
     func squareCropButtonTapped() {

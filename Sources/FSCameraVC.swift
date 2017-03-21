@@ -13,7 +13,6 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     public var usesFrontCamera = false
     public var didCapturePhoto: ((UIImage) -> Void)?
-    
     private let sessionQueue = DispatchQueue(label: "FSCameraVCSerialQueue")
     let session = AVCaptureSession()
     var device: AVCaptureDevice? {
@@ -22,9 +21,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     var videoInput: AVCaptureDeviceInput!
     let imageOutput = AVCaptureStillImageOutput()
     let focusView = UIView(frame: CGRect(x: 0, y: 0, width: 90, height: 90))
-    
     var v = FSCameraView()
-    
     var isPreviewSetup = false
     
     override public func loadView() { view = v }

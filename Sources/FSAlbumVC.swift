@@ -82,7 +82,10 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
     public override func loadView() {
         let bundle = Bundle(for: self.classForCoder)
-        v = UINib(nibName: "FSAlbumView", bundle: bundle).instantiate(withOwner: self, options: nil)[0] as! FSAlbumView
+        let xibView = UINib(nibName: "FSAlbumView",
+                            bundle: bundle).instantiate(withOwner: self,
+                                                        options: nil)[0] as? FSAlbumView
+        v = xibView
         view = v
     }
     
@@ -296,32 +299,34 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     }
     
     // MARK: - UICollectionViewDelegate Protocol
+    
     public func collectionView(_ collectionView: UICollectionView,
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FSAlbumViewCell",
-                                                      for: indexPath) as! FSAlbumViewCell
-        let currentTag = cell.tag + 1
-        cell.tag = currentTag
-        if let images = images {
-            let asset = images[(indexPath as NSIndexPath).item]
-            imageManager?.requestImage(for: asset,
-                                       targetSize: cellSize,
-                                       contentMode: .aspectFill,
-                                       options: nil) { result, _ in
-                                        if cell.tag == currentTag {
-                                            cell.imageView.image = result
-                                        }
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FSAlbumViewCell",
+                                                         for: indexPath) as? FSAlbumViewCell {
+            let currentTag = cell.tag + 1
+            cell.tag = currentTag
+            if let images = images {
+                let asset = images[(indexPath as NSIndexPath).item]
+                imageManager?.requestImage(for: asset,
+                                           targetSize: cellSize,
+                                           contentMode: .aspectFill,
+                                           options: nil) { result, _ in
+                                            if cell.tag == currentTag {
+                                                cell.imageView.image = result
+                                            }
+                }
+                if asset.mediaType == .video {
+                    cell.durationLabel.isHidden = false
+                    cell.durationLabel.text = formattedStrigFrom(asset.duration)
+                } else {
+                    cell.durationLabel.isHidden = true
+                    cell.durationLabel.text = ""
+                }
             }
-            
-            if asset.mediaType == .video {
-                cell.durationLabel.isHidden = false
-                cell.durationLabel.text = formattedStrigFrom(asset.duration)
-            } else {
-                cell.durationLabel.isHidden = true
-                cell.durationLabel.text = ""
-            }
+            return cell
         }
-        return cell
+        return UICollectionViewCell()
     }
 
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -659,11 +664,4 @@ internal extension IndexSet {
         })
         return indexPaths
     }
-}
-
-func formattedStrigFrom(_ timeInterval: TimeInterval) -> String {
-    let interval = Int(timeInterval)
-    let seconds = interval % 60
-    let minutes = (interval / 60) % 60
-    return String(format: "%02d:%02d", minutes, seconds)
 }

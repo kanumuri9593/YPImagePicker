@@ -13,14 +13,11 @@ class FiltersVC: UIViewController {
     override var prefersStatusBarHidden: Bool { return true }
     
     var v = FiltersView()
-    
     var filterPreviews = [FilterPreview]()
     var filters = [Filter]()
     var originalImage = UIImage()
     var thumbImage = UIImage()
-    
     var didSelectImage: ((UIImage, Bool) -> Void)?
-    
     var isImageFiltered = false
     
     override func loadView() { view = v }
@@ -104,18 +101,20 @@ extension FiltersVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let filterPreview = filterPreviews[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell",
-                                                      for: indexPath) as! FilterCollectionViewCell
-        cell.name.text = filterPreview.name
-        if let img = filterPreview.image {
-            cell.imageView.image = img
-        } else {
-            let filter = self.filters[indexPath.row]
-            let filteredImage = filter.filter(self.thumbImage)
-            cell.imageView.image = filteredImage
-            filterPreview.image = filteredImage // Cache
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell",
+                                                         for: indexPath) as? FilterCollectionViewCell {
+            cell.name.text = filterPreview.name
+            if let img = filterPreview.image {
+                cell.imageView.image = img
+            } else {
+                let filter = self.filters[indexPath.row]
+                let filteredImage = filter.filter(self.thumbImage)
+                cell.imageView.image = filteredImage
+                filterPreview.image = filteredImage // Cache
+            }
+            return cell
         }
-        return cell
+        return UICollectionViewCell()
     }
 }
 

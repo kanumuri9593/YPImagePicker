@@ -12,20 +12,17 @@ import AVFoundation
 public class FSVideoVC: UIViewController {
     
     public var didCaptureVideo: ((URL) -> Void)?
-    
     private let sessionQueue = DispatchQueue(label: "FSVideoVCSerialQueue")
     let session = AVCaptureSession()
     var device: AVCaptureDevice? {
         return videoInput?.device
     }
-    
     fileprivate var videoInput: AVCaptureDeviceInput!
     fileprivate var videoOutput = AVCaptureMovieFileOutput()
     let focusView = UIView(frame: CGRect(x: 0, y: 0, width: 90, height: 90))
     fileprivate var timer = Timer()
     fileprivate var dateVideoStarted = Date()
     fileprivate var v = FSCameraView()
-    
     var isPreviewSetup = false
     
     override public func loadView() { view = v }

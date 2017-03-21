@@ -55,32 +55,6 @@ extension AVCaptureDevice {
     }
 }
 
-func flipCameraFor(captureDeviceInput: AVCaptureDeviceInput,
-                   onSession s: AVCaptureSession) -> AVCaptureDeviceInput? {
-    var out: AVCaptureDeviceInput?
-    s.stopRunning()
-    s.beginConfiguration()
-    for input in s.inputs {
-        s.removeInput(input as! AVCaptureInput)
-    }
-    let toggledPosition: AVCaptureDevicePosition = (captureDeviceInput.device.position == .front)
-        ? .back
-        : .front
-    
-    for device in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) {
-        if let device = device as? AVCaptureDevice, device.position == toggledPosition {
-            out = try? AVCaptureDeviceInput(device: device)
-            if s.canAddInput(captureDeviceInput) {
-                s.addInput(captureDeviceInput)
-            }
-        }
-    }
-    
-    s.commitConfiguration()
-    s.startRunning()
-    return out
-}
-
 func configureFocusView(_ v: UIView) {
     v.alpha = 0.0
     v.backgroundColor = UIColor.clear
@@ -157,4 +131,11 @@ func flippedDeviceInputForInput(_ input: AVCaptureDeviceInput) -> AVCaptureDevic
     let p = toggledPositionForDevice(input.device)
     let aDevice = deviceForPosition(p)
     return try? AVCaptureDeviceInput(device: aDevice)
+}
+
+func formattedStrigFrom(_ timeInterval: TimeInterval) -> String {
+    let interval = Int(timeInterval)
+    let seconds = interval % 60
+    let minutes = (interval / 60) % 60
+    return String(format: "%02d:%02d", minutes, seconds)
 }
