@@ -36,11 +36,6 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
             }
         }
         cropView?.setFitImage(shouldCropToSquare)
-        refreshCropModeButtonColor()
-    }
-    
-    func refreshCropModeButtonColor() {
-        squareCropButton.backgroundColor = UIColor.black.withAlphaComponent(0.2)
     }
     
     override func awakeFromNib() {
@@ -49,13 +44,8 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         grid.frame = frame
         clipsToBounds = true
         
-        sv(squareCropButton)
-        refreshCropModeButtonColor()
-        squareCropButton.size(30)
-        |-squareCropButton
-        squareCropButton.top(300)
-        squareCropButton.addTarget(self, action: #selector(squareCropButtonTapped), for: .touchUpInside)
     
+
         for sv in subviews {
             if let cv = sv as? FSImageCropView {
                 cropView = cv
@@ -85,6 +75,15 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         spinnerView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         curtain.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         curtain.alpha = 0
+        
+        
+        // Crop Button
+        squareCropButton.setImage(imageFromBundle("yp_iconCrop") , for: .normal)
+        sv(squareCropButton)
+        squareCropButton.size(42)
+        |-15-squareCropButton
+        squareCropButton.Bottom == cropView!.Bottom - 15
+        squareCropButton.addTarget(self, action: #selector(squareCropButtonTapped), for: .touchUpInside)
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {

@@ -19,8 +19,6 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
     let flashButton = UIButton()
     let timeElapsedLabel = UILabel()
     let progressBar = UIProgressView()
-    //    @IBOutlet weak var croppedAspectRatioConstraint: NSLayoutConstraint!
-    //    @IBOutlet weak var fullAspectRatioConstraint: NSLayoutConstraint!
 
     convenience init() {
         self.init(frame:CGRect.zero)
@@ -35,7 +33,6 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
                 shotButton
             )
         )
-        
         
         let isIphone4 = UIScreen.main.bounds.height == 480
         let sideMargin:CGFloat = isIphone4 ? 20 : 0
