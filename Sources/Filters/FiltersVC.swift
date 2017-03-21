@@ -85,7 +85,9 @@ class FiltersVC: UIViewController {
         v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                                   animated: false,
                                                   scrollPosition: UICollectionViewScrollPosition.bottom)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(done))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
+                                                            target: self,
+                                                            action: #selector(done))
     }
     
     func done() {

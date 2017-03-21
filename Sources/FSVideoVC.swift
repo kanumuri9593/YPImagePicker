@@ -98,7 +98,7 @@ public class FSVideoVC: UIViewController {
         let timeScale: Int32 = 30 //FPS
         let maxDuration = CMTimeMakeWithSeconds(totalSeconds, timeScale)
         videoOutput.maxRecordedDuration = maxDuration
-        videoOutput.minFreeDiskSpaceLimit = 1024 * 1024 //SET MIN FREE SPACE IN BYTES FOR RECORDING TO CONTINUE ON A VOLUME
+        videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
         if session.canAddOutput(videoOutput) {
             session.addOutput(videoOutput)
         }

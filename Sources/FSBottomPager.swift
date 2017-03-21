@@ -194,7 +194,9 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         delegate?.pagerScrollViewDidScroll(scrollView)
     }
 
-    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView,
+                                          withVelocity velocity: CGPoint,
+                                          targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if !v.header.menuItems.isEmpty {
             let menuIndex = (targetContentOffset.pointee.x + v.frame.size.width) / v.frame.size.width
             let selectedIndex = Int(round(menuIndex)) - 1

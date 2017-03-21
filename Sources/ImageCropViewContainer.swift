@@ -83,7 +83,8 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         squareCropButton.addTarget(self, action: #selector(squareCropButtonTapped), for: .touchUpInside)
     }
     
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
+                                  otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     

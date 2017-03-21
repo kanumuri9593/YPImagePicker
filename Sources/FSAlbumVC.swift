@@ -107,7 +107,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         panGesture.delegate = self
         v.addGestureRecognizer(panGesture)
         
-        v.collectionViewConstraintHeight.constant = v.frame.height - v.imageCropView.frame.height - imageCropViewOriginalConstraintTop
+        v.collectionViewConstraintHeight.constant =
+            v.frame.height - v.imageCropView.frame.height - imageCropViewOriginalConstraintTop
         v.imageCropViewConstraintTop.constant = 0
         dragDirection = Direction.up
         
@@ -150,7 +151,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     func tappedImage() {
         if !isImageShown {
             v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-            v.collectionViewConstraintHeight.constant = v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
+            v.collectionViewConstraintHeight.constant =
+                v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
             UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
                 self.v.layoutIfNeeded()
             }, completion: nil)
@@ -164,8 +166,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         }
     }
     
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                                  shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
+                                  otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
@@ -181,21 +183,28 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     }
     
     func panned(_ sender: UIPanGestureRecognizer) {
+        
+        let containerHeight = v.imageCropViewContainer.frame.height
+        let height = v.frame.height
+        
         if sender.state == UIGestureRecognizerState.began {
             let view    = sender.view
             let loc     = sender.location(in: view)
             let subview = view?.hitTest(loc, with: nil)
             
-            if subview == v.imageCropView && v.imageCropViewConstraintTop.constant == imageCropViewOriginalConstraintTop {
+            if subview == v.imageCropView
+                && v.imageCropViewConstraintTop.constant == imageCropViewOriginalConstraintTop {
                 return
             }
             
             dragStartPos = sender.location(in: v)
-            cropBottomY = v.imageCropViewContainer.frame.origin.y + v.imageCropViewContainer.frame.height
+            cropBottomY = v.imageCropViewContainer.frame.origin.y + containerHeight
             
             // Move
             if dragDirection == Direction.stop {
-                dragDirection = (v.imageCropViewConstraintTop.constant == imageCropViewOriginalConstraintTop) ? Direction.up : Direction.down
+                dragDirection = (v.imageCropViewConstraintTop.constant == imageCropViewOriginalConstraintTop)
+                    ? Direction.up
+                    : Direction.down
             }
             
             // Scroll event of CollectionView is preferred.
@@ -209,17 +218,27 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         } else if sender.state == UIGestureRecognizerState.changed {
             let currentPos = sender.location(in: v)
             if dragDirection == Direction.up && currentPos.y < cropBottomY - dragDiff {
-                v.imageCropViewConstraintTop.constant = max(imageCropViewMinimalVisibleHeight - v.imageCropViewContainer.frame.height, currentPos.y + dragDiff - v.imageCropViewContainer.frame.height)
-                v.collectionViewConstraintHeight.constant = min(v.frame.height - imageCropViewMinimalVisibleHeight, v.frame.height - v.imageCropViewConstraintTop.constant - v.imageCropViewContainer.frame.height)
+                v.imageCropViewConstraintTop.constant =
+                    max(imageCropViewMinimalVisibleHeight - containerHeight, currentPos.y + dragDiff - containerHeight)
+                v.collectionViewConstraintHeight.constant =
+                    min(height - imageCropViewMinimalVisibleHeight,
+                        height - v.imageCropViewConstraintTop.constant - containerHeight)
             } else if dragDirection == Direction.down && currentPos.y > cropBottomY {
-                v.imageCropViewConstraintTop.constant = min(imageCropViewOriginalConstraintTop, currentPos.y - v.imageCropViewContainer.frame.height)
-                v.collectionViewConstraintHeight.constant = max(v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height, v.frame.height - v.imageCropViewConstraintTop.constant - v.imageCropViewContainer.frame.height)
+                v.imageCropViewConstraintTop.constant =
+                    min(imageCropViewOriginalConstraintTop, currentPos.y - containerHeight)
+                v.collectionViewConstraintHeight.constant =
+                    max(height - imageCropViewOriginalConstraintTop - containerHeight,
+                        height - v.imageCropViewConstraintTop.constant - containerHeight)
             } else if dragDirection == Direction.stop && v.collectionView.contentOffset.y < 0 {
                 dragDirection = Direction.scroll
                 imaginaryCollectionViewOffsetStartPosY = currentPos.y
             } else if dragDirection == Direction.scroll {
-                v.imageCropViewConstraintTop.constant = imageCropViewMinimalVisibleHeight - v.imageCropViewContainer.frame.height + currentPos.y - imaginaryCollectionViewOffsetStartPosY
-                v.collectionViewConstraintHeight.constant = max(v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height, v.frame.height - v.imageCropViewConstraintTop.constant - v.imageCropViewContainer.frame.height)
+                v.imageCropViewConstraintTop.constant =
+                    imageCropViewMinimalVisibleHeight - containerHeight
+                    + currentPos.y - imaginaryCollectionViewOffsetStartPosY
+                v.collectionViewConstraintHeight.constant =
+                    max(height - imageCropViewOriginalConstraintTop - containerHeight,
+                        height - v.imageCropViewConstraintTop.constant - containerHeight)
                 
             }
             
@@ -232,13 +251,18 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             
             let currentPos = sender.location(in: v)
             
-            if currentPos.y < cropBottomY - dragDiff && v.imageCropViewConstraintTop.constant != imageCropViewOriginalConstraintTop {
+            if currentPos.y < cropBottomY - dragDiff
+                && v.imageCropViewConstraintTop.constant != imageCropViewOriginalConstraintTop {
                 // The largest movement
                 v.imageCropView.changeScrollable(false)
-                v.imageCropViewConstraintTop.constant = imageCropViewMinimalVisibleHeight - v.imageCropViewContainer.frame.height
-                v.collectionViewConstraintHeight.constant = v.frame.height - imageCropViewMinimalVisibleHeight
+                v.imageCropViewConstraintTop.constant =
+                    imageCropViewMinimalVisibleHeight - containerHeight
+                v.collectionViewConstraintHeight.constant = height - imageCropViewMinimalVisibleHeight
                 
-                UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                UIView.animate(withDuration: 0.3,
+                               delay: 0.0,
+                               options: UIViewAnimationOptions.curveEaseOut,
+                               animations: {
                     self.v.layoutIfNeeded()
                     }, completion: nil)
                 dragDirection = Direction.down
@@ -246,9 +270,13 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                 // Get back to the original position
                 v.imageCropView.changeScrollable(true)
                 v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-                v.collectionViewConstraintHeight.constant = v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
+                v.collectionViewConstraintHeight.constant =
+                    height - imageCropViewOriginalConstraintTop - containerHeight
                 
-                UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                UIView.animate(withDuration: 0.3,
+                               delay: 0.0,
+                               options: UIViewAnimationOptions.curveEaseOut,
+                               animations: {
                     self.v.layoutIfNeeded()
                     }, completion: nil)
                 dragDirection = Direction.up
@@ -262,13 +290,16 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     }
     
     func refreshImageCurtainAlpha() {
-        let imageCurtainAlpha = abs(v.imageCropViewConstraintTop.constant)/(v.imageCropViewContainer.frame.height - imageCropViewMinimalVisibleHeight)
+        let imageCurtainAlpha = abs(v.imageCropViewConstraintTop.constant)
+            / (v.imageCropViewContainer.frame.height - imageCropViewMinimalVisibleHeight)
         v.imageCropViewContainer.curtain.alpha = imageCurtainAlpha
     }
     
     // MARK: - UICollectionViewDelegate Protocol
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FSAlbumViewCell", for: indexPath) as! FSAlbumViewCell
+    public func collectionView(_ collectionView: UICollectionView,
+                               cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FSAlbumViewCell",
+                                                      for: indexPath) as! FSAlbumViewCell
         let currentTag = cell.tag + 1
         cell.tag = currentTag
         if let images = images {
@@ -301,7 +332,9 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         return images == nil ? 0 : images!.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         let width = (collectionView.frame.width - 3) / 4
         return CGSize(width: width, height: width)
     }
@@ -311,7 +344,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             changeImage(images[(indexPath as NSIndexPath).row])
             v.imageCropView.changeScrollable(true)
             v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-            v.collectionViewConstraintHeight.constant = v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
+            v.collectionViewConstraintHeight.constant =
+                v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
             UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
                 self.v.layoutIfNeeded()
                 }, completion: nil)
@@ -347,7 +381,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                             }
                             let insertedIndexes = collectionChanges!.insertedIndexes
                             if (insertedIndexes?.count ?? 0) != 0 {
-                                collectionView.insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                                collectionView
+                                    .insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
                             }
                             let changedIndexes = collectionChanges!.changedIndexes
                             if (changedIndexes?.count ?? 0) != 0 {
@@ -373,15 +408,14 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                 // Show Loading when video is from the cloud
                 let videosOptions = PHVideoRequestOptions()
                 videosOptions.isNetworkAccessAllowed = true
-                PHImageManager.default().requestAVAsset(forVideo: asset,
-                                                        options: videosOptions) { v, _, _ in
-                                                            DispatchQueue.main.async {
-                                                                if v == nil {
-                                                                    self.v.imageCropViewContainer.spinnerView.isHidden = false
-                                                                } else {
-                                                                    self.v.imageCropViewContainer.spinnerView.isHidden = true
-                                                                }
-                                                            }
+                PHImageManager.default().requestAVAsset(forVideo: asset, options: videosOptions) { v, _, _ in
+                    DispatchQueue.main.async {
+                        if v == nil {
+                            self.v.imageCropViewContainer.spinnerView.isHidden = false
+                        } else {
+                            self.v.imageCropViewContainer.spinnerView.isHidden = true
+                        }
+                    }
                 }
             }
         } else {
@@ -454,7 +488,9 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             var addedIndexPaths: [IndexPath] = []
             var removedIndexPaths: [IndexPath] = []
             
-            self.computeDifferenceBetweenRect(self.previousPreheatRect, andRect: preheatRect, removedHandler: {removedRect in
+            self.computeDifferenceBetweenRect(self.previousPreheatRect,
+                                              andRect: preheatRect,
+                                              removedHandler: { removedRect in
                 let indexPaths = self.v.collectionView.aapl_indexPathsForElementsInRect(removedRect)
                 removedIndexPaths += indexPaths
                 }, addedHandler: {addedRect in
@@ -488,19 +524,31 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             let newMaxY = newRect.maxY
             let newMinY = newRect.minY
             if newMaxY > oldMaxY {
-                let rectToAdd = CGRect(x: newRect.origin.x, y: oldMaxY, width: newRect.size.width, height: (newMaxY - oldMaxY))
+                let rectToAdd = CGRect(x: newRect.origin.x,
+                                       y: oldMaxY,
+                                       width: newRect.size.width,
+                                       height: (newMaxY - oldMaxY))
                 addedHandler(rectToAdd)
             }
             if oldMinY > newMinY {
-                let rectToAdd = CGRect(x: newRect.origin.x, y: newMinY, width: newRect.size.width, height: (oldMinY - newMinY))
+                let rectToAdd = CGRect(x: newRect.origin.x,
+                                       y: newMinY,
+                                       width: newRect.size.width,
+                                       height: (oldMinY - newMinY))
                 addedHandler(rectToAdd)
             }
             if newMaxY < oldMaxY {
-                let rectToRemove = CGRect(x: newRect.origin.x, y: newMaxY, width: newRect.size.width, height: (oldMaxY - newMaxY))
+                let rectToRemove = CGRect(x: newRect.origin.x,
+                                          y: newMaxY,
+                                          width: newRect.size.width,
+                                          height: (oldMaxY - newMaxY))
                 removedHandler(rectToRemove)
             }
             if oldMinY < newMinY {
-                let rectToRemove = CGRect(x: newRect.origin.x, y: oldMinY, width: newRect.size.width, height: (newMinY - oldMinY))
+                let rectToRemove = CGRect(x: newRect.origin.x,
+                                          y: oldMinY,
+                                          width: newRect.size.width,
+                                          height: (newMinY - oldMinY))
                 removedHandler(rectToRemove)
             }
         } else {

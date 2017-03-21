@@ -179,7 +179,10 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                                 ctx.rotate(by: CGFloat(M_PI/2.0))
                                 ctx.translateBy(x: 0, y: -imageSize.width)
                                 ctx.scaleBy(x: imageSize.height/imageSize.width, y: imageSize.width/imageSize.height)
-                                ctx.draw(image.cgImage!, in: CGRect(x:0.0, y:0.0, width:imageSize.width, height:imageSize.height))
+                                ctx.draw(image.cgImage!, in: CGRect(x:0.0,
+                                                                    y:0.0,
+                                                                    width:imageSize.width,
+                                                                    height:imageSize.height))
                                 let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
                                 UIGraphicsEndImageContext()
                                 return newImage
