@@ -21,8 +21,8 @@ public class YPImagePicker: UINavigationController {
         set { fusuma.usesFrontCamera = newValue }
     }
     public var showsFilters = true
-    public var didSelectImage:((UIImage) -> Void)?
-    public var didSelectVideo:((Data, UIImage) -> Void)?
+    public var didSelectImage: ((UIImage) -> Void)?
+    public var didSelectVideo: ((Data, UIImage) -> Void)?
     
     private let fusuma = FusumaVC()
     
@@ -65,7 +65,7 @@ public class YPImagePicker: UINavigationController {
             let thumb = thunbmailFromVideoPath(videoURL)
             // Compress Video to 640x480 format.
             let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            if let firstPath = paths.first{
+            if let firstPath = paths.first {
                 let path = firstPath + "/\(Int(Date().timeIntervalSince1970))temporary.mov"
                 let uploadURL = URL(fileURLWithPath: path)
                 let asset = AVURLAsset(url: videoURL)

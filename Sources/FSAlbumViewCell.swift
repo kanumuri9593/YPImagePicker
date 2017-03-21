@@ -42,7 +42,7 @@ class FSAlbumViewCell: UICollectionViewCell {
         backgroundColor = UIColor(r: 247, g: 247, b: 247)
     }
 
-    override var isSelected : Bool {
+    override var isSelected: Bool {
         didSet { isHighlighted = isSelected }
     }
     

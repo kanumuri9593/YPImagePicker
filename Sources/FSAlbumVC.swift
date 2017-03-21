@@ -9,23 +9,22 @@
 import UIKit
 import Photos
 
-
 @objc public protocol FSAlbumViewDelegate: class {
     func albumViewCameraRollUnauthorized()
     func albumViewStartedLoadingImage()
     func albumViewFinishedLoadingImage()
 }
 
-
-public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
+public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
+PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
-    weak var delegate: FSAlbumViewDelegate? = nil
+    weak var delegate: FSAlbumViewDelegate?
     
     public var showsVideo = false
     
     let myQueue = DispatchQueue(label: "com.octopepper.ypImagePicker.imagesQueue")
 
-    var _images:PHFetchResult<PHAsset>?
+    var _images: PHFetchResult<PHAsset>?
     var images: PHFetchResult<PHAsset>? {
         get {
             return myQueue.sync {
@@ -60,9 +59,8 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
     var dragStartPos: CGPoint = CGPoint.zero
     let dragDiff: CGFloat     = 0//20.0
 
-    
     var _isImageShown = true
-    var isImageShown:Bool {
+    var isImageShown: Bool {
         get { return self._isImageShown }
         set {
             if newValue != isImageShown {
@@ -80,11 +78,11 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         }
     }
 
-    var v:FSAlbumView!
+    var v: FSAlbumView!
     
     public override func loadView() {
         let bundle = Bundle(for: self.classForCoder)
-        v = UINib(nibName: "FSAlbumView", bundle:bundle).instantiate(withOwner: self, options: nil)[0] as! FSAlbumView
+        v = UINib(nibName: "FSAlbumView", bundle: bundle).instantiate(withOwner: self, options: nil)[0] as! FSAlbumView
         view = v
     }
     
@@ -118,7 +116,6 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         v.imageCropViewContainer.layer.shadowOpacity = 0.9
         v.imageCropViewContainer.layer.shadowOffset  = CGSize.zero
         
-        
         v.collectionView.register(FSAlbumViewCell.self, forCellWithReuseIdentifier: "FSAlbumViewCell")
         
         // Never load photos Unless the user allows to access to photo album
@@ -131,12 +128,16 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         ]
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-            self.images = self.showsVideo ? PHAsset.fetchAssets(with: options) : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+            self.images = self.showsVideo
+                ? PHAsset.fetchAssets(with: options)
+                : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
             DispatchQueue.main.async {
                 if let images = self.images, images.count > 0 {
                     self.changeImage(images[0])
                     self.v.collectionView.reloadData()
-                    self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: UICollectionViewScrollPosition())
+                    self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
+                                                     animated: false,
+                                                     scrollPosition: UICollectionViewScrollPosition())
                 }
             }
         }
@@ -163,7 +164,8 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         }
     }
     
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                                  shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
     
@@ -253,8 +255,6 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             }
         }
         
-        
-        
         // Update isImageShown
         isImageShown = v.imageCropViewConstraintTop.constant == 0
 
@@ -276,13 +276,11 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             imageManager?.requestImage(for: asset,
                                        targetSize: cellSize,
                                        contentMode: .aspectFill,
-                                       options: nil) { result, info in
+                                       options: nil) { result, _ in
                                         if cell.tag == currentTag {
                                             cell.imageView.image = result
                                         }
             }
-            
-            
             
             if asset.mediaType == .video {
                 cell.durationLabel.isHidden = false
@@ -330,7 +328,8 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         }
     }
     
-    //MARK: - PHPhotoLibraryChangeObserver
+    // MARK: - PHPhotoLibraryChangeObserver
+    
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         DispatchQueue.main.async {
             if let images = self.images {
@@ -370,13 +369,13 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         latestImageTapped = asset.localIdentifier
         if asset.mediaType == PHAssetMediaType.video {
             v.imageCropViewContainer.isVideoMode = true
-            DispatchQueue.global(qos: .default).async() {
+            DispatchQueue.global(qos: .default).async {
                 // Show Loading when video is from the cloud
                 let videosOptions = PHVideoRequestOptions()
                 videosOptions.isNetworkAccessAllowed = true
                 PHImageManager.default().requestAVAsset(forVideo: asset,
-                                                        options: videosOptions) { v, audioMix, info in
-                                                            DispatchQueue.main.async() {
+                                                        options: videosOptions) { v, _, _ in
+                                                            DispatchQueue.main.async {
                                                                 if v == nil {
                                                                     self.v.imageCropViewContainer.spinnerView.isHidden = false
                                                                 } else {
@@ -389,7 +388,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             v.imageCropViewContainer.isVideoMode = false
         }
         
-        DispatchQueue.global(qos: .default).async() {
+        DispatchQueue.global(qos: .default).async {
             let options = PHImageRequestOptions()
             options.isNetworkAccessAllowed = true
             self.imageManager?.requestImage(for: asset,
@@ -398,7 +397,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                                             options: options) { result, info in
                 // Prevent long images to come after user selected another in the meantime.
                 if self.latestImageTapped == asset.localIdentifier {
-                    DispatchQueue.main.async() {
+                    DispatchQueue.main.async {
                         if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool, isFromCloud  == true {
                             self.v.imageCropViewContainer.spinnerView.isHidden = false
                         } else {
@@ -429,7 +428,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                     self.changeImage(images[0])
                 }
             case .restricted, .denied:
-                DispatchQueue.main.async() {
+                DispatchQueue.main.async {
                     self.delegate?.albumViewCameraRollUnauthorized()
                 }
             default:
@@ -479,7 +478,10 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         }
     }
     
-    func computeDifferenceBetweenRect(_ oldRect: CGRect, andRect newRect: CGRect, removedHandler: (CGRect)->Void, addedHandler: (CGRect)->Void) {
+    func computeDifferenceBetweenRect(_ oldRect: CGRect,
+                                      andRect newRect: CGRect,
+                                      removedHandler: (CGRect) -> Void,
+                                      addedHandler: (CGRect) -> Void) {
         if newRect.intersects(oldRect) {
             let oldMaxY = oldRect.maxY
             let oldMinY = oldRect.minY
@@ -521,7 +523,8 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
         return assets
     }
     
-    public func selectedMedia(photo:@escaping (_ photo:UIImage) -> Void, video:@escaping (_ videoURL:URL) -> Void) {
+    public func selectedMedia(photo:@escaping (_ photo: UIImage) -> Void,
+                              video: @escaping (_ videoURL: URL) -> Void) {
         var cropRect = CGRect.zero
         if let cropView = v.imageCropView {
             let normalizedX = min(1, cropView.contentOffset.x / cropView.contentSize.width)
@@ -530,7 +533,7 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             let normalizedHeight = min(1, cropView.frame.height / cropView.contentSize.height)
             cropRect = CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
         }
-        DispatchQueue.global(qos: .default).async() {
+        DispatchQueue.global(qos: .default).async {
             let options = PHImageRequestOptions()
             options.deliveryMode = .highQualityFormat
             options.isNetworkAccessAllowed = true
@@ -545,7 +548,6 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
             
             let asset = self.phAsset!
             
-            
             if asset.mediaType == .video {
                 if asset.duration > 60 {
                     let alert = UIAlertController(title: fsLocalized("YPFusumaVideoTooLongTitle"),
@@ -558,9 +560,9 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                     videosOptions.isNetworkAccessAllowed = true
                     self.delegate?.albumViewStartedLoadingImage()
                     PHImageManager.default().requestAVAsset(forVideo: asset,
-                                                            options: videosOptions) { v, audioMix, info in
+                                                            options: videosOptions) { v, _, _ in
                                                                 if let urlAsset = v as? AVURLAsset {
-                                                                    DispatchQueue.main.async() {
+                                                                    DispatchQueue.main.async {
                                                                         self.delegate?.albumViewFinishedLoadingImage()
                                                                         video(urlAsset.url)
                                                                     }
@@ -573,8 +575,8 @@ public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollecti
                     .requestImage(for: asset,
                                   targetSize: targetSize,
                                   contentMode: .aspectFit,
-                                  options: options) { result, info in
-                                    DispatchQueue.main.async() {
+                                  options: options) { result, _ in
+                                    DispatchQueue.main.async {
                                         self.delegate?.albumViewFinishedLoadingImage()
                                         photo(result!)
                                     }
@@ -604,16 +606,14 @@ internal extension IndexSet {
     func aapl_indexPathsFromIndexesWithSection(_ section: Int) -> [IndexPath] {
         var indexPaths: [IndexPath] = []
         indexPaths.reserveCapacity(count)
-        (self as NSIndexSet).enumerate({idx, stop in
+        (self as NSIndexSet).enumerate({idx, _ in
             indexPaths.append(IndexPath(item: idx, section: section))
         })
         return indexPaths
     }
 }
 
-    
-
-func formattedStrigFrom(_ timeInterval:TimeInterval) -> String {
+func formattedStrigFrom(_ timeInterval: TimeInterval) -> String {
     let interval = Int(timeInterval)
     let seconds = interval % 60
     let minutes = (interval / 60) % 60

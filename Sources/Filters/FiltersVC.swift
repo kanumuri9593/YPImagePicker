@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class FiltersVC: UIViewController {
     
     override var prefersStatusBarHidden: Bool { return true }
@@ -20,13 +19,13 @@ class FiltersVC: UIViewController {
     var originalImage = UIImage()
     var thumbImage = UIImage()
     
-    var didSelectImage:((UIImage,Bool) -> Void)?
+    var didSelectImage: ((UIImage, Bool) -> Void)?
     
     var isImageFiltered = false
     
     override func loadView() { view = v }
     
-    required init(image:UIImage) {
+    required init(image: UIImage) {
         super.init(nibName: nil, bundle: nil)
         title = fsLocalized("YPFusumaFilter")
         self.originalImage = image
@@ -100,9 +99,11 @@ extension FiltersVC: UICollectionViewDataSource {
         return filterPreviews.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let filterPreview = filterPreviews[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell", for: indexPath) as! FilterCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell",
+                                                      for: indexPath) as! FilterCollectionViewCell
         cell.name.text = filterPreview.name
         if let img = filterPreview.image {
             cell.imageView.image = img

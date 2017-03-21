@@ -16,17 +16,11 @@ protocol FSImageCropViewDelegate: class {
 
 final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     
-    
     var isVideoMode = false
-    
-    
     var squaredZoomScale: CGFloat = 1
-    
-    weak var myDelegate:FSImageCropViewDelegate?
+    weak var myDelegate: FSImageCropViewDelegate?
     var imageView = UIImageView()
-    
     var imageSize: CGSize?
-    
     var image: UIImage! = nil {
         didSet {
             setZoomScale(1.0, animated: true)
@@ -39,8 +33,6 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
                 imageView.image = nil
                 return
             }
-            
-            
             if isVideoMode {
                 imageView.frame = frame
                 imageView.contentMode = .scaleAspectFit
@@ -49,11 +41,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
                 return
             }
             
-            
-            
-            // Set image
-//            self.imageView.frame = self.frame
-            let screenSize:CGFloat = 375
+            let screenSize: CGFloat = 375
             self.imageView.frame.size.width = screenSize
             self.imageView.frame.size.height = screenSize
             
@@ -76,10 +64,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
             
             self.imageView.contentMode = .scaleAspectFill
             self.imageView.image = self.image
-            
-            
             imageView.clipsToBounds = true
-            
             refreshZoomScale()
         }
     }

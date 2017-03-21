@@ -6,7 +6,6 @@
 //  Copyright © 2016 octopepper. All rights reserved.
 //
 
-
 import Stevia
 
 class FiltersView: UIView {
@@ -15,7 +14,7 @@ class FiltersView: UIView {
     var collectionView: UICollectionView!
     
     convenience init() {
-        self.init(frame:CGRect.zero)
+        self.init(frame: CGRect.zero)
         collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout())
         
         sv(
@@ -24,7 +23,7 @@ class FiltersView: UIView {
         )
         
         let isIphone4 = UIScreen.main.bounds.height == 480
-        let sideMargin:CGFloat = isIphone4 ? 20 : 0
+        let sideMargin: CGFloat = isIphone4 ? 20 : 0
         
         layout(
             0,

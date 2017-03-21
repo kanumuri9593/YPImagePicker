@@ -9,18 +9,17 @@
 import UIKit
 import CoreImage
 
-var _filterSharedContext:CIContext!
-
+var _filterSharedContext: CIContext!
 
 struct Filter {
     
     var name = ""
     
-    init(_ name:String) {
+    init(_ name: String) {
         self.name = name
     }
     
-    func filter(_ image:UIImage) -> UIImage {
+    func filter(_ image: UIImage) -> UIImage {
         if name == "" {
             return image
         }

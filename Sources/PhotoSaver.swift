@@ -9,7 +9,6 @@
 import Foundation
 import Photos
 
-
 public class PhotoSaver {
     
     public static var albumName = "DefaultYPImagePickerAlbumName"
@@ -28,7 +27,7 @@ public class PhotoSaver {
     }
 }
 
-func album(named:String) -> PHAssetCollection? {
+func album(named: String) -> PHAssetCollection? {
     let fetchOptions = PHFetchOptions()
     fetchOptions.predicate = NSPredicate(format: "title = %@", named)
     let collection = PHAssetCollection.fetchAssetCollections(with: .album,
@@ -37,16 +36,16 @@ func album(named:String) -> PHAssetCollection? {
     return collection.firstObject
 }
 
-func saveImage(_ image:UIImage, toAlbum album:PHAssetCollection) {
+func saveImage(_ image: UIImage, toAlbum album: PHAssetCollection) {
     PHPhotoLibrary.shared().performChanges({
         let changeRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
         let albumChangeRequest = PHAssetCollectionChangeRequest(for: album)
-        let enumeration:NSArray = [changeRequest.placeholderForCreatedAsset!]
+        let enumeration: NSArray = [changeRequest.placeholderForCreatedAsset!]
         albumChangeRequest?.addAssets(enumeration)
     })
 }
 
-func createAlbum(withName name:String, completion:@escaping ()->Void) {
+func createAlbum(withName name: String, completion:@escaping () -> Void) {
     PHPhotoLibrary.shared().performChanges({
         PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: name)
     }) { success, _ in

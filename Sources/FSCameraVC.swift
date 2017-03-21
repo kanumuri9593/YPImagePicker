@@ -12,7 +12,7 @@ import AVFoundation
 public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     public var usesFrontCamera = false
-    public var didCapturePhoto:((UIImage) -> Void)?
+    public var didCapturePhoto: ((UIImage) -> Void)?
     
     private let sessionQueue = DispatchQueue(label: "FSCameraVCSerialQueue")
     let session = AVCaptureSession()
@@ -29,7 +29,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     override public func loadView() { view = v }
     
-    convenience init(shouldUseFrontCamera:Bool) {
+    convenience init(shouldUseFrontCamera: Bool) {
         self.init(nibName:nil, bundle:nil)
         usesFrontCamera = shouldUseFrontCamera
         title = fsLocalized("YPFusumaPhoto")
@@ -130,10 +130,10 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     }
 
     func shotButtonTapped() {
-        DispatchQueue.global(qos: .default).async() {
+        DispatchQueue.global(qos: .default).async {
             let videoConnection = self.imageOutput.connection(withMediaType: AVMediaTypeVideo)
             let orientation: UIDeviceOrientation = UIDevice.current.orientation
-            switch (orientation) {
+            switch orientation {
             case .portrait:
                 videoConnection?.videoOrientation = .portrait
             case .portraitUpsideDown:
@@ -146,7 +146,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                 videoConnection?.videoOrientation = .portrait
             }
             
-            self.imageOutput.captureStillImageAsynchronously(from: videoConnection) { buffer, error in
+            self.imageOutput.captureStillImageAsynchronously(from: videoConnection) { buffer, _ in
                 self.session.stopRunning()
                 let data = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
                 if let image = UIImage(data: data!) {
@@ -155,7 +155,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                     var iw: CGFloat
                     var ih: CGFloat
                     
-                    switch (orientation) {
+                    switch orientation {
                     case .landscapeLeft, .landscapeRight:
                         // Swap width and height if orientation is landscape
                         iw = image.size.height
@@ -168,19 +168,19 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                     let sw = self.v.previewViewContainer.frame.width
                     // The center coordinate along Y axis
                     let rcy = ih * 0.5
-                    let imageRef = image.cgImage?.cropping(to: CGRect(x: rcy-iw*0.5, y: 0 , width: iw, height: iw))
-                    DispatchQueue.main.async() {
+                    let imageRef = image.cgImage?.cropping(to: CGRect(x: rcy-iw*0.5, y: 0, width: iw, height: iw))
+                    DispatchQueue.main.async {
                         var resizedImage = UIImage(cgImage: imageRef!, scale: 1.0, orientation: image.imageOrientation)
                         if let device = self.device, let cgImg =  resizedImage.cgImage, device.position == .front {
                             func flipImage(image: UIImage!) -> UIImage! {
-                                let imageSize:CGSize = image.size
+                                let imageSize: CGSize = image.size
                                 UIGraphicsBeginImageContextWithOptions(imageSize, true, 1.0)
                                 let ctx = UIGraphicsGetCurrentContext()!
                                 ctx.rotate(by: CGFloat(M_PI/2.0))
                                 ctx.translateBy(x: 0, y: -imageSize.width)
                                 ctx.scaleBy(x: imageSize.height/imageSize.width, y: imageSize.width/imageSize.height)
                                 ctx.draw(image.cgImage!, in: CGRect(x:0.0, y:0.0, width:imageSize.width, height:imageSize.height))
-                                let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+                                let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
                                 UIGraphicsEndImageContext()
                                 return newImage
                             }
@@ -205,7 +205,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
 
-    func flashImage(forAVCaptureFlashMode:AVCaptureFlashMode) -> UIImage {
+    func flashImage(forAVCaptureFlashMode: AVCaptureFlashMode) -> UIImage {
         switch forAVCaptureFlashMode {
         case .on: return flashOnImage!
         case .off: return flashOffImage!

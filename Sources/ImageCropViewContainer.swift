@@ -22,7 +22,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     var isVideoMode = false {
         didSet { self.cropView?.isVideoMode = isVideoMode }
     }
-    var cropView:FSImageCropView?
+    var cropView: FSImageCropView?
     
     var shouldCropToSquare = false
     
@@ -44,8 +44,6 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         grid.frame = frame
         clipsToBounds = true
         
-    
-
         for sv in subviews {
             if let cv = sv as? FSImageCropView {
                 cropView = cv
@@ -76,9 +74,8 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         curtain.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         curtain.alpha = 0
         
-        
         // Crop Button
-        squareCropButton.setImage(imageFromBundle("yp_iconCrop") , for: .normal)
+        squareCropButton.setImage(imageFromBundle("yp_iconCrop"), for: .normal)
         sv(squareCropButton)
         squareCropButton.size(42)
         |-15-squareCropButton
@@ -94,7 +91,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
          return !(touch.view is UIButton)
     }
     
-    func handleTouchDown(sender:UILongPressGestureRecognizer) {
+    func handleTouchDown(sender: UILongPressGestureRecognizer) {
 
         switch sender.state {
         case .began:

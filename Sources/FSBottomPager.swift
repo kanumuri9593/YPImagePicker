@@ -150,7 +150,6 @@ final class PagerView: UIView {
             0
         )
 
-        
         clipsToBounds = false
         scrollView.clipsToBounds = false
         scrollView.isPagingEnabled = true
@@ -174,13 +173,10 @@ protocol PagerDelegate: class {
 
 public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     
-    
-    
     weak var delegate: PagerDelegate?
     var controllers = [UIViewController]() { didSet { reload() } }
     
     var v = PagerView()
-    
     
     var currentPage = 0
     
@@ -246,14 +242,13 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         showPage(b.tag)
     }
     
-    func showPage(_ page: Int, animated:Bool = true) {
+    func showPage(_ page: Int, animated: Bool = true) {
         v.animateSelectorToPage(page)
         let x = CGFloat(page) * UIScreen.main.bounds.width
         v.scrollView.setContentOffset(CGPoint(x:x, y:0), animated: animated)
         selectPage(page)
     }
 
-    
     func selectPage(_ page: Int) {
         currentPage = page
         //select menut item and deselect others

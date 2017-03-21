@@ -10,7 +10,6 @@ import Foundation
 import AVFoundation
 import UIKit
 
-
 func fsLocalized(_ str: String) -> String {
     return NSLocalizedString(str,
                              tableName: nil,
@@ -19,13 +18,11 @@ func fsLocalized(_ str: String) -> String {
                              comment: "")
 }
 
-func imageFromBundle(_ named:String) -> UIImage {
+func imageFromBundle(_ named: String) -> UIImage {
     return UIImage(named: named, in: Bundle(for:FusumaVC.self), compatibleWith: nil) ?? UIImage()
 }
 
-
-
-func deviceForPosition(_ p:AVCaptureDevicePosition) -> AVCaptureDevice? {
+func deviceForPosition(_ p: AVCaptureDevicePosition) -> AVCaptureDevice? {
     for device in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) {
         if let d = device as? AVCaptureDevice, d.position == p {
             return d
@@ -58,21 +55,20 @@ extension AVCaptureDevice {
     }
 }
 
-
-
-func flipCameraFor(captureDeviceInput:AVCaptureDeviceInput, onSession s:AVCaptureSession) -> AVCaptureDeviceInput? {
-    var out:AVCaptureDeviceInput?
+func flipCameraFor(captureDeviceInput: AVCaptureDeviceInput,
+                   onSession s: AVCaptureSession) -> AVCaptureDeviceInput? {
+    var out: AVCaptureDeviceInput?
     s.stopRunning()
     s.beginConfiguration()
     for input in s.inputs {
         s.removeInput(input as! AVCaptureInput)
     }
-    let toggledPosition:AVCaptureDevicePosition = (captureDeviceInput.device.position == .front)
+    let toggledPosition: AVCaptureDevicePosition = (captureDeviceInput.device.position == .front)
         ? .back
         : .front
     
     for device in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) {
-        if let device = device as? AVCaptureDevice , device.position == toggledPosition {
+        if let device = device as? AVCaptureDevice, device.position == toggledPosition {
             out = try? AVCaptureDeviceInput(device: device)
             if s.canAddInput(captureDeviceInput) {
                 s.addInput(captureDeviceInput)
@@ -85,9 +81,7 @@ func flipCameraFor(captureDeviceInput:AVCaptureDeviceInput, onSession s:AVCaptur
     return out
 }
 
-
-
-func configureFocusView(_ v:UIView) {
+func configureFocusView(_ v: UIView) {
     v.alpha = 0.0
     v.backgroundColor = UIColor.clear
     v.layer.borderColor = fusumaBaseTintColor.cgColor
@@ -95,20 +89,19 @@ func configureFocusView(_ v:UIView) {
     v.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
 }
 
-func animateFocusView(_ v:UIView) {
+func animateFocusView(_ v: UIView) {
     UIView.animate(withDuration: 0.8, delay: 0.0, usingSpringWithDamping: 0.8,
                    initialSpringVelocity: 3.0, options: UIViewAnimationOptions.curveEaseIn,
                    animations: {
                     v.alpha = 1.0
                     v.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
-        }, completion: { finished in
+        }, completion: { _ in
             v.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             v.removeFromSuperview()
     })
 }
 
-
-func setFocusPointOnDevice(device:AVCaptureDevice, point:CGPoint) {
+func setFocusPointOnDevice(device: AVCaptureDevice, point: CGPoint) {
     do {
         try device.lockForConfiguration()
         if device.isFocusModeSupported(AVCaptureFocusMode.autoFocus) {
@@ -125,8 +118,7 @@ func setFocusPointOnDevice(device:AVCaptureDevice, point:CGPoint) {
     }
 }
 
-
-func setFocusPointOnCurrentDevice(_ point:CGPoint) {
+func setFocusPointOnCurrentDevice(_ point: CGPoint) {
     if let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) {
         do {
             try device.lockForConfiguration()
@@ -145,7 +137,6 @@ func setFocusPointOnCurrentDevice(_ point:CGPoint) {
     }
 }
 
-
 extension AVCaptureSession {
 
     func resetInputs() {
@@ -158,14 +149,11 @@ extension AVCaptureSession {
     }
 }
 
-
-func toggledPositionForDevice(_ device:AVCaptureDevice) ->AVCaptureDevicePosition {
+func toggledPositionForDevice(_ device: AVCaptureDevice) -> AVCaptureDevicePosition {
    return (device.position == .front) ? .back : .front
 }
 
-
-
-func flippedDeviceInputForInput(_ input:AVCaptureDeviceInput) -> AVCaptureDeviceInput? {
+func flippedDeviceInputForInput(_ input: AVCaptureDeviceInput) -> AVCaptureDeviceInput? {
     let p = toggledPositionForDevice(input.device)
     let aDevice = deviceForPosition(p)
     return try? AVCaptureDeviceInput(device: aDevice)

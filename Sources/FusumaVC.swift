@@ -14,13 +14,11 @@ var flashOnImage: UIImage?
 var videoStartImage: UIImage?
 var videoStopImage: UIImage?
 
-
 extension UIColor {
     convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 1.0) {
         self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: a)
     }
 }
-
 
 public class FusumaVC: FSBottomPager, PagerDelegate {
     
@@ -28,13 +26,12 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     
     override public var prefersStatusBarHidden: Bool { return shouldShowStatusBar }
     
-    
     public var showsVideo = false
     public var usesFrontCamera = false
     
     public var didClose:(() -> Void)?
-    public var didSelectImage:((UIImage, Bool) -> Void)?
-    public var didSelectVideo:((URL) -> Void)?
+    public var didSelectImage: ((UIImage, Bool) -> Void)?
+    public var didSelectVideo: ((URL) -> Void)?
     
     enum Mode {
         case library
@@ -43,16 +40,16 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     }
     
     let albumVC = FSAlbumVC()
-    lazy var cameraVC:FSCameraVC = {
+    lazy var cameraVC: FSCameraVC = {
         return FSCameraVC(shouldUseFrontCamera: self.usesFrontCamera)
     }()
     let videoVC = FSVideoVC()
     
     var mode = Mode.camera
     
-    var capturedImage:UIImage?
+    var capturedImage: UIImage?
     
-    func imageFromBundle(_ named:String) -> UIImage {
+    func imageFromBundle(_ named: String) -> UIImage {
         let bundle = Bundle(for: self.classForCoder)
         return UIImage(named: named, in: bundle, compatibleWith: nil) ?? UIImage()
     }
@@ -84,7 +81,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         }
         
         startOnPage(1)
-        
         
         updateUI()
     }
@@ -156,7 +152,6 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
         }
     }
     
-    
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         shouldShowStatusBar = false
@@ -165,12 +160,17 @@ public class FusumaVC: FSBottomPager, PagerDelegate {
     
     func updateUI() {
         // Update Nav Bar state.
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(close))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+                                                           target: self,
+                                                           action: #selector(close))
         navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
         switch mode {
         case .library:
             title = albumVC.title
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPFusumaNext"), style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPFusumaNext"),
+                                                                style: .done,
+                                                                target: self,
+                                                                action: #selector(done))
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
             title = cameraVC.title
@@ -214,11 +214,13 @@ extension FusumaVC: FSAlbumViewDelegate {
     }
     
     public func albumViewFinishedLoadingImage() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPFusumaNext"), style: UIBarButtonItemStyle.done, target: self, action: #selector(done))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPFusumaNext"),
+                                                            style: .done,
+                                                            target: self,
+                                                            action: #selector(done))
     }
     
     public func albumViewCameraRollUnauthorized() {
         
     }
 }
-

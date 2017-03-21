@@ -9,7 +9,6 @@
 import UIKit
 import Stevia
 
-
 class FSCameraView: UIView, UIGestureRecognizerDelegate {
     
     let previewViewContainer = UIView()
@@ -35,7 +34,7 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
         )
         
         let isIphone4 = UIScreen.main.bounds.height == 480
-        let sideMargin:CGFloat = isIphone4 ? 20 : 0
+        let sideMargin: CGFloat = isIphone4 ? 20 : 0
         
         layout(
             0,
@@ -85,6 +84,3 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
         shotButton.setImage(shotImage, for: .normal)
     }
 }
-    
-
-

@@ -23,14 +23,12 @@ class ViewController: UIViewController {
         view.addSubview(imageView)
         imageView.frame = view.frame
         
-        
         button.setTitle("Pick", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         view.addSubview(button)
         button.center = view.center
         button.addTarget(self, action: #selector(showPicker), for: .touchUpInside)
-        
     }
     
     func showPicker() {
@@ -50,4 +48,3 @@ class ViewController: UIViewController {
         present(picker, animated: true, completion: nil)
     }
 }
-

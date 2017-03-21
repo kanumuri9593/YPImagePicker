@@ -18,7 +18,6 @@ final class FSAlbumView: UIView {
     @IBOutlet weak var collectionViewConstraintHeight: NSLayoutConstraint!
     @IBOutlet weak var imageCropViewConstraintTop: NSLayoutConstraint!
     
-    
     let line = UIView()
     
     override func awakeFromNib() {
@@ -36,4 +35,3 @@ final class FSAlbumView: UIView {
         line.backgroundColor = .white
     }
 }
-

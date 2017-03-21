@@ -9,8 +9,8 @@
 import UIKit
 
 class FilterPreview {
-    let name:String
-    var image:UIImage?
+    let name: String
+    var image: UIImage?
     
     init(_ name: String) {
         self.name = name
