@@ -211,12 +211,9 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             }
             
             // Scroll event of CollectionView is preferred.
-            if (dragDirection == Direction.up   && dragStartPos.y < cropBottomY + dragDiff) ||
+            if (dragDirection == Direction.up && dragStartPos.y < cropBottomY + dragDiff) ||
                 (dragDirection == Direction.down && dragStartPos.y > cropBottomY) {
                 dragDirection = Direction.stop
-                v.imageCropView.changeScrollable(false)
-            } else {
-                v.imageCropView.changeScrollable(true)
             }
         } else if sender.state == UIGestureRecognizerState.changed {
             let currentPos = sender.location(in: v)
@@ -244,20 +241,15 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                         height - v.imageCropViewConstraintTop.constant - containerHeight)
                 
             }
-            
         } else {
             imaginaryCollectionViewOffsetStartPosY = 0.0
             if sender.state == UIGestureRecognizerState.ended && dragDirection == Direction.stop {
-                v.imageCropView.changeScrollable(true)
                 return
             }
-            
             let currentPos = sender.location(in: v)
-            
             if currentPos.y < cropBottomY - dragDiff
                 && v.imageCropViewConstraintTop.constant != imageCropViewOriginalConstraintTop {
                 // The largest movement
-                v.imageCropView.changeScrollable(false)
                 v.imageCropViewConstraintTop.constant =
                     imageCropViewMinimalVisibleHeight - containerHeight
                 v.collectionViewConstraintHeight.constant = height - imageCropViewMinimalVisibleHeight
@@ -271,7 +263,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                 dragDirection = Direction.down
             } else {
                 // Get back to the original position
-                v.imageCropView.changeScrollable(true)
                 v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
                 v.collectionViewConstraintHeight.constant =
                     height - imageCropViewOriginalConstraintTop - containerHeight
@@ -347,7 +338,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let images = images {
             changeImage(images[(indexPath as NSIndexPath).row])
-            v.imageCropView.changeScrollable(true)
             v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
             v.collectionViewConstraintHeight.constant =
                 v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height

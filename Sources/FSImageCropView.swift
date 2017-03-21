@@ -112,10 +112,6 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
         myDelegate?.fsImageCropViewDidLayoutSubviews()
     }
     
-    func changeScrollable(_ isScrollable: Bool) {
-//        isScrollEnabled = isScrollable
-    }
-    
     // MARK: UIScrollViewDelegate Protocol
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
