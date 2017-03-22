@@ -9,8 +9,13 @@
 import UIKit
 import AVFoundation
 
+class YPImagePickerConfiguration {
+    static let shared = YPImagePickerConfiguration()
+    public var onlySquareImages = false
+}
+
 public class YPImagePicker: UINavigationController {
-    
+        
     public static var albumName = "DefaultYPImagePickerAlbumName" {
         didSet { PhotoSaver.albumName = albumName }
     }
@@ -23,6 +28,11 @@ public class YPImagePicker: UINavigationController {
     public var showsFilters = true
     public var didSelectImage: ((UIImage) -> Void)?
     public var didSelectVideo: ((Data, UIImage) -> Void)?
+    public var onlySquareImages = false {
+        didSet {
+            YPImagePickerConfiguration.shared.onlySquareImages = onlySquareImages
+        }
+    }
     
     private let fusuma = FusumaVC()
     

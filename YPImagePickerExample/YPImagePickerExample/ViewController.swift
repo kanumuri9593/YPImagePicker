@@ -33,10 +33,11 @@ class ViewController: UIViewController {
     
     func showPicker() {
         let picker = YPImagePicker()
+//        picker.onlySquareImages = true
         // picker.showsFilters = false
         // picker.startsOnCameraMode = true
         // picker.usesFrontCamera = true
-        picker.showsVideo = true
+//        picker.showsVideo = true
         picker.didSelectImage = { img in
             // image picked
             self.imageView.image = img

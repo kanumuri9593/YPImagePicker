@@ -439,12 +439,11 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                         self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
                         self.v.imageCropView.image = result
                         
-                        // Square image
-                        if self.v.imageCropView.image.size.width == self.v.imageCropView.image.size.height {
-                            self.v.imageCropViewContainer.squareCropButton.isHidden = true
-                        } else {
-                            self.v.imageCropViewContainer.squareCropButton.isHidden = false
+                        if YPImagePickerConfiguration.shared.onlySquareImages {
+                            self.v.imageCropView.setFitImage(true)
+                            self.v.imageCropView.minimumZoomScale = self.v.imageCropView.squaredZoomScale
                         }
+                        self.v.imageCropViewContainer.refreshSquareCropButton()
                     }
                 }
             }

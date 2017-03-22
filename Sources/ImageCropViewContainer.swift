@@ -19,10 +19,16 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     let squareCropButton = UIButton()
     var isVideoMode = false {
-        didSet { self.cropView?.isVideoMode = isVideoMode }
+        didSet {
+            self.cropView?.isVideoMode = isVideoMode
+            self.refresh()
+        }
     }
     var cropView: FSImageCropView?
     var shouldCropToSquare = false
+    public var onlySquareImages: Bool {
+        return YPImagePickerConfiguration.shared.onlySquareImages
+    }
     
     func squareCropButtonTapped() {
         if let cropView = cropView {
@@ -34,6 +40,17 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
             }
         }
         cropView?.setFitImage(shouldCropToSquare)
+    }
+    
+    func refresh() {
+        refreshSquareCropButton()
+    }
+    
+    func refreshSquareCropButton() {
+        if let image = cropView?.image {
+            let isShowingSquareImage = image.size.width == image.size.height
+            squareCropButton.isHidden = isVideoMode || isShowingSquareImage
+        }
     }
     
     override func awakeFromNib() {
@@ -72,13 +89,15 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         curtain.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         curtain.alpha = 0
         
-        // Crop Button
-        squareCropButton.setImage(imageFromBundle("yp_iconCrop"), for: .normal)
-        sv(squareCropButton)
-        squareCropButton.size(42)
-        |-15-squareCropButton
-        squareCropButton.Bottom == cropView!.Bottom - 15
-        squareCropButton.addTarget(self, action: #selector(squareCropButtonTapped), for: .touchUpInside)
+        if !onlySquareImages {
+            // Crop Button
+            squareCropButton.setImage(imageFromBundle("yp_iconCrop"), for: .normal)
+            sv(squareCropButton)
+            squareCropButton.size(42)
+            |-15-squareCropButton
+            squareCropButton.Bottom == cropView!.Bottom - 15
+            squareCropButton.addTarget(self, action: #selector(squareCropButtonTapped), for: .touchUpInside)
+        }
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
@@ -91,7 +110,6 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     }
     
     func handleTouchDown(sender: UILongPressGestureRecognizer) {
-
         switch sender.state {
         case .began:
             if isShown && !isVideoMode {
@@ -105,7 +123,6 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
             }
         default : ()
         }
-        
     }
     
     func fsImageCropViewDidLayoutSubviews() {
@@ -115,7 +132,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     }
     
     func fsImageCropViewscrollViewDidZoom() {
-        if isShown  && !isVideoMode {
+        if isShown && !isVideoMode {
             UIView.animate(withDuration: 0.1) {
                 self.grid.alpha = 1
             }
