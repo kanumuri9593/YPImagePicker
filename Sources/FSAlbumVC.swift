@@ -22,7 +22,11 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
     public var showsVideo = false
     
-    let myQueue = DispatchQueue(label: "com.octopepper.ypImagePicker.imagesQueue")
+    let myQueue = DispatchQueue(label: "com.octopepper.ypImagePicker.imagesQueue",
+                                qos: DispatchQoS.background,
+                                attributes: DispatchQueue.Attributes.concurrent,
+                                autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
+                                target: nil)
 
     var _images: PHFetchResult<PHAsset>?
     var images: PHFetchResult<PHAsset>? {
