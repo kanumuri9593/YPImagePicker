@@ -70,6 +70,7 @@ Import Fusuma ```import Fusuma``` then use the following codes in some function 
 
 ```swift
 let picker = YPImagePicker()
+// picker.onlySquareImages = true
 // picker.showsFilters = false
 // picker.startsOnCameraMode = true
 // picker.usesFrontCamera = true
